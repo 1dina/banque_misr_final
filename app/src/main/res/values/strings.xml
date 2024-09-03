@@ -1,3 +1,13 @@
 <resources>
     <string name="app_name">Speedo Transfer</string>
+    <string name="home">Home</string>
+    <string name="more">More</string>
+    <string name="my_cards">My cards</string>
+    <string name="transfer">Transfer</string>
+    <string name="transactions">Transactions</string>
+    <string name="title_activity_dashboard2">DashboardActivity2</string>
+    <string name="title_activity_dashboard">DashboardActivity</string>
+    <string name="welcome_back">Welcome back,</string>
+
+
 </resources>
