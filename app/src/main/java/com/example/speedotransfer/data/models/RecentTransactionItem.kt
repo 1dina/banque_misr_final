@@ -1,4 +1,4 @@
-package com.example.speedotransfer.data
+package com.example.speedotransfer.data.models
 
 import androidx.annotation.DrawableRes
 

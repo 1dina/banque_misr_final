@@ -1,6 +1,5 @@
 package com.example.speedotransfer.ui.screens.dashboard
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
@@ -43,7 +42,7 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.example.speedotransfer.R
 import com.example.speedotransfer.data.DummyDataSource
-import com.example.speedotransfer.data.RecentTransactionItem
+import com.example.speedotransfer.data.models.RecentTransactionItem
 import com.example.speedotransfer.ui.theme.Grey
 import com.example.speedotransfer.ui.theme.LightRed
 import com.example.speedotransfer.ui.theme.LightYellow
@@ -51,7 +50,7 @@ import com.example.speedotransfer.ui.theme.Maroon
 
 @Composable
 fun HomeScreen(navController: NavController, modifier: Modifier = Modifier) {
-    val transactionList = DummyDataSource.getDataSource()
+    val transactionList = DummyDataSource.getRecentTransactionsData()
     Box(
         modifier = Modifier
             .fillMaxSize()

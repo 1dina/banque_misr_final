@@ -77,7 +77,13 @@ fun TransferScreen(navController: NavController, modifier: Modifier = Modifier) 
             Stepper(steps = 3,
                 currentStep = currentStep,
                 onStepSelected = { newStep -> currentStep = newStep })
+            if(currentStep ==1)
+                AmountStepScreen {
+                    if (it) currentStep++
+                }
         }
+
+
 
     }
 }
