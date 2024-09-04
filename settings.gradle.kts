@@ -16,8 +16,12 @@ dependencyResolutionManagement {
     repositories {
         google()
         mavenCentral()
+        maven(url = "https://jitpack.io")
+
+
     }
 }
+
 
 rootProject.name = "Speedo Transfer"
 include(":app")

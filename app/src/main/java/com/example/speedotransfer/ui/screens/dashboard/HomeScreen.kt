@@ -1,5 +1,6 @@
 package com.example.speedotransfer.ui.screens.dashboard
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
@@ -24,10 +25,12 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.Color.Companion.Unspecified
 import androidx.compose.ui.graphics.Color.Companion.White
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.res.painterResource
@@ -68,7 +71,8 @@ fun HomeScreen(navController: NavController, modifier: Modifier = Modifier) {
             Row(
                 modifier = modifier
                     .fillMaxWidth()
-                    .padding(bottom = 16.dp)
+                    .padding(bottom = 16.dp),
+                verticalAlignment = Alignment.CenterVertically
             ) {
                 Icon(
                     painter = painterResource(id = R.drawable.ic_launcher_foreground),
@@ -80,7 +84,7 @@ fun HomeScreen(navController: NavController, modifier: Modifier = Modifier) {
                 )
 
                 Column(
-                    verticalArrangement = Arrangement.SpaceBetween,
+                    verticalArrangement = Arrangement.SpaceEvenly,
                     modifier = modifier
                         .height(48.dp)
                         .padding(start = 8.dp)
@@ -162,8 +166,9 @@ fun RecentTransactionUI(transactionItem: RecentTransactionItem, modifier: Modifi
                 .padding(16.dp)
         ) {
             Icon(
-                painter = painterResource(id = R.drawable.ic_launcher_foreground),
-                contentDescription = "", modifier = modifier.size(64.dp)
+                painter = painterResource(id = R.drawable.ic_visa),
+                contentDescription = "", tint = Unspecified,
+                modifier = modifier.size(64.dp)
             )
             Column(
                 verticalArrangement = Arrangement.SpaceEvenly,
