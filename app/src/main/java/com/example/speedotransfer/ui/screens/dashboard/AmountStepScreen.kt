@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
@@ -35,6 +36,7 @@ import androidx.compose.ui.graphics.Color.Companion.White
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -48,7 +50,7 @@ import com.example.speedotransfer.ui.theme.Maroon
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun AmountStepScreen(modifier: Modifier = Modifier, onContinueClick: (Boolean) -> Unit) {
+fun AmountStepScreen(modifier: Modifier = Modifier,recipientUserChosen : (FavoriteListItem,Int) -> Unit) {
     var amountOfMoney by remember {
         mutableStateOf("0")
     }
@@ -58,13 +60,13 @@ fun AmountStepScreen(modifier: Modifier = Modifier, onContinueClick: (Boolean) -
     var recipientAccount by remember {
         mutableStateOf("")
     }
-    var onButtonClick by remember {
-        mutableStateOf(false)
-    }
+
     var showBottomSheet by remember {
         mutableStateOf(false)
     }
+
     if (showBottomSheet) BottomSheetFav(onDismiss = {showBottomSheet =it} ) {
+
         recipientName = it.favoriteRecipient
         recipientAccount = it.favoriteRecipientAccount
         showBottomSheet =false
@@ -94,7 +96,7 @@ fun AmountStepScreen(modifier: Modifier = Modifier, onContinueClick: (Boolean) -
                 Text(text = "Amount", fontSize = 16.sp, fontWeight = FontWeight.SemiBold)
                 OutlinedTextField(
                     value = amountOfMoney,
-                    onValueChange = { amountOfMoney = it },
+                    onValueChange = {  amountOfMoney = it }, keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
                     modifier = modifier
                         .fillMaxWidth()
                         .height(52.dp),
@@ -181,8 +183,8 @@ fun AmountStepScreen(modifier: Modifier = Modifier, onContinueClick: (Boolean) -
         )
         Button(
             onClick = {
-                onButtonClick = true
-                onContinueClick(onButtonClick)
+                val userChosen = FavoriteListItem(recipientName,recipientAccount)
+                recipientUserChosen(userChosen,amountOfMoney.toInt())
             },
             modifier = modifier
                 .fillMaxWidth()
@@ -274,10 +276,3 @@ fun FavoriteListItem(favoriteListItem: FavoriteListItem, modifier: Modifier = Mo
     }
 }
 
-@Preview(showSystemUi = true)
-@Composable
-private fun AmountStepScreenPreview() {
-    AmountStepScreen() {
-
-    }
-}

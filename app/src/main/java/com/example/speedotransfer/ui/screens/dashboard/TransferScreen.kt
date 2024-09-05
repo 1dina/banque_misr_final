@@ -18,6 +18,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -35,13 +36,20 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.example.speedotransfer.R
+import com.example.speedotransfer.data.models.FavoriteListItem
 import com.example.speedotransfer.ui.theme.LightRed
 import com.example.speedotransfer.ui.theme.LightYellow
 import com.example.speedotransfer.ui.theme.Maroon
 
 @Composable
 fun TransferScreen(navController: NavController, modifier: Modifier = Modifier) {
+    var chosenUser by remember {
+        mutableStateOf<FavoriteListItem?>(null)
+    }
     var currentStep by remember { mutableStateOf(1) }
+    var amountOfMoney by remember {
+        mutableIntStateOf(0)
+    }
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -75,12 +83,18 @@ fun TransferScreen(navController: NavController, modifier: Modifier = Modifier) 
 
             }
             Stepper(steps = 3,
-                currentStep = currentStep,
-                onStepSelected = { newStep -> currentStep = newStep })
+                currentStep = currentStep)
             if(currentStep ==1)
-                AmountStepScreen {
-                    if (it) currentStep++
+                AmountStepScreen { user,amount ->
+                    chosenUser = user
+                    amountOfMoney = amount
+                    currentStep ++
+
                 }
+            else if (currentStep ==2) ConfirmationStepScreen(amountOfMoney = amountOfMoney , recipientUser = chosenUser!!) {
+                  currentStep =it
+            }
+            else PaymentStepScreen(navController = rememberNavController(), recipientUser =chosenUser!! , amountOfMoney =amountOfMoney )
         }
 
 
@@ -91,7 +105,7 @@ fun TransferScreen(navController: NavController, modifier: Modifier = Modifier) 
 
 @Composable
 fun Stepper(
-    steps: Int, currentStep: Int, onStepSelected: (Int) -> Unit
+    steps: Int, currentStep: Int
 ) {
 
     Row(
@@ -104,7 +118,7 @@ fun Stepper(
             StepItem(
                 step = step,
                 isSelected = step <= currentStep,
-                onClick = { onStepSelected(step) })
+               )
 
             if (step < steps) {
                 Divider(
@@ -123,7 +137,7 @@ fun Stepper(
 
 @Composable
 fun StepItem(
-    step: Int, isSelected: Boolean, onClick: () -> Unit
+    step: Int, isSelected: Boolean
 ) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.Center
@@ -131,7 +145,7 @@ fun StepItem(
         Box(contentAlignment = Alignment.Center,
             modifier = Modifier
                 .size(48.dp)
-                .clickable { onClick() }) {
+        ) {
             val iconResult = if (!isSelected) {
                 if (step == 2) R.drawable.ic_step_two else R.drawable.ic_step_three
             } else {
