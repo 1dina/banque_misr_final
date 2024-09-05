@@ -1,5 +1,6 @@
 package com.example.speedotransfer.ui.screens.dashboard.components
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
@@ -28,11 +29,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Color.Companion.Unspecified
 import androidx.compose.ui.graphics.Color.Companion.White
 import androidx.compose.ui.graphics.RectangleShape
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -165,9 +168,9 @@ fun RecentTransactionUI(transactionItem: RecentTransactionItem, modifier: Modifi
                 .fillMaxWidth()
                 .padding(16.dp)
         ) {
-            Icon(
+            Image(
                 painter = painterResource(id = R.drawable.ic_visa),
-                contentDescription = "", tint = Unspecified,
+                contentDescription = "", contentScale = ContentScale.None,
                 modifier = modifier.size(64.dp)
             )
             Column(
