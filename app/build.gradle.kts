@@ -68,7 +68,6 @@ dependencies {
     debugImplementation(libs.androidx.ui.test.manifest)
     implementation(libs.androidx.navigation.compose)
     implementation(libs.androidx.material)
-    implementation("com.github.binayshaw7777:KotStep:2.2.2")
 
 
 
