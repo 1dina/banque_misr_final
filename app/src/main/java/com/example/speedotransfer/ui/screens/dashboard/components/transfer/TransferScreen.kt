@@ -1,12 +1,11 @@
-package com.example.speedotransfer.ui.screens.dashboard
+package com.example.speedotransfer.ui.screens.dashboard.components.transfer
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -27,22 +26,29 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color.Companion.Gray
 import androidx.compose.ui.graphics.Color.Companion.Unspecified
+import androidx.compose.ui.graphics.Color.Companion.Yellow
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.compose.rememberNavController
 import com.example.speedotransfer.R
 import com.example.speedotransfer.data.models.FavoriteListItem
+import com.example.speedotransfer.routes.AppRoutes
+import com.example.speedotransfer.ui.screens.dashboard.commonUI.HeaderUI
+import com.example.speedotransfer.ui.theme.LightPink
 import com.example.speedotransfer.ui.theme.LightRed
 import com.example.speedotransfer.ui.theme.LightYellow
 import com.example.speedotransfer.ui.theme.Maroon
 
 @Composable
-fun TransferScreen(navController: NavController, modifier: Modifier = Modifier) {
+fun TransferScreen(
+    navController: NavController,
+    innerPadding: PaddingValues,
+    modifier: Modifier = Modifier
+) {
     var chosenUser by remember {
         mutableStateOf<FavoriteListItem?>(null)
     }
@@ -56,47 +62,52 @@ fun TransferScreen(navController: NavController, modifier: Modifier = Modifier) 
             .background(
                 brush = Brush.verticalGradient(
                     colors = listOf(
-                        LightYellow, LightRed
+                        LightYellow, LightYellow, LightPink, LightRed
                     )
                 )
             )
+            .padding(innerPadding)
     ) {
         Column {
-            Row(
-                modifier = modifier
-                    .fillMaxWidth()
-                    .padding(top = 48.dp, start = 16.dp, end = 16.dp)
-            ) {
-                Icon(
-                    painter = painterResource(id = R.drawable.ic_back), contentDescription = "",
-                    modifier.weight(1f)
-                )
-                Text(
-                    text = "Transfer",
-                    fontSize = 20.sp,
-                    modifier = modifier.weight(5f),
-                    textAlign = TextAlign.Center,
-                    fontWeight = FontWeight.SemiBold
-                )
-                Spacer(modifier = modifier.weight(1f))
 
-
-            }
-            Stepper(steps = 3,
-                currentStep = currentStep)
-            if(currentStep ==1)
-                AmountStepScreen { user,amount ->
+            HeaderUI(headerTitle = "Transfer", onClickBackButton = {
+                if (currentStep != 2) {
+                    navController.navigate(AppRoutes.HOME) {
+                        popUpTo(navController.graph.findStartDestination().id) {
+                            inclusive = true
+                        }
+                    }
+                } else currentStep -= 1
+            })
+            Stepper(
+                steps = 3,
+                currentStep = currentStep
+            )
+            if (currentStep == 1)
+                AmountStepScreen { user, amount ->
                     chosenUser = user
                     amountOfMoney = amount
-                    currentStep ++
+                    currentStep++
 
                 }
-            else if (currentStep ==2) ConfirmationStepScreen(amountOfMoney = amountOfMoney , recipientUser = chosenUser!!) {
-                  currentStep =it
+            else if (currentStep == 2) ConfirmationStepScreen(
+                amountOfMoney = amountOfMoney,
+                recipientUser = chosenUser!!
+            ) {
+                currentStep = it
             }
-            else PaymentStepScreen(navController = rememberNavController(), recipientUser =chosenUser!! , amountOfMoney =amountOfMoney )
-        }
+            else PaymentStepScreen(
+                recipientUser = chosenUser!!,
+                amountOfMoney = amountOfMoney,
+                onBackToHomeClick = {
+                    navController.navigate(AppRoutes.HOME) {
+                        popUpTo(navController.graph.findStartDestination().id) { inclusive = true }
+                    }
+                }) {
+                //handle to add to favourite
+            }
 
+        }
 
 
     }
@@ -118,7 +129,7 @@ fun Stepper(
             StepItem(
                 step = step,
                 isSelected = step <= currentStep,
-               )
+            )
 
             if (step < steps) {
                 Divider(
@@ -142,7 +153,8 @@ fun StepItem(
     Column(
         horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.Center
     ) {
-        Box(contentAlignment = Alignment.Center,
+        Box(
+            contentAlignment = Alignment.Center,
             modifier = Modifier
                 .size(48.dp)
         ) {
@@ -178,5 +190,5 @@ fun StepItem(
 @Preview
 @Composable
 private fun TransferScreenPreview() {
-    TransferScreen(rememberNavController())
+    TransferScreen(rememberNavController(), innerPadding = PaddingValues(16.dp))
 }

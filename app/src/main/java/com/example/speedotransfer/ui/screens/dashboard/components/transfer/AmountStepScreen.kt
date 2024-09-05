@@ -1,6 +1,5 @@
-package com.example.speedotransfer.ui.screens.dashboard
+package com.example.speedotransfer.ui.screens.dashboard.components.transfer
 
-import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -37,7 +36,6 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.speedotransfer.R
@@ -45,7 +43,6 @@ import com.example.speedotransfer.data.DummyDataSource
 import com.example.speedotransfer.data.models.FavoriteListItem
 import com.example.speedotransfer.ui.theme.Grey
 import com.example.speedotransfer.ui.theme.LightPink
-import com.example.speedotransfer.ui.theme.LightRed
 import com.example.speedotransfer.ui.theme.Maroon
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -234,7 +231,7 @@ fun BottomSheetFav(modifier: Modifier = Modifier , onDismiss : (Boolean)->Unit,o
 fun FavoriteListMaker(favItems: List<FavoriteListItem>, modifier: Modifier,selectedItem : (FavoriteListItem) -> Unit) {
     LazyColumn(modifier = modifier.padding(top = 24.dp)) {
         items(favItems) { item ->
-            FavoriteListItem(item, onItemClicked = {
+            FavoriteListItemUI(item, onItemClicked = {
                 selectedItem(item)
             })
         }
@@ -242,7 +239,7 @@ fun FavoriteListMaker(favItems: List<FavoriteListItem>, modifier: Modifier,selec
 }
 
 @Composable
-fun FavoriteListItem(favoriteListItem: FavoriteListItem, modifier: Modifier = Modifier,onItemClicked:(FavoriteListItem)->Unit) {
+fun FavoriteListItemUI(favoriteListItem: FavoriteListItem, modifier: Modifier = Modifier, onItemClicked:(FavoriteListItem)->Unit) {
     Card(
         onClick = { onItemClicked(favoriteListItem)},
         colors = CardDefaults.cardColors(containerColor = LightPink),

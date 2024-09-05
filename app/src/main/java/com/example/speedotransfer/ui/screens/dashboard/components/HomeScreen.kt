@@ -1,10 +1,11 @@
-package com.example.speedotransfer.ui.screens.dashboard
+package com.example.speedotransfer.ui.screens.dashboard.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
@@ -49,7 +50,7 @@ import com.example.speedotransfer.ui.theme.LightYellow
 import com.example.speedotransfer.ui.theme.Maroon
 
 @Composable
-fun HomeScreen(navController: NavController, modifier: Modifier = Modifier) {
+fun HomeScreen(navController: NavController, modifier: Modifier = Modifier,innerPadding : PaddingValues) {
     val transactionList = DummyDataSource.getRecentTransactionsData()
     Box(
         modifier = Modifier
@@ -60,7 +61,7 @@ fun HomeScreen(navController: NavController, modifier: Modifier = Modifier) {
                         LightYellow, LightRed
                     )
                 )
-            )
+            ).padding(innerPadding)
     ) {
         Column(
             modifier = modifier
@@ -203,5 +204,5 @@ fun RecentTransactionUI(transactionItem: RecentTransactionItem, modifier: Modifi
 @Preview(showSystemUi = true)
 @Composable
 private fun HomeScreenPreview() {
-    HomeScreen(rememberNavController())
+    HomeScreen(rememberNavController(), innerPadding = PaddingValues(16.dp))
 }

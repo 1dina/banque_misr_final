@@ -7,7 +7,6 @@ import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.BottomAppBar
@@ -30,7 +29,7 @@ import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import com.example.speedotransfer.routes.BottomNavGraph
+import com.example.speedotransfer.routes.AppNavHost
 import com.example.speedotransfer.ui.theme.Grey
 import com.example.speedotransfer.ui.theme.Maroon
 import com.example.speedotransfer.ui.theme.SpeedoTransferTheme
@@ -54,7 +53,7 @@ class DashboardActivity : ComponentActivity() {
                         ) {
                             val navBackStackEntry by navController.currentBackStackEntryAsState()
                             val currentDestination = navBackStackEntry?.destination
-                            BottomNavBarScreen.getBottomNavBarItems().forEach { screen ->
+                            BottomNavBarScreens.getBottomNavBarItems().forEach { screen ->
                                 NavigationBarItem(
                                     icon = {
                                         Icon(
@@ -97,9 +96,9 @@ class DashboardActivity : ComponentActivity() {
                         }
                     }
                 ) { innerPadding ->
-                    BottomNavGraph(
+                    AppNavHost(
                         navController = navController,
-                        modifier = Modifier.padding(innerPadding)
+                        innerPadding = innerPadding
                     )
                 }
             }

@@ -1,4 +1,4 @@
-package com.example.speedotransfer.ui.screens.dashboard
+package com.example.speedotransfer.ui.screens.dashboard.components.transfer
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Arrangement
@@ -27,20 +27,20 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.example.speedotransfer.R
 import com.example.speedotransfer.data.models.FavoriteListItem
-import com.example.speedotransfer.routes.DashboardRoute
+import com.example.speedotransfer.ui.screens.dashboard.commonUI.CommonCard
 import com.example.speedotransfer.ui.theme.Grey
 import com.example.speedotransfer.ui.theme.Maroon
 
 @Composable
 fun PaymentStepScreen(
-    navController: NavController,
     modifier: Modifier = Modifier,
     recipientUser: FavoriteListItem,
-    amountOfMoney: Int
+    amountOfMoney: Int,
+    onBackToHomeClick:()->Unit,
+    onAddToFavoriteClick:()->Unit
 ) {
     val navController = rememberNavController()
     val scrollState = rememberScrollState()
@@ -69,12 +69,12 @@ fun PaymentStepScreen(
                 .padding(top = 8.dp)
         ) {
             Column {
-                TransferProcessCard(
+                CommonCard(
                     destination = "From",
                     cardUser = "User Name",
                     cardAccount = "xxxx7890",
                 )
-                TransferProcessCard(
+                CommonCard(
                     destination = "To",
                     cardUser = recipientUser.favoriteRecipient,
                     cardAccount = recipientUser.favoriteRecipientAccount,
@@ -105,7 +105,7 @@ fun PaymentStepScreen(
                 .height(1.dp)
         )
         Button(
-            onClick = {},
+            onClick = {onBackToHomeClick()},
             modifier = modifier
                 .fillMaxWidth()
                 .padding(top = 32.dp),
@@ -115,7 +115,7 @@ fun PaymentStepScreen(
             Text(text = "Back to Home", fontSize = 16.sp, modifier = modifier.padding(8.dp))
         }
         OutlinedButton(
-            onClick = {},
+            onClick = {onAddToFavoriteClick()},
             modifier = modifier
                 .fillMaxWidth()
                 .padding(top = 16.dp),
