@@ -68,7 +68,7 @@ fun TransferScreen(
             )
             .padding(innerPadding)
     ) {
-        Column {
+        Column(modifier = modifier.padding(horizontal =16.dp)) {
 
             HeaderUI(headerTitle = "Transfer", onClickBackButton = {
                 if (currentStep != 2) {
@@ -81,7 +81,8 @@ fun TransferScreen(
             })
             Stepper(
                 steps = 3,
-                currentStep = currentStep
+                currentStep = currentStep,
+                modifier = modifier
             )
             if (currentStep == 1)
                 AmountStepScreen { user, amount ->
@@ -116,12 +117,13 @@ fun TransferScreen(
 
 @Composable
 fun Stepper(
-    steps: Int, currentStep: Int
+    steps: Int, currentStep: Int,
+    modifier: Modifier
 ) {
 
     Row(
         horizontalArrangement = Arrangement.Center,
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth()
             .padding(vertical = 32.dp)
     ) {
@@ -129,12 +131,13 @@ fun Stepper(
             StepItem(
                 step = step,
                 isSelected = step <= currentStep,
+                modifier = modifier
             )
 
             if (step < steps) {
                 Divider(
                     color = if (step < currentStep) Maroon else Gray,
-                    modifier = Modifier
+                    modifier = modifier
                         .padding(top = 24.dp)
                         .width(64.dp)
                         .height(1.dp)
@@ -149,13 +152,14 @@ fun Stepper(
 @Composable
 fun StepItem(
     step: Int, isSelected: Boolean
+    ,modifier: Modifier
 ) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.Center
     ) {
         Box(
             contentAlignment = Alignment.Center,
-            modifier = Modifier
+            modifier = modifier
                 .size(48.dp)
         ) {
             val iconResult = if (!isSelected) {
@@ -180,7 +184,7 @@ fun StepItem(
             },
             fontSize = 14.sp,
             color = if (isSelected) Maroon else Gray,
-            modifier = Modifier.padding(top = 8.dp)
+            modifier = modifier.padding(top = 8.dp)
         )
     }
 

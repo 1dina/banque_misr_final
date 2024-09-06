@@ -42,13 +42,12 @@ fun PaymentStepScreen(
     onBackToHomeClick:()->Unit,
     onAddToFavoriteClick:()->Unit
 ) {
-    val navController = rememberNavController()
     val scrollState = rememberScrollState()
 
     Column(
         modifier = modifier
             .fillMaxSize()
-            .padding(16.dp)
+            .padding(bottom =8.dp)
             .verticalScroll(scrollState),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {

@@ -71,7 +71,7 @@ fun AmountStepScreen(modifier: Modifier = Modifier,recipientUserChosen : (Favori
     Column(
         modifier = modifier
             .fillMaxSize()
-            .padding(end = 16.dp, start = 16.dp)
+            .padding(bottom = 8.dp)
     ) {
         Text(
             text = "How much are you sending?", fontSize = 20.sp, fontWeight = FontWeight.Normal

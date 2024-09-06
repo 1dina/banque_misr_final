@@ -7,24 +7,40 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.wrapContentHeight
+import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
+import androidx.compose.material3.ModalBottomSheet
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.focus.focusModifier
 import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Color.Companion.Unspecified
+import androidx.compose.ui.graphics.Color.Companion.White
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -38,8 +54,8 @@ import com.example.speedotransfer.data.models.FavoriteListItem
 import com.example.speedotransfer.ui.screens.dashboard.commonUI.HeaderUI
 import com.example.speedotransfer.ui.theme.Grey
 import com.example.speedotransfer.ui.theme.LightPink
-import com.example.speedotransfer.ui.theme.LightRed
 import com.example.speedotransfer.ui.theme.LightYellow
+import com.example.speedotransfer.ui.theme.Maroon
 
 @Composable
 fun FavouriteScreen(
@@ -48,19 +64,30 @@ fun FavouriteScreen(
     modifier: Modifier = Modifier
 ) {
     val dummyData = DummyDataSource.getFavoriteRecipentData()
+    var showBottomDialog by remember {
+        mutableStateOf(false)
+    }
+    var chosenItem by remember {
+        mutableStateOf(FavoriteListItem("",""))
+    }
+    if(showBottomDialog){
+        FavBottomSheetMaker(onDismiss = {
+        showBottomDialog=false
+        }, favoriteListItem = chosenItem)
+    }
     Box(
         modifier = modifier
             .fillMaxSize()
             .background(
                 brush = Brush.verticalGradient(
                     colors = listOf(
-                        LightYellow, LightRed
+                        LightYellow, LightPink
                     )
                 )
             )
             .padding(innerPadding)
     ) {
-        Column  {
+        Column  (modifier = modifier.padding(horizontal = 16.dp)){
             HeaderUI(headerTitle = "Favourite", onClickBackButton = {
                 navController.popBackStack()
             })
@@ -73,8 +100,11 @@ fun FavouriteScreen(
                 fontSize = 20.sp,
                 fontWeight = FontWeight.SemiBold
             )
-            FavoriteScreenListMaker(favoriteListItems = dummyData, modifier = modifier , onEditClick = {}, onDeleteClick ={
-
+            FavoriteScreenListMaker(favoriteListItems = dummyData, modifier = modifier , onEditClick = {
+                  showBottomDialog =true
+                chosenItem = it
+            }, onDeleteClick ={
+                 chosenItem=it
             } )
 
         }
@@ -111,7 +141,7 @@ fun FavoriteScreenListItem(
         colors = CardDefaults.cardColors(containerColor = LightPink),
         modifier = modifier
             .fillMaxWidth()
-            .padding(bottom =16.dp)
+            .padding(bottom = 16.dp)
     ) {
         Box(modifier = modifier.fillMaxWidth()) {
             Row(
@@ -170,6 +200,85 @@ fun FavoriteScreenListItem(
         }
     }
 }
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun FavBottomSheetMaker(onDismiss :() -> Unit, favoriteListItem: FavoriteListItem, modifier: Modifier = Modifier) {
+    ModalBottomSheet(onDismissRequest = { onDismiss() },
+        containerColor = White,
+        modifier = modifier.wrapContentSize()) {
+        Column(modifier = modifier
+            .height(500.dp)
+            .padding(16.dp)) {
+               Row(modifier = modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically,
+                   horizontalArrangement = Arrangement.Center) {
+                     Icon(painter = painterResource(id = R.drawable.ic_edit), contentDescription = "edit sheet",
+                         tint = Maroon, modifier = modifier.padding(horizontal = 4.dp))
+                     Text(text = "Edit" , fontSize = 20.sp)
+               }
+            Text(
+                text = "Recipient Account", modifier = modifier.padding(bottom = 8.dp,top=16.dp), fontSize = 16.sp
+            )
+            OutlinedTextField(
+                value = favoriteListItem.favoriteRecipientAccount,
+                onValueChange = { favoriteListItem.favoriteRecipientAccount = it },
+                placeholder = {
+                    Text(
+                        text = "Enter Cardholder Account", fontSize = 14.sp, color = Grey
+                    )
+                },
+                textStyle = TextStyle(fontSize = 14.sp),
+                colors = TextFieldDefaults.colors(
+                    focusedContainerColor = Color.White,
+                    unfocusedContainerColor = Color.White,
+                    focusedIndicatorColor = Maroon,
+                    unfocusedIndicatorColor = Grey
+                ),
+                modifier = modifier
+                    .fillMaxWidth()
+                    .height(52.dp)
+            )
+            Text(
+                text = "Recipient Name",
+                modifier = modifier.padding(vertical = 8.dp),
+                fontSize = 16.sp
+            )
+            OutlinedTextField(
+                value = favoriteListItem.favoriteRecipient,
+                onValueChange = { favoriteListItem.favoriteRecipient = it },
+                placeholder = {
+                    Text(
+                        text = "Enter Cardholder Name", fontSize = 14.sp, color = Grey
+                    )
+                }, // Placeholder text size
+                textStyle = TextStyle(fontSize = 14.sp, color = Grey),
+                colors = TextFieldDefaults.colors(
+                    focusedContainerColor = Color.White,
+                    unfocusedContainerColor = Color.White,
+                    focusedIndicatorColor = Maroon,
+                    unfocusedIndicatorColor = Grey
+                ),// Input text size
+                modifier = modifier
+                    .fillMaxWidth()
+                    .padding(bottom = 32.dp)
+                    .height(52.dp)
+            )
+            Button(
+                onClick = {
+                          onDismiss()
+                          //update saved item data
+                },
+                modifier = modifier
+                    .fillMaxWidth(),
+                colors = ButtonDefaults.buttonColors(containerColor = Maroon, contentColor = Color.White),
+                shape = RoundedCornerShape(6.dp),
+            ) {
+                Text(text = "Save", fontSize = 16.sp,modifier=modifier.padding(8.dp), fontWeight = FontWeight.Medium)
+            } 
+        }
+    }
+}
+
 
 
 @Preview(showSystemUi = true)

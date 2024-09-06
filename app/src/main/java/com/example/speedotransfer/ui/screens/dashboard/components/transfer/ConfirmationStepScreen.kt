@@ -41,7 +41,8 @@ fun ConfirmationStepScreen(
     Column(
         modifier = modifier
             .fillMaxSize()
-            .padding(horizontal = 16.dp)
+            .padding(bottom =8.dp)
+
     ) {
         Text(
             text = "$amountOfMoney EGP", modifier = modifier
