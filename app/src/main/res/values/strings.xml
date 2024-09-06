@@ -10,4 +10,9 @@
     <string name="welcome_back">Welcome back,</string>
 
 
+    <string name="app">Speedo Transfer</string>
+    <string name="name">Enter your Full Name</string>
+    <string name="email">Enter your email address</string>
+    <string name="password">Enter your password</string>
+    <string name="date">DD/MM/YY</string>
 </resources>
