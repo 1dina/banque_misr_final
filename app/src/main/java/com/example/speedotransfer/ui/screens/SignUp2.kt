@@ -271,7 +271,7 @@ fun SignUp2(modifier: Modifier = Modifier) {
 //                            fontSize = 16.sp,
 //                            color = Color.Black
 //                        )
-//                    }
+//                 sign   }
 //                )
 //            }
 //        }
