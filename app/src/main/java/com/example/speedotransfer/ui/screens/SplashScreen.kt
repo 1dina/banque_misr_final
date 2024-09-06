@@ -11,12 +11,15 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 import com.example.speedotransfer.R
+import com.example.speedotransfer.routes.AppRoutes
 import com.example.speedotransfer.ui.theme.DarkRed
 import kotlinx.coroutines.delay
 
 @Composable
-fun SplashScreen(modifier : Modifier = Modifier, onTimeout: () -> Unit) {
+fun SplashScreen(navController: NavController,modifier : Modifier = Modifier, onTimeout: () -> Unit) {
     // Displaying a splash screen
     Box(
         modifier = Modifier
@@ -34,7 +37,7 @@ fun SplashScreen(modifier : Modifier = Modifier, onTimeout: () -> Unit) {
     LaunchedEffect(Unit) {
         delay(3000) // 2000 milliseconds = 2 seconds
         onTimeout()
-        //navController.navigate(Route.)
+        navController.navigate(AppRoutes.FIRST_PAGE_SIGN_UP)
 
     }
 }
@@ -43,7 +46,7 @@ fun SplashScreen(modifier : Modifier = Modifier, onTimeout: () -> Unit) {
 @Composable
 private fun SplashScreenPreview() {
 
-    SplashScreen() {
+    SplashScreen(rememberNavController()) {
 
     }
 

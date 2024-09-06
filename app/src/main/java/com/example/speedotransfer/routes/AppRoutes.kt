@@ -6,6 +6,13 @@ import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
+import com.example.speedotransfer.routes.AppRoutes.HOME
+import com.example.speedotransfer.routes.AppRoutes.SPLASH
+import com.example.speedotransfer.ui.screens.SignIn
+import com.example.speedotransfer.ui.screens.SignUp1
+import com.example.speedotransfer.ui.screens.SignUp2
+import com.example.speedotransfer.ui.screens.SplashScreen
 import com.example.speedotransfer.ui.screens.dashboard.components.HomeScreen
 import com.example.speedotransfer.ui.screens.dashboard.components.more.MoreScreen
 import com.example.speedotransfer.ui.screens.dashboard.components.MyCardScreen
@@ -14,6 +21,10 @@ import com.example.speedotransfer.ui.screens.dashboard.components.more.Favourite
 import com.example.speedotransfer.ui.screens.dashboard.components.transfer.TransferScreen
 
 object AppRoutes {
+    const val SPLASH = "splash"
+    const val FIRST_PAGE_SIGN_UP = "signup1"
+    const val LAST_PAGE_SIGN_UP = "signup2"
+    const val SIGN_IN = "login"
     const val HOME = "home"
     const val TRANSFER = "transfer"
     const val TRANSACTION = "transaction"
@@ -22,16 +33,26 @@ object AppRoutes {
     const val FAVOURITES = "favourites"
 }
 
+
 @Composable
-fun AppNavHost(navController: NavController, innerPadding: PaddingValues) {
-    NavHost(navController = navController as NavHostController, startDestination = AppRoutes.HOME) {
-        composable(route = AppRoutes.HOME) { HomeScreen(navController, innerPadding = innerPadding) }
-        composable(route = AppRoutes.TRANSFER) { TransferScreen(navController,innerPadding = innerPadding) }
-        composable(route = AppRoutes.TRANSACTION) { TransactionScreen(navController,innerPadding = innerPadding) }
-        composable(route = AppRoutes.MY_CARD) { MyCardScreen(navController,innerPadding = innerPadding) }
-        composable(route = AppRoutes.MORE) { MoreScreen(navController,innerPadding = innerPadding) }
-        composable(route = AppRoutes.FAVOURITES) { FavouriteScreen(navController,innerPadding = innerPadding) }
-
-
+fun AuthNavGraph() {
+    val navController = rememberNavController()
+    NavHost(navController = navController, startDestination = SPLASH) {
+        composable(AppRoutes.SPLASH) { SplashScreen(navController = navController, onTimeout = {}) }
+        composable(AppRoutes.SIGN_IN) { SignIn(navController = navController) }
+        composable(AppRoutes.FIRST_PAGE_SIGN_UP) { SignUp1(navController = navController) }
+        composable(AppRoutes.LAST_PAGE_SIGN_UP) { SignUp2(navController = navController) }
     }
 }
+@Composable
+fun DashboardNavGraph(navController: NavController,innerPadding: PaddingValues) {
+    NavHost(navController = navController as NavHostController, startDestination = HOME) {
+        composable(AppRoutes.HOME) { HomeScreen(navController = navController, innerPadding = innerPadding) }
+        composable(AppRoutes.TRANSFER) { TransferScreen(navController = navController, innerPadding = innerPadding) }
+        composable(AppRoutes.TRANSACTION) { TransactionScreen(navController = navController, innerPadding = innerPadding) }
+        composable(AppRoutes.MY_CARD) { MyCardScreen(navController = navController, innerPadding = innerPadding) }
+        composable(AppRoutes.MORE) { MoreScreen(navController = navController, innerPadding = innerPadding) }
+        composable(AppRoutes.FAVOURITES) { FavouriteScreen(navController = navController, innerPadding = innerPadding) }
+    }
+}
+

@@ -13,21 +13,21 @@
         android:theme="@style/Theme.SpeedoTransfer"
         tools:targetApi="31" >
         <activity
-            android:name=".ui.screens.dashboard.DashboardActivity"
-            android:exported="true"
+            android:name=".DashboardActivity"
+            android:exported="false"
             android:label="@string/title_activity_dashboard"
+            android:theme="@style/Theme.SpeedoTransfer" >
+        </activity>
+        <activity
+            android:name=".AuthActivity"
+            android:exported="true"
+            android:label="@string/app_name"
             android:theme="@style/Theme.SpeedoTransfer" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-        </activity>
-        <activity
-            android:name=".MainActivity"
-            android:exported="false"
-            android:label="@string/app_name"
-            android:theme="@style/Theme.SpeedoTransfer" >
         </activity>
     </application>
 

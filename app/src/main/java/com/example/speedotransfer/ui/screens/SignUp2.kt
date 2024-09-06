@@ -34,13 +34,17 @@ import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 import com.example.speedotransfer.R
+import com.example.speedotransfer.routes.AppRoutes
 import com.example.speedotransfer.ui.theme.LightRed
+import com.example.speedotransfer.ui.theme.Maroon
 
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun SignUp2(modifier: Modifier = Modifier) {
+fun SignUp2(navController: NavController, modifier: Modifier = Modifier) {
 
     var dob by remember { mutableStateOf("") }
 
@@ -64,7 +68,7 @@ fun SignUp2(modifier: Modifier = Modifier) {
             modifier = Modifier.fillMaxSize()
         ) {
             Icon(
-                painter = painterResource(id = R.drawable.ic_arrow_back),
+                painter = painterResource(id = R.drawable.ic_back),
                 contentDescription = "Select your country",
                 Modifier
                     .size(40.dp)
@@ -137,7 +141,7 @@ fun SignUp2(modifier: Modifier = Modifier) {
                         Modifier
                             .alpha(0.5f)
                             .size(30.dp)
-                            .clickable {  }
+                            .clickable { }
                     )
                 }
 
@@ -182,12 +186,12 @@ fun SignUp2(modifier: Modifier = Modifier) {
 
 
             Button(
-                onClick = { },
+                onClick = { navController.navigate(AppRoutes.SIGN_IN)},
                 modifier = Modifier
                     .padding(top = 40.dp)
                     .size(width = 350.dp, height = 60.dp),
                 shape = RoundedCornerShape(10.dp),
-                colors = ButtonDefaults.buttonColors(colorResource(id = R.color.Marron))
+                colors = ButtonDefaults.buttonColors(containerColor = Maroon)
             ) {
                 Text(
                     text = "Continue",
@@ -207,8 +211,12 @@ fun SignUp2(modifier: Modifier = Modifier) {
                 )
                 Text(
                     text = "Sign In",
-                    modifier = Modifier.padding(top = 25.dp, start = 5.dp),
-                    color = colorResource(id = R.color.Marron),
+                    modifier = Modifier
+                        .padding(top = 25.dp, start = 5.dp)
+                        .clickable {
+                            navController.navigate(AppRoutes.SIGN_IN)
+                        },
+                    color = Maroon,
                     fontSize = 15.sp,
                     fontWeight = FontWeight.Bold,
                     textDecoration = TextDecoration.Underline
@@ -283,6 +291,6 @@ fun SignUp2(modifier: Modifier = Modifier) {
 @Composable
 private fun SignUp2Preview() {
 
-    SignUp2()
+    SignUp2(rememberNavController())
 
 }

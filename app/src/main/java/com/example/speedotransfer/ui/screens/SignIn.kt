@@ -1,5 +1,6 @@
 package com.example.speedotransfer.ui.screens
 
+import android.content.Intent
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -27,6 +28,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -38,17 +40,23 @@ import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 import com.example.speedotransfer.R
+import com.example.speedotransfer.routes.AppRoutes
+import com.example.speedotransfer.DashboardActivity
 import com.example.speedotransfer.ui.theme.LightRed
+import com.example.speedotransfer.ui.theme.Maroon
 
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun SignIn(modifier: Modifier = Modifier) {
+fun SignIn(navController: NavController, modifier: Modifier = Modifier) {
 
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
     var isPasswordVisible by remember { mutableStateOf(false) }
+    val context = LocalContext.current
 
 
     Box(
@@ -170,12 +178,15 @@ fun SignIn(modifier: Modifier = Modifier) {
             }
 
             Button(
-                onClick = { },
+                onClick = {     val intent = Intent(context, DashboardActivity::class.java).apply {
+                    flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                }
+                          context.startActivity(intent)},
                 modifier = Modifier
                     .padding(top = 40.dp)
                     .size(width = 350.dp, height = 60.dp),
                 shape = RoundedCornerShape(10.dp),
-                colors = ButtonDefaults.buttonColors(colorResource(id = R.color.Marron))
+                colors = ButtonDefaults.buttonColors(containerColor = Maroon)
             ) {
                 Text(
                     text = "Sign in",
@@ -197,8 +208,8 @@ fun SignIn(modifier: Modifier = Modifier) {
                     text = "Sign Up",
                     modifier = Modifier
                         .padding(top = 25.dp, start = 5.dp)
-                        .clickable {  },
-                    color = colorResource(id = R.color.Marron),
+                        .clickable { navController.navigate(AppRoutes.FIRST_PAGE_SIGN_UP) },
+                    color = Maroon,
                     fontSize = 15.sp,
                     fontWeight = FontWeight.Bold,
                     textDecoration = TextDecoration.Underline
@@ -214,6 +225,6 @@ fun SignIn(modifier: Modifier = Modifier) {
 @Composable
 private fun SignInPreview() {
 
-    SignIn()
+    SignIn(rememberNavController())
 
 }

@@ -38,12 +38,16 @@ import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 import com.example.speedotransfer.ui.theme.LightRed
 import com.example.speedotransfer.R
+import com.example.speedotransfer.routes.AppRoutes
+import com.example.speedotransfer.ui.theme.Maroon
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun SignUp1(modifier: Modifier = Modifier) {
+fun SignUp1(navController: NavController,modifier: Modifier = Modifier) {
 
     var name by remember { mutableStateOf("") }
     var email by remember { mutableStateOf("") }
@@ -232,12 +236,12 @@ fun SignUp1(modifier: Modifier = Modifier) {
 
             }
             Button(
-                onClick = { },
+                onClick = {  navController.navigate(AppRoutes.LAST_PAGE_SIGN_UP)},
                 modifier = Modifier
                     .padding(top = 40.dp)
                     .size(width = 350.dp, height = 60.dp),
                 shape = RoundedCornerShape(10.dp),
-                colors = ButtonDefaults.buttonColors(colorResource(id = R.color.Marron))
+                colors = ButtonDefaults.buttonColors(containerColor = Maroon)
             ) {
                 Text(
                     text = "Sign up",
@@ -259,8 +263,10 @@ fun SignUp1(modifier: Modifier = Modifier) {
                     text = "Sign In",
                     modifier = Modifier
                         .padding(top = 25.dp, start = 5.dp)
-                        .clickable {  },
-                    color = colorResource(id = R.color.Marron),
+                        .clickable {
+                            navController.navigate(AppRoutes.SIGN_IN)
+                        },
+                    color = Maroon,
                     fontSize = 15.sp,
                     fontWeight = FontWeight.Bold,
                     textDecoration = TextDecoration.Underline
@@ -326,7 +332,6 @@ fun Texts(text: String) {
 @Preview(showSystemUi = true)
 @Composable
 private fun SignUp1Preview() {
-
-    SignUp1()
+    SignUp1(rememberNavController())
 
 }

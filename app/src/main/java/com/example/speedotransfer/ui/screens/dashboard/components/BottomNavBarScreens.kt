@@ -1,4 +1,4 @@
-package com.example.speedotransfer.ui.screens.dashboard
+package com.example.speedotransfer.ui.screens.dashboard.components
 
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes

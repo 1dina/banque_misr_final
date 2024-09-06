@@ -1,4 +1,4 @@
-package com.example.speedotransfer.ui.screens.dashboard
+package com.example.speedotransfer
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -26,10 +26,11 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavDestination.Companion.hierarchy
-import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import com.example.speedotransfer.routes.AppNavHost
+import com.example.speedotransfer.routes.AppRoutes
+import com.example.speedotransfer.routes.DashboardNavGraph
+import com.example.speedotransfer.ui.screens.dashboard.components.BottomNavBarScreens
 import com.example.speedotransfer.ui.theme.Grey
 import com.example.speedotransfer.ui.theme.Maroon
 import com.example.speedotransfer.ui.theme.SpeedoTransferTheme
@@ -76,7 +77,7 @@ class DashboardActivity : ComponentActivity() {
                                     selected = currentDestination?.hierarchy?.any { it.route == screen.route } == true,
                                     onClick = {
                                         navController.navigate(screen.route) {
-                                            popUpTo(navController.graph.findStartDestination().id) {
+                                            popUpTo(AppRoutes.HOME) {
                                                 saveState = true
                                             }
                                             launchSingleTop = true
@@ -95,11 +96,7 @@ class DashboardActivity : ComponentActivity() {
 
                         }
                     }
-                ) { innerPadding ->
-                    AppNavHost(
-                        navController = navController,
-                        innerPadding = innerPadding
-                    )
+                ) { innerPadding -> DashboardNavGraph(navController,innerPadding = innerPadding)
                 }
             }
         }
