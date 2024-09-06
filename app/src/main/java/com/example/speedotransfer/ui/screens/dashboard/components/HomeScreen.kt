@@ -145,14 +145,15 @@ fun TransactionList(transactionList: List<RecentTransactionItem>, modifier: Modi
         Text(text = "Recent transactions", fontSize = 14.sp, fontWeight = FontWeight.Normal)
         Text(text = "View all", fontSize = 14.sp, color = Grey, fontWeight = FontWeight.Normal)
     }
-    Surface(shape = RoundedCornerShape(20.dp), modifier = modifier.padding(top = 16.dp)) {
+    Surface(shape = RoundedCornerShape(4.dp), modifier = modifier.padding(top = 16.dp),
+        shadowElevation = 2.dp) {
         LazyColumn {
             items(transactionList) {
                 RecentTransactionUI(transactionItem = it)
                 HorizontalDivider(
                     modifier = Modifier
                         .fillMaxWidth(),
-                    thickness = 1.dp,
+                    thickness = 0.5.dp,
                     color = Color.LightGray
                 )
             }
@@ -174,7 +175,7 @@ fun RecentTransactionUI(transactionItem: RecentTransactionItem, modifier: Modifi
                 modifier = modifier.size(64.dp)
             )
             Column(
-                verticalArrangement = Arrangement.SpaceEvenly,
+                verticalArrangement = Arrangement.SpaceBetween,
                 modifier = modifier
                     .padding(start = 8.dp)
                     .height(64.dp)
