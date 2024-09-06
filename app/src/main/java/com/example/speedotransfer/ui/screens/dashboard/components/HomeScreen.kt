@@ -74,7 +74,7 @@ fun HomeScreen(navController: NavController, modifier: Modifier = Modifier,inner
             Row(
                 modifier = modifier
                     .fillMaxWidth()
-                    .padding(bottom = 16.dp),
+                    .padding(bottom = 8.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Icon(
@@ -109,8 +109,9 @@ fun HomeScreen(navController: NavController, modifier: Modifier = Modifier,inner
             Card(
                 modifier = modifier
                     .fillMaxWidth()
-                    .padding(top = 16.dp)
-                    .height(120.dp),
+                    .padding(top = 8.dp)
+                    .height(128.dp),
+                shape = RoundedCornerShape(8.dp),
                 colors = CardDefaults.cardColors(containerColor = Maroon, contentColor = White)
             ) {
                 Column(
@@ -145,7 +146,7 @@ fun TransactionList(transactionList: List<RecentTransactionItem>, modifier: Modi
         Text(text = "Recent transactions", fontSize = 14.sp, fontWeight = FontWeight.Normal)
         Text(text = "View all", fontSize = 14.sp, color = Grey, fontWeight = FontWeight.Normal)
     }
-    Surface(shape = RoundedCornerShape(4.dp), modifier = modifier.padding(top = 16.dp),
+    Surface(shape = RoundedCornerShape(4.dp), modifier = modifier.padding(top = 8.dp),
         shadowElevation = 2.dp) {
         LazyColumn {
             items(transactionList) {
@@ -153,7 +154,7 @@ fun TransactionList(transactionList: List<RecentTransactionItem>, modifier: Modi
                 HorizontalDivider(
                     modifier = Modifier
                         .fillMaxWidth(),
-                    thickness = 0.5.dp,
+                    thickness = 0.8.dp,
                     color = Color.LightGray
                 )
             }
@@ -167,7 +168,7 @@ fun RecentTransactionUI(transactionItem: RecentTransactionItem, modifier: Modifi
         Row(
             modifier = modifier
                 .fillMaxWidth()
-                .padding(16.dp)
+                .padding(horizontal = 8.dp,vertical=16.dp)
         ) {
             Image(
                 painter = painterResource(id = R.drawable.ic_visa),
