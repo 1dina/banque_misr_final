@@ -34,7 +34,6 @@ import androidx.compose.ui.graphics.Color.Companion.Unspecified
 import androidx.compose.ui.graphics.Color.Companion.White
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -130,9 +129,11 @@ fun HelpBottomSheetMaker(
     onEmailClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    ModalBottomSheet(onDismissRequest = { onDismiss() },
+    ModalBottomSheet(
+        onDismissRequest = { onDismiss() },
         containerColor = White,
-        modifier = modifier.wrapContentSize()) {
+        modifier = modifier.wrapContentSize()
+    ) {
         Row(
             modifier = modifier
                 .height(280.dp)
@@ -140,12 +141,13 @@ fun HelpBottomSheetMaker(
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceEvenly
         ) {
-            Card(colors = CardDefaults.cardColors(containerColor = White), modifier = modifier
-                .width(120.dp)
-                .height(140.dp)
-                .clickable {
-                    onEmailClick()
-                }, elevation = CardDefaults.cardElevation(4.dp)
+            Card(
+                colors = CardDefaults.cardColors(containerColor = White), modifier = modifier
+                    .width(120.dp)
+                    .height(140.dp)
+                    .clickable {
+                        onEmailClick()
+                    }, elevation = CardDefaults.cardElevation(4.dp)
             ) {
                 Column(
                     modifier = modifier
@@ -156,21 +158,22 @@ fun HelpBottomSheetMaker(
                     Icon(
                         painter = painterResource(id = R.drawable.ic_email_us),
                         contentDescription = "our email", tint = Unspecified,
-                        modifier = modifier.padding(bottom=8.dp)
+                        modifier = modifier.padding(bottom = 8.dp)
                     )
                     Text(
                         text = "Send Email",
                         fontSize = 14.sp, color = Black,
-                        )
+                    )
 
                 }
             }
-            Card(colors = CardDefaults.cardColors(containerColor = White), modifier = modifier
-                .width(120.dp)
-                .height(140.dp)
-                .clickable {
-                    onCallClick()
-                }, elevation = CardDefaults.cardElevation(4.dp)
+            Card(
+                colors = CardDefaults.cardColors(containerColor = White), modifier = modifier
+                    .width(120.dp)
+                    .height(140.dp)
+                    .clickable {
+                        onCallClick()
+                    }, elevation = CardDefaults.cardElevation(4.dp)
             ) {
                 Column(
                     modifier = modifier
@@ -181,7 +184,7 @@ fun HelpBottomSheetMaker(
                     Icon(
                         painter = painterResource(id = R.drawable.ic_call_us),
                         contentDescription = "our phone number", tint = Unspecified,
-                        modifier = modifier.padding(bottom=8.dp)
+                        modifier = modifier.padding(bottom = 8.dp)
                     )
                     Text(
                         text = "Call Us",
