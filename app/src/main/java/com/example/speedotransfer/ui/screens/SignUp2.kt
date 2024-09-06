@@ -13,6 +13,7 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
+import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextFieldDefaults
@@ -26,6 +27,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.Color.Companion.White
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -47,6 +49,12 @@ import com.example.speedotransfer.ui.theme.Maroon
 fun SignUp2(navController: NavController, modifier: Modifier = Modifier) {
 
     var dob by remember { mutableStateOf("") }
+    var expandMenu by remember {
+        mutableStateOf(false)
+    }
+    if (expandMenu) {
+        CountryBottomSheetMaker(onDismiss = { expandMenu = false })
+    }
 
 
 
@@ -125,7 +133,6 @@ fun SignUp2(navController: NavController, modifier: Modifier = Modifier) {
                         color = colorResource(id = R.color.black)
                     )
                 },
-                readOnly = true,
                 shape = RoundedCornerShape(10.dp),
                 colors = TextFieldDefaults.outlinedTextFieldColors(
                     containerColor = Color.White
@@ -141,7 +148,9 @@ fun SignUp2(navController: NavController, modifier: Modifier = Modifier) {
                         Modifier
                             .alpha(0.5f)
                             .size(30.dp)
-                            .clickable { }
+                            .clickable {
+                                expandMenu = true
+                            }
                     )
                 }
 
@@ -186,7 +195,7 @@ fun SignUp2(navController: NavController, modifier: Modifier = Modifier) {
 
 
             Button(
-                onClick = { navController.navigate(AppRoutes.SIGN_IN)},
+                onClick = { navController.navigate(AppRoutes.SIGN_IN) },
                 modifier = Modifier
                     .padding(top = 40.dp)
                     .size(width = 350.dp, height = 60.dp),
@@ -229,62 +238,20 @@ fun SignUp2(navController: NavController, modifier: Modifier = Modifier) {
 
 }
 
-//@OptIn(ExperimentalMaterial3Api::class)
-//@Composable
-//fun DropdownMenuExample() {
-//    var expanded by remember { mutableStateOf(false) }
-//    var selectedOption by remember { mutableStateOf("Select a country") }
-//
-//    val options = listOf("United States", "Canada", "Mexico", "Brazil", "Argentina")
-//
-//    ExposedDropdownMenuBox(
-//        expanded = expanded,
-//        onExpandedChange = { expanded = !expanded }
-//    ) {
-//        // Outlined TextField for the dropdown
-//        TextField(
-//            readOnly = true,
-//            value = selectedOption,
-//            onValueChange = { },
-//            trailingIcon = {
-//                ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded)
-//            },
-//            colors = TextFieldDefaults.outlinedTextFieldColors(
-//                containerColor = Color.White // Background color of TextField
-//
-//            ),
-//            modifier = Modifier
-//                .fillMaxWidth()
-//                .padding(16.dp)
-//                .menuAnchor(),
-//            shape = RoundedCornerShape(10.dp)
-//
-//        )
-//
-//        // Dropdown menu items
-//        ExposedDropdownMenu(
-//            expanded = expanded,
-//            onDismissRequest = { expanded = false }
-//        ) {
-//            options.forEach { option ->
-//
-//                DropdownMenuItem(
-//                    onClick = {
-//                        selectedOption = option
-//                        expanded = false
-//                    },
-//                    text = {
-//                        Text(
-//                            text = option,
-//                            fontSize = 16.sp,
-//                            color = Color.Black
-//                        )
-//                 sign   }
-//                )
-//            }
-//        }
-//    }
-//}
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun CountryBottomSheetMaker(onDismiss: () -> Unit, modifier: Modifier = Modifier) {
+    ModalBottomSheet(onDismissRequest = { onDismiss() },
+        containerColor = White) {
+        Box(
+            modifier = modifier
+                .fillMaxSize()
+                .padding(16.dp)
+        ) {
+            Text("Trying Bottom Sheet", modifier = modifier.align(Alignment.TopCenter))
+        }
+    }
+}
 
 
 @Preview(showSystemUi = true)
