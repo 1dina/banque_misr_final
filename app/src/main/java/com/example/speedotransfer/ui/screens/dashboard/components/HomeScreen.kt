@@ -3,6 +3,7 @@ package com.example.speedotransfer.ui.screens.dashboard.components
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -19,6 +20,8 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Badge
+import androidx.compose.material3.BadgedBox
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.HorizontalDivider
@@ -29,7 +32,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Color.Companion.Unspecified
@@ -47,13 +49,18 @@ import androidx.navigation.compose.rememberNavController
 import com.example.speedotransfer.R
 import com.example.speedotransfer.data.DummyDataSource
 import com.example.speedotransfer.data.models.RecentTransactionItem
+import com.example.speedotransfer.routes.AppRoutes
 import com.example.speedotransfer.ui.theme.Grey
 import com.example.speedotransfer.ui.theme.LightRed
 import com.example.speedotransfer.ui.theme.LightYellow
 import com.example.speedotransfer.ui.theme.Maroon
 
 @Composable
-fun HomeScreen(navController: NavController, modifier: Modifier = Modifier,innerPadding : PaddingValues) {
+fun HomeScreen(
+    navController: NavController,
+    modifier: Modifier = Modifier,
+    innerPadding: PaddingValues
+) {
     val transactionList = DummyDataSource.getRecentTransactionsData()
     Box(
         modifier = Modifier
@@ -64,7 +71,8 @@ fun HomeScreen(navController: NavController, modifier: Modifier = Modifier,inner
                         LightYellow, LightRed
                     )
                 )
-            ).padding(innerPadding)
+            )
+            .padding(innerPadding)
     ) {
         Column(
             modifier = modifier
@@ -100,12 +108,16 @@ fun HomeScreen(navController: NavController, modifier: Modifier = Modifier,inner
                     Text(text = "User name", fontSize = 16.sp)
                 }
                 Spacer(modifier = Modifier.weight(1f))
-                Icon(
-                    painter = painterResource(id = R.drawable.ic_notifications),
-                    contentDescription = "notification icon",
-                    modifier = modifier.padding(end = 8.dp),
-                )
-            }
+                    Icon(
+                        painter = painterResource(id = R.drawable.ic_notifications),
+                        contentDescription = "notification icon",
+                        tint = Unspecified,
+                        modifier = modifier.padding(end = 8.dp)
+                            .clickable {
+                                navController.navigate(AppRoutes.NOTIFICATIONS)
+                            }
+                    )
+                }
             Card(
                 modifier = modifier
                     .fillMaxWidth()
@@ -146,8 +158,10 @@ fun TransactionList(transactionList: List<RecentTransactionItem>, modifier: Modi
         Text(text = "Recent transactions", fontSize = 14.sp, fontWeight = FontWeight.Normal)
         Text(text = "View all", fontSize = 14.sp, color = Grey, fontWeight = FontWeight.Normal)
     }
-    Surface(shape = RoundedCornerShape(4.dp), modifier = modifier.padding(top = 8.dp),
-        shadowElevation = 2.dp) {
+    Surface(
+        shape = RoundedCornerShape(4.dp), modifier = modifier.padding(top = 8.dp),
+        shadowElevation = 2.dp
+    ) {
         LazyColumn {
             items(transactionList) {
                 RecentTransactionUI(transactionItem = it)
@@ -168,7 +182,7 @@ fun RecentTransactionUI(transactionItem: RecentTransactionItem, modifier: Modifi
         Row(
             modifier = modifier
                 .fillMaxWidth()
-                .padding(horizontal = 8.dp,vertical=16.dp)
+                .padding(horizontal = 8.dp, vertical = 16.dp)
         ) {
             Image(
                 painter = painterResource(id = R.drawable.ic_visa),

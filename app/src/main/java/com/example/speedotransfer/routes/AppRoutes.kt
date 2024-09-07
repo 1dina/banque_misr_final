@@ -16,6 +16,7 @@ import com.example.speedotransfer.ui.screens.SplashScreen
 import com.example.speedotransfer.ui.screens.dashboard.components.HomeScreen
 import com.example.speedotransfer.ui.screens.dashboard.components.more.MoreScreen
 import com.example.speedotransfer.ui.screens.dashboard.components.MyCardScreen
+import com.example.speedotransfer.ui.screens.dashboard.components.NotificationScreen
 import com.example.speedotransfer.ui.screens.dashboard.components.TransactionScreen
 import com.example.speedotransfer.ui.screens.dashboard.components.more.FavouriteScreen
 import com.example.speedotransfer.ui.screens.dashboard.components.transfer.TransferScreen
@@ -31,6 +32,7 @@ object AppRoutes {
     const val MY_CARD = "MyCard"
     const val MORE = "more"
     const val FAVOURITES = "favourites"
+    const val NOTIFICATIONS = "notification"
 }
 
 
@@ -53,6 +55,8 @@ fun DashboardNavGraph(navController: NavController,innerPadding: PaddingValues) 
         composable(AppRoutes.MY_CARD) { MyCardScreen(navController = navController, innerPadding = innerPadding) }
         composable(AppRoutes.MORE) { MoreScreen(navController = navController, innerPadding = innerPadding) }
         composable(AppRoutes.FAVOURITES) { FavouriteScreen(navController = navController, innerPadding = innerPadding) }
+        composable(AppRoutes.NOTIFICATIONS) { NotificationScreen(navController = navController, innerPadding = innerPadding) }
+
     }
 }
 
