@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
@@ -93,13 +94,12 @@ fun NotificationListItem(
         modifier = modifier
             .fillMaxWidth()
             .padding(vertical = 8.dp)
-            .height(108.dp)
             .shadow(2.dp, shape = RoundedCornerShape(8.dp)),
         colors = CardDefaults.cardColors(containerColor = LightPink)
     ) {
         Row (
             modifier
-                .fillMaxSize()
+                .fillMaxWidth()
                 .padding(8.dp)){
 
             Box(
@@ -112,12 +112,13 @@ fun NotificationListItem(
                     painter = painterResource(id = R.drawable.ic_receive),
                     contentDescription = "Receive Icon",
                     tint = Color.Unspecified, // Keeping the icon color as original
-                    modifier = Modifier.size(64.dp) // Ensure icon fills the box
+                    modifier = Modifier.size(40.dp)
+                        .align(Alignment.Center)// Ensure icon fills the box
                 )
             }
 
             Column(modifier = modifier
-                .fillMaxHeight()
+                .wrapContentHeight()
                 .padding(horizontal = 8.dp), verticalArrangement = Arrangement.Center) {
                 Text(text = notificationItemData.title, fontSize = 14.sp, fontWeight = FontWeight.Medium)
                 Text(text = notificationItemData.body, fontSize = 12.sp,fontWeight = FontWeight.Normal)
