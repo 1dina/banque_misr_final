@@ -2,6 +2,7 @@ package com.example.speedotransfer.data
 
 import com.example.speedotransfer.R
 import com.example.speedotransfer.data.models.FavoriteListItem
+import com.example.speedotransfer.data.models.MyCardsItemData
 import com.example.speedotransfer.data.models.NotificationItemData
 import com.example.speedotransfer.data.models.RecentTransactionItem
 
@@ -42,6 +43,18 @@ object DummyDataSource {
         val list = mutableListOf<NotificationItemData>()
         for (i in 0..4) {
             list.add(notificationItem)
+        }
+        return list
+    }
+    fun getCardInfo() : List<MyCardsItemData>{
+        val cardItem =MyCardsItemData(
+            "Asmaa Dosuky",
+            "xxxx7890"
+            ,true
+        )
+        val list = mutableListOf<MyCardsItemData>()
+        for (i in 0..2) {
+            list.add(cardItem)
         }
         return list
     }
