@@ -17,6 +17,7 @@ import androidx.compose.material3.DatePickerDialog
 import androidx.compose.material3.DatePickerState
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
+import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.SelectableDates
 import androidx.compose.material3.Text
@@ -35,6 +36,7 @@ import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.graphics.Color.Companion.White
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -43,20 +45,30 @@ import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 import com.example.speedotransfer.R
+import com.example.speedotransfer.routes.AppRoutes
 import com.example.speedotransfer.ui.theme.LightRed
 import java.text.SimpleDateFormat
 import java.util.Locale
+import com.example.speedotransfer.ui.theme.Maroon
 
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun SignUp2(modifier: Modifier = Modifier) {
+fun SignUp2(navController: NavController, modifier: Modifier = Modifier) {
 
     var dob by remember { mutableStateOf("") }
     var isDatePickerShown by remember { mutableStateOf(false) }
 
     var dateMillis by remember { mutableLongStateOf(0L) }
+    var expandMenu by remember {
+        mutableStateOf(false)
+    }
+    if (expandMenu) {
+        CountryBottomSheetMaker(onDismiss = { expandMenu = false })
+    }
 
     if(isDatePickerShown)
         DatePickerChooser(onConfirm = {
@@ -88,7 +100,7 @@ fun SignUp2(modifier: Modifier = Modifier) {
             modifier = Modifier.fillMaxSize()
         ) {
             Icon(
-                painter = painterResource(id = R.drawable.ic_arrow_back),
+                painter = painterResource(id = R.drawable.ic_back),
                 contentDescription = "Select your country",
                 Modifier
                     .size(40.dp)
@@ -145,7 +157,6 @@ fun SignUp2(modifier: Modifier = Modifier) {
                         color = colorResource(id = R.color.black)
                     )
                 },
-                readOnly = true,
                 shape = RoundedCornerShape(10.dp),
                 colors = TextFieldDefaults.outlinedTextFieldColors(
                     containerColor = Color.White
@@ -161,7 +172,9 @@ fun SignUp2(modifier: Modifier = Modifier) {
                         Modifier
                             .alpha(0.5f)
                             .size(30.dp)
-                            .clickable {  }
+                            .clickable {
+                                expandMenu = true
+                            }
                     )
                 }
 
@@ -210,12 +223,12 @@ fun SignUp2(modifier: Modifier = Modifier) {
 
 
             Button(
-                onClick = { },
+                onClick = { navController.navigate(AppRoutes.SIGN_IN) },
                 modifier = Modifier
                     .padding(top = 40.dp)
                     .size(width = 350.dp, height = 60.dp),
                 shape = RoundedCornerShape(10.dp),
-                colors = ButtonDefaults.buttonColors(colorResource(id = R.color.Marron))
+                colors = ButtonDefaults.buttonColors(containerColor = Maroon)
             ) {
                 Text(
                     text = "Continue",
@@ -235,8 +248,12 @@ fun SignUp2(modifier: Modifier = Modifier) {
                 )
                 Text(
                     text = "Sign In",
-                    modifier = Modifier.padding(top = 25.dp, start = 5.dp),
-                    color = colorResource(id = R.color.Marron),
+                    modifier = Modifier
+                        .padding(top = 25.dp, start = 5.dp)
+                        .clickable {
+                            navController.navigate(AppRoutes.SIGN_IN)
+                        },
+                    color = Maroon,
                     fontSize = 16.sp,
                     fontWeight = FontWeight.Bold,
                     textDecoration = TextDecoration.Underline
@@ -280,12 +297,26 @@ fun DatePickerChooser(onConfirm: (DatePickerState) -> Unit, onDismiss: () -> Uni
         DatePicker(state = datePickerState)
     }
 }
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun CountryBottomSheetMaker(onDismiss: () -> Unit, modifier: Modifier = Modifier) {
+    ModalBottomSheet(onDismissRequest = { onDismiss() },
+        containerColor = White) {
+        Box(
+            modifier = modifier
+                .fillMaxSize()
+                .padding(16.dp)
+        ) {
+            Text("Trying Bottom Sheet", modifier = modifier.align(Alignment.TopCenter))
+        }
+    }
+}
 
 
 @Preview(showSystemUi = true)
 @Composable
 private fun SignUp2Preview() {
 
-    SignUp2()
+    SignUp2(rememberNavController())
 
 }
