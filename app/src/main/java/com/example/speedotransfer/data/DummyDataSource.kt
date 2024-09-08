@@ -1,10 +1,10 @@
 package com.example.speedotransfer.data
 
 import com.example.speedotransfer.R
-import com.example.speedotransfer.data.models.FavoriteListItem
-import com.example.speedotransfer.data.models.MyCardsItemData
-import com.example.speedotransfer.data.models.NotificationItemData
-import com.example.speedotransfer.data.models.RecentTransactionItem
+import com.example.speedotransfer.data.models.dummy.FavoriteListItem
+import com.example.speedotransfer.data.models.dummy.MyCardsItemData
+import com.example.speedotransfer.data.models.dummy.NotificationItemData
+import com.example.speedotransfer.data.models.dummy.RecentTransactionItem
 
 
 object DummyDataSource {
@@ -23,7 +23,8 @@ object DummyDataSource {
         }
         return list
     }
-    fun getFavoriteRecipentData() : List<FavoriteListItem>{
+
+    fun getFavoriteRecipentData(): List<FavoriteListItem> {
         val favoriteUser = FavoriteListItem(
             "Asmaa Dosuky",
             "xxxx7890"
@@ -34,11 +35,11 @@ object DummyDataSource {
         }
         return list
     }
-    fun getNotificationData() : List<NotificationItemData>{
-        val notificationItem =NotificationItemData(
+
+    fun getNotificationData(): List<NotificationItemData> {
+        val notificationItem = NotificationItemData(
             "Receive Transaction",
-            "You have received 1000 USD from Asmaa Dosuky 1234 xxx"
-            ,"12 Jul 2024 09:00 PM"
+            "You have received 1000 USD from Asmaa Dosuky 1234 xxx", "12 Jul 2024 09:00 PM"
         )
         val list = mutableListOf<NotificationItemData>()
         for (i in 0..4) {
@@ -46,11 +47,11 @@ object DummyDataSource {
         }
         return list
     }
-    fun getCardInfo() : List<MyCardsItemData>{
-        val cardItem =MyCardsItemData(
+
+    fun getCardInfo(): List<MyCardsItemData> {
+        val cardItem = MyCardsItemData(
             "Asmaa Dosuky",
-            "xxxx7890"
-            ,true
+            "xxxx7890", true
         )
         val list = mutableListOf<MyCardsItemData>()
         for (i in 0..2) {

@@ -1,5 +1,6 @@
 package com.example.speedotransfer.ui.screens
 
+import android.content.Intent
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
@@ -18,6 +19,8 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -28,6 +31,7 @@ import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Color.Companion.White
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -36,18 +40,34 @@ import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
-import androidx.navigation.compose.rememberNavController
+import com.example.speedotransfer.DashboardActivity
 import com.example.speedotransfer.R
+import com.example.speedotransfer.data.models.UserAuthRegisterRequest
+import com.example.speedotransfer.data.source.BankingAPIService
 import com.example.speedotransfer.routes.AppRoutes
 import com.example.speedotransfer.ui.theme.LightRed
 import com.example.speedotransfer.ui.theme.Maroon
+import com.example.speedotransfer.ui.viewmodels.AuthViewModel
+import com.example.speedotransfer.ui.viewmodels.AuthViewModelFactory
 
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun SignUp2(navController: NavController, modifier: Modifier = Modifier) {
+fun SignUp2(
+    navController: NavController,
+    name: String,
+    email: String,
+    password: String,
+    modifier: Modifier = Modifier
 
+) {
+    val apiService = BankingAPIService.callable
+    val viewModel: AuthViewModel = viewModel(factory = AuthViewModelFactory(apiService))
+    var country by remember {
+        mutableStateOf("")
+    }
     var dob by remember { mutableStateOf("") }
     var expandMenu by remember {
         mutableStateOf(false)
@@ -55,9 +75,18 @@ fun SignUp2(navController: NavController, modifier: Modifier = Modifier) {
     if (expandMenu) {
         CountryBottomSheetMaker(onDismiss = { expandMenu = false })
     }
+    val context = LocalContext.current
+    val toLogin by viewModel.responseStatus.collectAsState()
 
-
-
+    LaunchedEffect(toLogin) {
+        if (toLogin) {
+            viewModel.resetResponseStatus()
+            val intent = Intent(context, DashboardActivity::class.java).apply {
+                flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+            }
+            context.startActivity(intent)
+        }
+    }
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -124,8 +153,8 @@ fun SignUp2(navController: NavController, modifier: Modifier = Modifier) {
             //DropdownMenuExample()
 
             OutlinedTextField(
-                value = dob,
-                onValueChange = { newText -> dob = newText },
+                value = country,
+                onValueChange = { newText -> country = newText },
                 label = {
                     Text(
                         text = "Select your country",
@@ -195,7 +224,13 @@ fun SignUp2(navController: NavController, modifier: Modifier = Modifier) {
 
 
             Button(
-                onClick = { navController.navigate(AppRoutes.SIGN_IN) },
+                onClick = {
+                    val user = UserAuthRegisterRequest(
+                        name = name, email = email, password = password,
+                        country = country, dateofbirth = dob
+                    )
+                    viewModel.submitUserData(user)
+                },
                 modifier = Modifier
                     .padding(top = 40.dp)
                     .size(width = 350.dp, height = 60.dp),
@@ -241,8 +276,10 @@ fun SignUp2(navController: NavController, modifier: Modifier = Modifier) {
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CountryBottomSheetMaker(onDismiss: () -> Unit, modifier: Modifier = Modifier) {
-    ModalBottomSheet(onDismissRequest = { onDismiss() },
-        containerColor = White) {
+    ModalBottomSheet(
+        onDismissRequest = { onDismiss() },
+        containerColor = White
+    ) {
         Box(
             modifier = modifier
                 .fillMaxSize()
@@ -258,6 +295,6 @@ fun CountryBottomSheetMaker(onDismiss: () -> Unit, modifier: Modifier = Modifier
 @Composable
 private fun SignUp2Preview() {
 
-    SignUp2(rememberNavController())
+    //SignUp2(rememberNavController())
 
 }

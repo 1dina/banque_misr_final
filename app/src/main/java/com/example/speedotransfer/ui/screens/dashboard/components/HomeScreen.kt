@@ -20,8 +20,6 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Badge
-import androidx.compose.material3.BadgedBox
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.HorizontalDivider
@@ -48,7 +46,7 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.example.speedotransfer.R
 import com.example.speedotransfer.data.DummyDataSource
-import com.example.speedotransfer.data.models.RecentTransactionItem
+import com.example.speedotransfer.data.models.dummy.RecentTransactionItem
 import com.example.speedotransfer.routes.AppRoutes
 import com.example.speedotransfer.ui.theme.Grey
 import com.example.speedotransfer.ui.theme.LightRed

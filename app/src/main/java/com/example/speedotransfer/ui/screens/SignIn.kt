@@ -178,7 +178,9 @@ fun SignIn(navController: NavController, modifier: Modifier = Modifier) {
             }
 
             Button(
-                onClick = {     val intent = Intent(context, DashboardActivity::class.java).apply {
+                onClick = {
+
+                    val intent = Intent(context, DashboardActivity::class.java).apply {
                     flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
                 }
                           context.startActivity(intent)},
@@ -221,10 +223,3 @@ fun SignIn(navController: NavController, modifier: Modifier = Modifier) {
     }
 }
 
-@Preview(showSystemUi = true)
-@Composable
-private fun SignInPreview() {
-
-    SignIn(rememberNavController())
-
-}

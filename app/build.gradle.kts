@@ -71,9 +71,8 @@ dependencies {
     implementation(libs.androidx.material)
     implementation (libs.retrofit)
     implementation (libs.converter.gson)
-
-
-
+    implementation(libs.androidx.lifecycle.viewmodel.compose)
+    implementation(libs.kotlinx.coroutines.android)
 
 
 

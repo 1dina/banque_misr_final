@@ -10,9 +10,9 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -25,7 +25,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.example.speedotransfer.data.DummyDataSource
-import com.example.speedotransfer.data.models.MyCardsItemData
+import com.example.speedotransfer.data.models.dummy.MyCardsItemData
 import com.example.speedotransfer.routes.AppRoutes
 import com.example.speedotransfer.ui.screens.dashboard.commonUI.CommonCard
 import com.example.speedotransfer.ui.screens.dashboard.commonUI.HeaderUI
@@ -63,7 +63,7 @@ fun MyCardScreen(
                 MyCardsListMaker(myCardsList = myCardsInfo, modifier = modifier.weight(2f))
 
                 Button(
-                    onClick = { navController.navigate(AppRoutes.CURRENCY)},
+                    onClick = { navController.navigate(AppRoutes.CURRENCY) },
                     modifier = modifier
                         .fillMaxWidth()
                         .padding(bottom = 64.dp),

@@ -236,7 +236,7 @@ fun SignUp1(navController: NavController,modifier: Modifier = Modifier) {
 
             }
             Button(
-                onClick = {  navController.navigate(AppRoutes.LAST_PAGE_SIGN_UP)},
+                onClick = {  navController.navigate("${AppRoutes.LAST_PAGE_SIGN_UP}/$name/$email/$password")},
                 modifier = Modifier
                     .padding(top = 40.dp)
                     .size(width = 350.dp, height = 60.dp),

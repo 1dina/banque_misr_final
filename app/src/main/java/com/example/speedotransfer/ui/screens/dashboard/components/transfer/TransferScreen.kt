@@ -26,7 +26,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color.Companion.Gray
 import androidx.compose.ui.graphics.Color.Companion.Unspecified
-import androidx.compose.ui.graphics.Color.Companion.Yellow
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -35,7 +34,7 @@ import androidx.navigation.NavController
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.compose.rememberNavController
 import com.example.speedotransfer.R
-import com.example.speedotransfer.data.models.FavoriteListItem
+import com.example.speedotransfer.data.models.dummy.FavoriteListItem
 import com.example.speedotransfer.routes.AppRoutes
 import com.example.speedotransfer.ui.screens.dashboard.commonUI.HeaderUI
 import com.example.speedotransfer.ui.theme.LightPink
@@ -68,7 +67,7 @@ fun TransferScreen(
             )
             .padding(innerPadding)
     ) {
-        Column(modifier = modifier.padding(horizontal =16.dp)) {
+        Column(modifier = modifier.padding(horizontal = 16.dp)) {
 
             HeaderUI(headerTitle = "Transfer", onClickBackButton = {
                 if (currentStep != 2) {
@@ -151,8 +150,7 @@ fun Stepper(
 
 @Composable
 fun StepItem(
-    step: Int, isSelected: Boolean
-    ,modifier: Modifier
+    step: Int, isSelected: Boolean, modifier: Modifier
 ) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.Center
