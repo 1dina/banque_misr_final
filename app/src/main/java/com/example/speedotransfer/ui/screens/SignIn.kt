@@ -19,6 +19,8 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -47,16 +49,34 @@ import com.example.speedotransfer.routes.AppRoutes
 import com.example.speedotransfer.DashboardActivity
 import com.example.speedotransfer.ui.theme.LightRed
 import com.example.speedotransfer.ui.theme.Maroon
+import com.example.speedotransfer.ui.viewmodels.AuthViewModel
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.speedotransfer.data.models.UserLoginRequest
+import com.example.speedotransfer.data.source.BankingAPIService
+import com.example.speedotransfer.ui.viewmodels.AuthViewModelFactory
 
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SignIn(navController: NavController, modifier: Modifier = Modifier) {
+    val apiService = BankingAPIService.callable
+    val authViewModel: AuthViewModel = viewModel(factory = AuthViewModelFactory(apiService))
 
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
     var isPasswordVisible by remember { mutableStateOf(false) }
     val context = LocalContext.current
+    val toLogin by authViewModel.responseStatus.collectAsState()
+
+    LaunchedEffect(toLogin) {
+        if (toLogin) {
+            authViewModel.resetResponseStatus()
+            val intent = Intent(context, DashboardActivity::class.java).apply {
+                flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+            }
+            context.startActivity(intent)
+        }
+    }
 
 
     Box(
@@ -179,11 +199,9 @@ fun SignIn(navController: NavController, modifier: Modifier = Modifier) {
 
             Button(
                 onClick = {
-
-                    val intent = Intent(context, DashboardActivity::class.java).apply {
-                    flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-                }
-                          context.startActivity(intent)},
+                    val userLoginRequest = UserLoginRequest(email,password)
+                     authViewModel.submitLoginData(userLoginRequest)
+                },
                 modifier = Modifier
                     .padding(top = 40.dp)
                     .size(width = 350.dp, height = 60.dp),

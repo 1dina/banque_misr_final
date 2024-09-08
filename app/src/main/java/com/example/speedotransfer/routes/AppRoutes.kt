@@ -25,6 +25,7 @@ import com.example.speedotransfer.ui.screens.dashboard.components.mycards.CardAd
 import com.example.speedotransfer.ui.screens.dashboard.components.mycards.CardCurrency
 import com.example.speedotransfer.ui.screens.dashboard.components.mycards.MyCardScreen
 import com.example.speedotransfer.ui.screens.dashboard.components.transfer.TransferScreen
+import com.example.speedotransfer.ui.viewmodels.AuthViewModel
 
 object AppRoutes {
     const val SPLASH = "splash"
@@ -45,11 +46,11 @@ object AppRoutes {
 
 
 @Composable
-fun AuthNavGraph() {
+fun AuthNavGraph(authViewModel : AuthViewModel) {
     val navController = rememberNavController()
     NavHost(navController = navController, startDestination = SPLASH) {
         composable(AppRoutes.SPLASH) { SplashScreen(navController = navController, onTimeout = {}) }
-        composable(AppRoutes.SIGN_IN) { SignIn(navController = navController) }
+        composable(AppRoutes.SIGN_IN) { SignIn(navController = navController  ) }
         composable(route = "$LAST_PAGE_SIGN_UP/{name}/{email}/{password}",
             arguments = listOf(navArgument("name") { type = NavType.StringType },
                 navArgument("email") { type = NavType.StringType },

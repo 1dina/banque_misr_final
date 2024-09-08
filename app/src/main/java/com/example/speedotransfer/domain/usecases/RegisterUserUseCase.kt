@@ -4,11 +4,11 @@ import com.example.speedotransfer.data.models.UserAuthRegisterRequest
 import com.example.speedotransfer.data.models.UserAuthRegisterResponse
 import com.example.speedotransfer.domain.repository.AuthRepository
 
-interface AuthenticateUserUseCase {
+interface RegisterUserUseCase {
     suspend fun execute(user:UserAuthRegisterRequest) :Result<UserAuthRegisterResponse>
 }
 
-class AuthenticateUserUseCaseImpl(private val authRepository : AuthRepository) : AuthenticateUserUseCase{
+class RegisterUserUseCaseImpl(private val authRepository : AuthRepository) : RegisterUserUseCase{
     override suspend fun execute(user: UserAuthRegisterRequest): Result<UserAuthRegisterResponse> {
         return try {
             val response = authRepository.createUserAuth(user)

@@ -73,6 +73,8 @@ dependencies {
     implementation (libs.converter.gson)
     implementation(libs.androidx.lifecycle.viewmodel.compose)
     implementation(libs.kotlinx.coroutines.android)
+    implementation (libs.java.jwt)
+
 
 
 

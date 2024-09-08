@@ -229,7 +229,7 @@ fun SignUp2(
                         name = name, email = email, password = password,
                         country = country, dateofbirth = dob
                     )
-                    viewModel.submitUserData(user)
+                    viewModel.submitRegistrationData(user)
                 },
                 modifier = Modifier
                     .padding(top = 40.dp)
