@@ -1,13 +1,14 @@
 package com.example.speedotransfer.ui.screens
 
-import android.content.Intent
 import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -20,7 +21,6 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.OutlinedTextField
-import androidx.compose.material3.SelectableDates
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TextFieldDefaults
@@ -38,29 +38,31 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.graphics.Color.Companion.Unspecified
 import androidx.compose.ui.graphics.Color.Companion.White
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
-import com.example.speedotransfer.DashboardActivity
+import androidx.navigation.compose.rememberNavController
 import com.example.speedotransfer.R
 import com.example.speedotransfer.data.models.UserAuthRegisterRequest
 import com.example.speedotransfer.data.source.BankingAPIService
 import com.example.speedotransfer.routes.AppRoutes
 import com.example.speedotransfer.ui.theme.LightRed
-import java.text.SimpleDateFormat
-import java.util.Locale
 import com.example.speedotransfer.ui.theme.Maroon
 import com.example.speedotransfer.ui.viewmodels.AuthViewModel
 import com.example.speedotransfer.ui.viewmodels.AuthViewModelFactory
+import java.text.SimpleDateFormat
+import java.util.Locale
 
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -71,7 +73,6 @@ fun SignUp2(
     email: String,
     password: String,
     modifier: Modifier = Modifier
-
 ) {
     val apiService = BankingAPIService.callable
     val viewModel: AuthViewModel = viewModel(factory = AuthViewModelFactory(apiService))
@@ -79,6 +80,9 @@ fun SignUp2(
         mutableStateOf("")
     }
     var dob by remember { mutableStateOf("") }
+    var dobInternal by remember {
+        mutableStateOf("")
+    }
     var isDatePickerShown by remember { mutableStateOf(false) }
 
     var dateMillis by remember { mutableLongStateOf(0L) }
@@ -89,26 +93,26 @@ fun SignUp2(
         CountryBottomSheetMaker(onDismiss = { expandMenu = false })
     }
 
-    if(isDatePickerShown)
-        DatePickerChooser(onConfirm = {
-            val dateFormatter = SimpleDateFormat("dd-MM-yyyy", Locale.US)
-            dateMillis = it.selectedDateMillis!!
-            dob = dateFormatter.format(dateMillis)
-            isDatePickerShown = false
-        }) {
-            isDatePickerShown = false
+    if (isDatePickerShown) {
+        DatePickerChooser(
+            onConfirm = { displayDate, internalDate ->
+                dob = displayDate
+                dobInternal = internalDate
+                isDatePickerShown = false
+            },
+            onDismiss = {
+                isDatePickerShown = false
+            }
+        )
+    }
 
-        }
     val context = LocalContext.current
     val toLogin by viewModel.responseStatus.collectAsState()
 
     LaunchedEffect(toLogin) {
-        if (toLogin) {
+        if (toLogin == true) {
             viewModel.resetResponseStatus()
-            val intent = Intent(context, DashboardActivity::class.java).apply {
-                flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-            }
-            context.startActivity(intent)
+            navController.navigate(AppRoutes.SIGN_IN)
         }
     }
     Box(
@@ -125,44 +129,46 @@ fun SignUp2(
     ) {
 
         Column(
-            horizontalAlignment = Alignment.CenterHorizontally,
-            modifier = Modifier.fillMaxSize()
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(16.dp)
         ) {
             Icon(
                 painter = painterResource(id = R.drawable.ic_back),
                 contentDescription = "Select your country",
-                Modifier
-                    .size(40.dp)
-                    .padding(top = 16.dp)
-                    .align(Alignment.Start)
+                tint = Unspecified,
+                modifier = modifier
+                    .size(24.dp)
+                    .padding(24.dp)
                     .clickable {}
-            )
-
-            Text(
-                text = "",
-                fontSize = 20.sp,
-                modifier = Modifier.padding(top = 42.dp)
-
             )
 
             Text(
                 text = stringResource(id = R.string.app),
                 fontSize = 24.sp,
-                modifier = Modifier.padding(top = 32.dp),
+                modifier = Modifier
+                    .padding(top = 32.dp)
+                    .fillMaxWidth(),
+                textAlign = TextAlign.Center,
                 fontWeight = FontWeight.Medium
             )
 
             Text(
                 text = "Welcome to Banque Misr!",
                 fontSize = 24.sp,
-                modifier = Modifier.padding(top = 80.dp),
+                modifier = Modifier
+                    .padding(top = 72.dp)
+                    .fillMaxWidth(),
+                textAlign = TextAlign.Center,
                 fontWeight = FontWeight.Medium
             )
             Text(
                 text = "Let's Complete your Profile",
                 fontSize = 16.sp,
                 modifier = Modifier
-                    .padding(top = 20.dp)
+                    .padding(top = 16.dp)
+                    .fillMaxWidth(),
+                textAlign = TextAlign.Center
             )
 
 
@@ -171,10 +177,9 @@ fun SignUp2(
             Text(
                 text = "Country",
                 modifier = Modifier
-                    .padding(end = 300.dp, top = 40.dp),
+                    .padding(top = 40.dp),
                 fontSize = 16.sp
             )
-            //DropdownMenuExample()
 
             OutlinedTextField(
                 value = country,
@@ -191,8 +196,8 @@ fun SignUp2(
                     containerColor = Color.White
                 ),
                 modifier = Modifier
-                    .size(360.dp, 80.dp)
-                    .padding(top = 10.dp),
+                    .fillMaxWidth()
+                    .padding(top = 8.dp),
 
                 trailingIcon = {
                     Icon(
@@ -200,7 +205,7 @@ fun SignUp2(
                         contentDescription = "Select your country",
                         Modifier
                             .alpha(0.5f)
-                            .size(30.dp)
+                            .size(24.dp)
                             .clickable {
                                 expandMenu = true
                             }
@@ -211,8 +216,8 @@ fun SignUp2(
 
             Text(
                 text = "Date Of Birth",
-                modifier = Modifier
-                    .padding(end = 260.dp, top = 40.dp),
+                modifier = modifier
+                    .padding(top = 16.dp),
                 fontSize = 16.sp
             )
 
@@ -229,11 +234,11 @@ fun SignUp2(
                 },
                 shape = RoundedCornerShape(10.dp),
                 colors = TextFieldDefaults.outlinedTextFieldColors(
-                    containerColor = Color.White
+                    containerColor = White
                 ),
                 modifier = Modifier
-                    .size(360.dp, 80.dp)
-                    .padding(top = 10.dp),
+                    .fillMaxWidth()
+                    .padding(top = 8.dp),
 
                 trailingIcon = {
                     Icon(
@@ -241,7 +246,7 @@ fun SignUp2(
                         contentDescription = "Date Of Birth",
                         Modifier
                             .alpha(0.5f)
-                            .size(30.dp)
+                            .size(24.dp)
                             .clickable {
                                 isDatePickerShown = true
                             }
@@ -255,28 +260,33 @@ fun SignUp2(
                 onClick = {
                     val user = UserAuthRegisterRequest(
                         name = name, email = email, password = password,
-                        country = country, dateofbirth = dob
+                        country = country, dateofbirth = dobInternal
                     )
                     viewModel.submitRegistrationData(user)
                 },
                 modifier = Modifier
                     .padding(top = 40.dp)
-                    .size(width = 350.dp, height = 60.dp),
+                    .fillMaxWidth(),
                 shape = RoundedCornerShape(10.dp),
                 colors = ButtonDefaults.buttonColors(containerColor = Maroon)
             ) {
                 Text(
                     text = "Continue",
-                    fontSize = 16.sp
+                    fontSize = 16.sp,
+                    modifier = modifier.padding(10.dp)
                 )
 
             }
 
-            Row {
+            Row(
+                horizontalArrangement = Arrangement.Center,
+                modifier = modifier
+                    .fillMaxWidth()
+                    .padding(24.dp)
+            ) {
                 Text(
                     text = "Already have an account?",
                     modifier = Modifier
-                        .padding(top = 25.dp, start = 30.dp)
                         .alpha(0.6f),
                     color = colorResource(id = R.color.black),
                     fontSize = 16.sp
@@ -284,7 +294,7 @@ fun SignUp2(
                 Text(
                     text = "Sign In",
                     modifier = Modifier
-                        .padding(top = 25.dp, start = 5.dp)
+                        .padding(start = 4.dp)
                         .clickable {
                             navController.navigate(AppRoutes.SIGN_IN)
                         },
@@ -303,10 +313,12 @@ fun SignUp2(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun DatePickerChooser(onConfirm: (DatePickerState) -> Unit, onDismiss: () -> Unit) {
+fun DatePickerChooser(onConfirm: (String,String) -> Unit, onDismiss: () -> Unit) {
     val todayInMillis = System.currentTimeMillis()
     val datePickerState = rememberDatePickerState()
     val context = LocalContext.current
+    val dateFormatterDisplay = SimpleDateFormat("dd/MM/yy", Locale.US)
+    val dateFormatterInternal = SimpleDateFormat("yyyy-MM-dd", Locale.US)
 
     DatePickerDialog(
         onDismissRequest = { onDismiss() },
@@ -314,9 +326,12 @@ fun DatePickerChooser(onConfirm: (DatePickerState) -> Unit, onDismiss: () -> Uni
             TextButton(onClick = {
                 val selectedDate = datePickerState.selectedDateMillis ?: todayInMillis
                 if (selectedDate <= todayInMillis) {
-                    onConfirm(datePickerState) // Only confirm if the date is valid
+                    val displayDate = dateFormatterDisplay.format(selectedDate)
+                    val internalDate = dateFormatterInternal.format(selectedDate)
+                    onConfirm(displayDate,internalDate) // Only confirm if the date is valid
                 } else {
-                    Toast.makeText(context,"Please Choose date in the past",Toast.LENGTH_SHORT).show()
+                    Toast.makeText(context, "Please Choose date in the past", Toast.LENGTH_SHORT)
+                        .show()
                 }
             }) {
                 Text(text = "OK")
@@ -332,6 +347,7 @@ fun DatePickerChooser(onConfirm: (DatePickerState) -> Unit, onDismiss: () -> Uni
         DatePicker(state = datePickerState)
     }
 }
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CountryBottomSheetMaker(onDismiss: () -> Unit, modifier: Modifier = Modifier) {
@@ -353,7 +369,6 @@ fun CountryBottomSheetMaker(onDismiss: () -> Unit, modifier: Modifier = Modifier
 @Preview(showSystemUi = true)
 @Composable
 private fun SignUp2Preview() {
-
-    //SignUp2(rememberNavController())
+    SignUp2(rememberNavController(), "Dina", "dindfjdjf", "dfjdj")
 
 }

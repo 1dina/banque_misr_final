@@ -18,7 +18,7 @@ class AuthViewModel(private val registerUserUseCase: RegisterUserUseCase,
     private val userRegistrationData = _userRegistrationData.asStateFlow()
     private val _userLoginData = MutableStateFlow(UserLoginRequest())
     private val userLoginData = _userLoginData.asStateFlow()
-    private val _responseStatus = MutableStateFlow(false)
+    private val _responseStatus = MutableStateFlow<Boolean?>(null)
     val responseStatus = _responseStatus.asStateFlow()
 
     fun submitRegistrationData(user: UserAuthRegisterRequest) {
@@ -54,15 +54,18 @@ class AuthViewModel(private val registerUserUseCase: RegisterUserUseCase,
             try {
                 val authData: AuthData = loginUserUseCase.execute(user)
                 Log.e("trace" , "userLogin is successed ${authData.id}")
+                _responseStatus.value = true
+
 
             } catch (e: Exception) {
                 // Handle login error
               //  println("Login failed: ${e.message}")
+                _responseStatus.value = false
                 Log.e("trace" , "userLogin is failed ${e.message}")
             }
         }
     }
     fun resetResponseStatus() {
-        _responseStatus.value = false
+        _responseStatus.value = null
     }
 }

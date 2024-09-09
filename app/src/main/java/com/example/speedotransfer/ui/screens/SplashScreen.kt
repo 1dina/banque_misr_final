@@ -37,7 +37,10 @@ fun SplashScreen(navController: NavController,modifier : Modifier = Modifier, on
     LaunchedEffect(Unit) {
         delay(3000) // 2000 milliseconds = 2 seconds
         onTimeout()
-        navController.navigate(AppRoutes.FIRST_PAGE_SIGN_UP)
+
+        navController.navigate(AppRoutes.FIRST_PAGE_SIGN_UP){
+            popUpTo(AppRoutes.SPLASH) { inclusive = true }
+        }
 
     }
 }

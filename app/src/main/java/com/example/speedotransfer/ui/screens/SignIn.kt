@@ -69,7 +69,7 @@ fun SignIn(navController: NavController, modifier: Modifier = Modifier) {
     val toLogin by authViewModel.responseStatus.collectAsState()
 
     LaunchedEffect(toLogin) {
-        if (toLogin) {
+        if (toLogin == true) {
             authViewModel.resetResponseStatus()
             val intent = Intent(context, DashboardActivity::class.java).apply {
                 flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
@@ -241,4 +241,3 @@ fun SignIn(navController: NavController, modifier: Modifier = Modifier) {
         }
     }
 }
-

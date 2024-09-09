@@ -15,4 +15,5 @@ interface BankingAPICallable {
 
     @POST(Constants.SIGNIN_ENDPOINT)
     suspend fun logInUser (@Body loginRequest: UserLoginRequest) : Response<UserLoginResponse>
+
 }
