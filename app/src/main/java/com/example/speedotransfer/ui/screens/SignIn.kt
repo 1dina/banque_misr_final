@@ -102,13 +102,13 @@ fun SignIn(navController: NavController, modifier: Modifier = Modifier) {
             Text(
                 text = "Sign In",
                 fontSize = 20.sp,
-                modifier = Modifier.padding(top = 40.dp)
+                modifier = Modifier.padding(top = 42.dp)
 
             )
 
             Text(
                 text = stringResource(id = R.string.app),
-                fontSize = 30.sp,
+                fontSize = 24.sp,
                 modifier = Modifier.padding(top = 32.dp),
                 fontWeight = FontWeight.Medium
             )
@@ -127,7 +127,7 @@ fun SignIn(navController: NavController, modifier: Modifier = Modifier) {
                 OutlinedTextField(
                     value = email,
                     onValueChange = { newText -> email = newText },
-                    label = {
+                    placeholder = {
                         Text(
                             text = stringResource(id = R.string.email),
                             Modifier.alpha(0.4f),
@@ -163,7 +163,7 @@ fun SignIn(navController: NavController, modifier: Modifier = Modifier) {
                 OutlinedTextField(
                     value = password,
                     onValueChange = { newText -> password = newText },
-                    label = {
+                    placeholder = {
                         Text(
                             text = stringResource(id = R.string.password),
                             Modifier.alpha(0.4f),
@@ -181,8 +181,9 @@ fun SignIn(navController: NavController, modifier: Modifier = Modifier) {
                     visualTransformation = if (isPasswordVisible) VisualTransformation.None else PasswordVisualTransformation(),
                     trailingIcon = {
                         Icon(
-                            painter = painterResource(id = R.drawable.ic_eye),
-                            contentDescription = "Password isn't visible",
+                            painter = if (!isPasswordVisible) painterResource(id = R.drawable.ic_visibility)
+                            else painterResource(id = R.drawable.ic_eye),
+                            contentDescription = "Password",
                             Modifier
                                 .alpha(0.5f)
                                 .size(30.dp)
@@ -210,7 +211,7 @@ fun SignIn(navController: NavController, modifier: Modifier = Modifier) {
             ) {
                 Text(
                     text = "Sign in",
-                    fontSize = 18.sp
+                    fontSize = 16.sp
                 )
 
             }
@@ -222,7 +223,7 @@ fun SignIn(navController: NavController, modifier: Modifier = Modifier) {
                         .padding(top = 25.dp, start = 30.dp)
                         .alpha(0.6f),
                     color = colorResource(id = R.color.black),
-                    fontSize = 15.sp
+                    fontSize = 16.sp
                 )
                 Text(
                     text = "Sign Up",
@@ -230,7 +231,7 @@ fun SignIn(navController: NavController, modifier: Modifier = Modifier) {
                         .padding(top = 25.dp, start = 5.dp)
                         .clickable { navController.navigate(AppRoutes.FIRST_PAGE_SIGN_UP) },
                     color = Maroon,
-                    fontSize = 15.sp,
+                    fontSize = 16.sp,
                     fontWeight = FontWeight.Bold,
                     textDecoration = TextDecoration.Underline
 
