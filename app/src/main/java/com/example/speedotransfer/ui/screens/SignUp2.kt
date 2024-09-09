@@ -11,12 +11,14 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.DatePicker
 import androidx.compose.material3.DatePickerDialog
-import androidx.compose.material3.DatePickerState
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.ModalBottomSheet
@@ -29,16 +31,15 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableLongStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.Color.Companion.Unspecified
 import androidx.compose.ui.graphics.Color.Companion.White
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
@@ -57,6 +58,7 @@ import com.example.speedotransfer.R
 import com.example.speedotransfer.data.models.UserAuthRegisterRequest
 import com.example.speedotransfer.data.source.BankingAPIService
 import com.example.speedotransfer.routes.AppRoutes
+import com.example.speedotransfer.ui.theme.LightGrey
 import com.example.speedotransfer.ui.theme.LightRed
 import com.example.speedotransfer.ui.theme.Maroon
 import com.example.speedotransfer.ui.viewmodels.AuthViewModel
@@ -74,45 +76,67 @@ fun SignUp2(
     password: String,
     modifier: Modifier = Modifier
 ) {
+    var isButtonEnabled by remember {
+        mutableStateOf(false)
+    }
     val apiService = BankingAPIService.callable
     val viewModel: AuthViewModel = viewModel(factory = AuthViewModelFactory(apiService))
-    var country by remember {
+    var country by rememberSaveable {
         mutableStateOf("")
     }
-    var dob by remember { mutableStateOf("") }
-    var dobInternal by remember {
+    var dob by rememberSaveable { mutableStateOf("") }
+    var dobInternal by rememberSaveable {
         mutableStateOf("")
     }
     var isDatePickerShown by remember { mutableStateOf(false) }
+    var isLoading by remember {
+        mutableStateOf(false)
+    }
 
-    var dateMillis by remember { mutableLongStateOf(0L) }
     var expandMenu by remember {
         mutableStateOf(false)
     }
     if (expandMenu) {
         CountryBottomSheetMaker(onDismiss = { expandMenu = false })
     }
-
-    if (isDatePickerShown) {
-        DatePickerChooser(
-            onConfirm = { displayDate, internalDate ->
-                dob = displayDate
-                dobInternal = internalDate
-                isDatePickerShown = false
-            },
-            onDismiss = {
-                isDatePickerShown = false
-            }
-        )
+    isButtonEnabled = if (!(country.isBlank() || dob.isBlank())) {
+        true
     }
+    else {
+        false
+    }
+
+        if (isDatePickerShown) {
+            DatePickerChooser(
+                onConfirm = { displayDate, internalDate ->
+                    dob = displayDate
+                    dobInternal = internalDate
+                    isDatePickerShown = false
+                },
+                onDismiss = {
+                    isDatePickerShown = false
+                }
+            )
+        }
 
     val context = LocalContext.current
     val toLogin by viewModel.responseStatus.collectAsState()
 
     LaunchedEffect(toLogin) {
         if (toLogin == true) {
+            isLoading = false
             viewModel.resetResponseStatus()
             navController.navigate(AppRoutes.SIGN_IN)
+        } else {
+            isLoading = false
+            if (viewModel.toastMessage.value != null)
+                Toast.makeText(
+                    context,
+                    viewModel.toastMessage.value,
+                    Toast.LENGTH_SHORT
+                ).show()
+            viewModel.resetToastMessage()
+            viewModel.resetResponseStatus()
         }
     }
     Box(
@@ -121,26 +145,29 @@ fun SignUp2(
             .background(
                 brush = Brush.verticalGradient(
                     colors = listOf(
-                        Color.White,
+                        White,
                         LightRed
                     )
                 )
             )
     ) {
 
+
         Column(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(16.dp)
         ) {
+
+
             Icon(
-                painter = painterResource(id = R.drawable.ic_back),
-                contentDescription = "Select your country",
-                tint = Unspecified,
+                painter = painterResource(id = R.drawable.ic_back), contentDescription = "Go back",
                 modifier = modifier
                     .size(24.dp)
-                    .padding(24.dp)
-                    .clickable {}
+                    .padding(top = 8.dp)
+                    .clickable {
+                        navController.navigate(AppRoutes.FIRST_PAGE_SIGN_UP)
+                    }
             )
 
             Text(
@@ -183,7 +210,7 @@ fun SignUp2(
 
             OutlinedTextField(
                 value = country,
-                onValueChange = { newText -> country = newText },
+                onValueChange = { newText -> country = newText },maxLines = 1,
                 placeholder = {
                     Text(
                         text = "Select your country",
@@ -193,7 +220,7 @@ fun SignUp2(
                 },
                 shape = RoundedCornerShape(10.dp),
                 colors = TextFieldDefaults.outlinedTextFieldColors(
-                    containerColor = Color.White
+                    containerColor = Color.White, focusedBorderColor = Maroon
                 ),
                 modifier = Modifier
                     .fillMaxWidth()
@@ -234,7 +261,7 @@ fun SignUp2(
                 },
                 shape = RoundedCornerShape(10.dp),
                 colors = TextFieldDefaults.outlinedTextFieldColors(
-                    containerColor = White
+                    containerColor = White, focusedBorderColor = Maroon
                 ),
                 modifier = Modifier
                     .fillMaxWidth()
@@ -258,6 +285,7 @@ fun SignUp2(
 
             Button(
                 onClick = {
+                    isLoading = true
                     val user = UserAuthRegisterRequest(
                         name = name, email = email, password = password,
                         country = country, dateofbirth = dobInternal
@@ -267,6 +295,7 @@ fun SignUp2(
                 modifier = Modifier
                     .padding(top = 40.dp)
                     .fillMaxWidth(),
+                enabled = isButtonEnabled,
                 shape = RoundedCornerShape(10.dp),
                 colors = ButtonDefaults.buttonColors(containerColor = Maroon)
             ) {
@@ -306,14 +335,33 @@ fun SignUp2(
                 )
             }
         }
-
+        if (isLoading) {
+            Box(
+                modifier = modifier
+                    .fillMaxSize()
+                    .background(Color.Black.copy(alpha = 0.5f), RoundedCornerShape(8.dp))
+                    .wrapContentSize(Alignment.Center)
+            ) {
+                IndeterminateCircularIndicator()
+            }
+        }
     }
 
 }
 
+@Composable
+fun IndeterminateCircularIndicator() {
+    CircularProgressIndicator(
+        modifier = Modifier.width(64.dp),
+        color = Maroon,
+        trackColor = LightGrey
+    )
+}
+
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun DatePickerChooser(onConfirm: (String,String) -> Unit, onDismiss: () -> Unit) {
+fun DatePickerChooser(onConfirm: (String, String) -> Unit, onDismiss: () -> Unit) {
     val todayInMillis = System.currentTimeMillis()
     val datePickerState = rememberDatePickerState()
     val context = LocalContext.current
@@ -328,7 +376,7 @@ fun DatePickerChooser(onConfirm: (String,String) -> Unit, onDismiss: () -> Unit)
                 if (selectedDate <= todayInMillis) {
                     val displayDate = dateFormatterDisplay.format(selectedDate)
                     val internalDate = dateFormatterInternal.format(selectedDate)
-                    onConfirm(displayDate,internalDate) // Only confirm if the date is valid
+                    onConfirm(displayDate, internalDate) // Only confirm if the date is valid
                 } else {
                     Toast.makeText(context, "Please Choose date in the past", Toast.LENGTH_SHORT)
                         .show()
@@ -343,7 +391,6 @@ fun DatePickerChooser(onConfirm: (String,String) -> Unit, onDismiss: () -> Unit)
             }
         }
     ) {
-        // DatePicker widget with the state
         DatePicker(state = datePickerState)
     }
 }

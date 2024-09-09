@@ -24,6 +24,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -54,10 +55,10 @@ import com.example.speedotransfer.ui.theme.Maroon
 @Composable
 fun SignUp1(navController: NavController, modifier: Modifier = Modifier) {
 
-    var name by remember { mutableStateOf("") }
-    var email by remember { mutableStateOf("") }
-    var password by remember { mutableStateOf("") }
-    var confirmpassword by remember { mutableStateOf("") }
+    var name by rememberSaveable { mutableStateOf("") }
+    var email by rememberSaveable { mutableStateOf("") }
+    var password by rememberSaveable { mutableStateOf("") }
+    var confirmpassword by rememberSaveable { mutableStateOf("") }
     var isPasswordVisible by remember { mutableStateOf(false) }
     var isPasswordVisible1 by remember { mutableStateOf(false) }
     var isButtonEnabled by remember { mutableStateOf(false) }
@@ -132,7 +133,7 @@ fun SignUp1(navController: NavController, modifier: Modifier = Modifier) {
                     onValueChange = { newText ->
                         name = newText
                         nameError = null
-                    },
+                    },maxLines = 1,
                     placeholder = {
                         Text(
                             text = stringResource(id = R.string.name),
@@ -182,7 +183,7 @@ fun SignUp1(navController: NavController, modifier: Modifier = Modifier) {
                     onValueChange = { newText ->
                         email = newText
                         emailError = null
-                    },
+                    },maxLines = 1,
                     placeholder = {
                         Text(
                             text = stringResource(id = R.string.email),
@@ -229,7 +230,7 @@ fun SignUp1(navController: NavController, modifier: Modifier = Modifier) {
                     onValueChange = { newText ->
                         password = newText
                         passwordError = null
-                    },
+                    },maxLines = 1,
                     placeholder = {
                         Text(
                             text = stringResource(id = R.string.password),
@@ -283,7 +284,7 @@ fun SignUp1(navController: NavController, modifier: Modifier = Modifier) {
                     onValueChange = { newText ->
                         confirmpassword = newText
                         confirmPasswordError = null
-                    },
+                    },maxLines = 1,
                     placeholder = {
                         Text(
                             text = stringResource(id = R.string.password),
@@ -296,7 +297,6 @@ fun SignUp1(navController: NavController, modifier: Modifier = Modifier) {
                     isError = confirmPasswordError != null,
                     colors = TextFieldDefaults.outlinedTextFieldColors(
                         containerColor = Color.White,
-                        focusedTrailingIconColor = Maroon,
                         focusedBorderColor = Maroon,
                         errorBorderColor = Red,
                         errorContainerColor = White

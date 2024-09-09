@@ -11,20 +11,26 @@ import com.example.speedotransfer.domain.usecases.RegisterUserUseCase
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import java.net.UnknownHostException
 
-class AuthViewModel(private val registerUserUseCase: RegisterUserUseCase,
-    private val loginUserUseCase: LoginUserUseCase) : ViewModel() {
+class AuthViewModel(
+    private val registerUserUseCase: RegisterUserUseCase,
+    private val loginUserUseCase: LoginUserUseCase
+) : ViewModel() {
     private val _userRegistrationData = MutableStateFlow(UserAuthRegisterRequest())
     private val userRegistrationData = _userRegistrationData.asStateFlow()
     private val _userLoginData = MutableStateFlow(UserLoginRequest())
     private val userLoginData = _userLoginData.asStateFlow()
     private val _responseStatus = MutableStateFlow<Boolean?>(null)
     val responseStatus = _responseStatus.asStateFlow()
+    private val _toastMessage = MutableStateFlow<String?>(null)
+    val toastMessage = _toastMessage.asStateFlow()
 
     fun submitRegistrationData(user: UserAuthRegisterRequest) {
         _userRegistrationData.value = user
         createUser(userRegistrationData.value)
     }
+
     fun submitLoginData(user: UserLoginRequest) {
         _userLoginData.value = user
         loginUser(userLoginData.value)
@@ -34,38 +40,51 @@ class AuthViewModel(private val registerUserUseCase: RegisterUserUseCase,
     private fun createUser(user: UserAuthRegisterRequest) {
         viewModelScope.launch {
             try {
-                Log.e("trace", "user data $user")
+                Log.e("trace", "Submitting user data $user")
                 val result = registerUserUseCase.execute(user)
                 if (result.isSuccess) {
-                    Log.e("trace", "User created successfully")
+                    _toastMessage.value = "User created successfully"
                     _responseStatus.value = true
                 } else {
-                    Log.e("trace", "Error: ${result.exceptionOrNull()?.message}")
-                    _responseStatus.value = false
+                    handleError(result.exceptionOrNull() ?: Exception("Unknown error"))
                 }
             } catch (e: Exception) {
-                Log.e("trace", "Network error: ${e.message}")
-                _responseStatus.value = false
+                handleError(e)
             }
         }
     }
+
     private fun loginUser(user: UserLoginRequest) {
         viewModelScope.launch {
             try {
-                val authData: AuthData = loginUserUseCase.execute(user)
-                Log.e("trace" , "userLogin is successed ${authData.id}")
-                _responseStatus.value = true
-
-
+                val authDataResult: Result<AuthData> = loginUserUseCase.execute(user)
+                if (authDataResult.isSuccess) {
+                    _responseStatus.value = true
+                    _toastMessage.value = "Login successful"
+                } else {
+                    handleError(authDataResult.exceptionOrNull() ?: Exception("Unknown error"))
+                }
             } catch (e: Exception) {
-                // Handle login error
-              //  println("Login failed: ${e.message}")
-                _responseStatus.value = false
-                Log.e("trace" , "userLogin is failed ${e.message}")
+                handleError(e)
             }
         }
     }
+
     fun resetResponseStatus() {
         _responseStatus.value = null
     }
+
+    fun resetToastMessage() {
+        _toastMessage.value = null
+    }
+    private fun handleError(exception: Throwable) {
+        val errorMessage = when (exception) {
+            is UnknownHostException -> "Please check your internet connection."
+            else -> "Error: ${exception.message ?: "Unknown error occurred"}"
+        }
+        _responseStatus.value = false
+        _toastMessage.value = errorMessage
+    }
+
+
 }

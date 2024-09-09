@@ -17,12 +17,18 @@ class Repository(val apiService: BankingAPICallable) : AuthRepository {
     }
 
     override suspend fun loginUserAuth(user: UserLoginRequest): AuthData {
-        val response = apiService.logInUser(user)
-        val token = response.body()?.accessToken
-        val decodedJWT = JWT.decode(token)
-        Log.e("trace","user Id is ${response.body()?.accessToken}")
-        val userId = decodedJWT.getClaim("id").asInt()
-        Log.e("trace","user Id is $userId")
-        return AuthData(userId)
+        return try {
+            val response = apiService.logInUser(user)
+            if (response.isSuccessful) {
+                val token = response.body()?.accessToken
+                val decodedJWT = JWT.decode(token)
+                val userId = decodedJWT.getClaim("id").asInt()
+                AuthData(userId)
+            } else {
+                throw Exception("Invalid Email or Password")
+            }
+        } catch (e: Exception) {
+            throw e
+        }
     }
 }
