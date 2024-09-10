@@ -103,7 +103,10 @@ class AuthViewModel(
     private fun handleError(exception: Throwable) {
         val errorMessage = when (exception) {
             is UnknownHostException -> "Please check your internet connection."
-            else -> "Error: ${exception.message ?: "Unknown error occurred"}"
+
+            else -> { val shownMessage = "server take long time to respond"
+                "Error: $shownMessage"
+            }
         }
         _responseStatus.value = false
         _toastMessage.value = errorMessage

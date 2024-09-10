@@ -5,6 +5,7 @@ import com.example.speedotransfer.data.models.dummy.FavoriteListItem
 import com.example.speedotransfer.data.models.dummy.MyCardsItemData
 import com.example.speedotransfer.data.models.dummy.NotificationItemData
 import com.example.speedotransfer.data.models.dummy.RecentTransactionItem
+import com.example.speedotransfer.data.models.dummy.TransactionCard
 
 
 object DummyDataSource {
@@ -55,6 +56,22 @@ object DummyDataSource {
         )
         val list = mutableListOf<MyCardsItemData>()
         for (i in 0..2) {
+            list.add(cardItem)
+        }
+        return list
+    }
+
+    fun getTransactionCards(): List<TransactionCard> {
+        val cardItem = TransactionCard(
+            "Asmaa Dosuky",
+            "Visa . Mater Card . 1234",
+            "Today 11:00 ",
+            "Received",
+            false,
+            1000
+        )
+        val list = mutableListOf<TransactionCard>()
+        for (i in 0..10) {
             list.add(cardItem)
         }
         return list
