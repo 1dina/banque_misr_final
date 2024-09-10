@@ -7,6 +7,7 @@ import com.example.speedotransfer.data.models.UserLoginRequest
 import com.example.speedotransfer.data.models.UserLoginResponse
 import retrofit2.Response
 import retrofit2.http.Body
+import retrofit2.http.Header
 import retrofit2.http.POST
 
 interface BankingAPICallable {
@@ -15,5 +16,8 @@ interface BankingAPICallable {
 
     @POST(Constants.SIGNIN_ENDPOINT)
     suspend fun logInUser (@Body loginRequest: UserLoginRequest) : Response<UserLoginResponse>
+
+     @POST(Constants.SIGNOUT_ENDPOINT)
+     suspend fun signOutUser( @Body user: UserLoginResponse) : Response<String>
 
 }

@@ -93,7 +93,7 @@ fun TransactionsDetails( modifier: Modifier = Modifier) {
                     fontSize = 21.sp,
                     fontWeight = FontWeight.Bold,
                     modifier = Modifier
-                        .padding(end = 2.dp)
+                        .padding(end = 2.dp,top =3.dp)
                 )
 
                 Text(

@@ -63,12 +63,13 @@ import com.example.speedotransfer.ui.viewmodels.AuthViewModelFactory
 @Composable
 fun SignIn(navController: NavController, modifier: Modifier = Modifier) {
     val apiService = BankingAPIService.callable
-    val authViewModel: AuthViewModel = viewModel(factory = AuthViewModelFactory(apiService))
+    val context = LocalContext.current
+
+    val authViewModel: AuthViewModel = viewModel(factory = AuthViewModelFactory(apiService,context))
 
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
     var isPasswordVisible by remember { mutableStateOf(false) }
-    val context = LocalContext.current
     val toLogin by authViewModel.responseStatus.collectAsState()
     var isButtonEnabled by remember {
         mutableStateOf(false)

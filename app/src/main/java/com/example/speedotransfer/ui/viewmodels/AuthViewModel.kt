@@ -8,6 +8,7 @@ import com.example.speedotransfer.data.models.UserAuthRegisterRequest
 import com.example.speedotransfer.data.models.UserLoginRequest
 import com.example.speedotransfer.domain.usecases.LoginUserUseCase
 import com.example.speedotransfer.domain.usecases.RegisterUserUseCase
+import com.example.speedotransfer.domain.usecases.SignOutUseCase
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
@@ -15,7 +16,8 @@ import java.net.UnknownHostException
 
 class AuthViewModel(
     private val registerUserUseCase: RegisterUserUseCase,
-    private val loginUserUseCase: LoginUserUseCase
+    private val loginUserUseCase: LoginUserUseCase,
+    private val signOutUseCase: SignOutUseCase
 ) : ViewModel() {
     private val _userRegistrationData = MutableStateFlow(UserAuthRegisterRequest())
     private val userRegistrationData = _userRegistrationData.asStateFlow()
@@ -66,6 +68,27 @@ class AuthViewModel(
                 }
             } catch (e: Exception) {
                 handleError(e)
+            }
+        }
+    }
+     fun signOut(){
+        viewModelScope.launch {
+            try {
+                val signOutResult = signOutUseCase.execute()
+                if (signOutResult.isSuccess) {
+                    _responseStatus.value = true
+                    _toastMessage.value = "Sign out successfully"
+                    Log.e("trace","SignOut")
+                } else {
+                    signOutResult.exceptionOrNull()?.message?.let { Log.e("trace", it) }
+                    handleError(signOutResult.exceptionOrNull() ?: Exception("Unknown error"))
+
+
+                }
+            }catch (e:Exception){
+                Log.e("trace","Exception")
+                handleError(e)
+
             }
         }
     }

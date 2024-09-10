@@ -79,8 +79,9 @@ fun SignUp2(
     var isButtonEnabled by remember {
         mutableStateOf(false)
     }
+    val context = LocalContext.current
     val apiService = BankingAPIService.callable
-    val viewModel: AuthViewModel = viewModel(factory = AuthViewModelFactory(apiService))
+    val viewModel: AuthViewModel = viewModel(factory = AuthViewModelFactory(apiService, context = context))
     var country by rememberSaveable {
         mutableStateOf("")
     }
@@ -119,7 +120,6 @@ fun SignUp2(
             )
         }
 
-    val context = LocalContext.current
     val toLogin by viewModel.responseStatus.collectAsState()
 
     LaunchedEffect(toLogin) {

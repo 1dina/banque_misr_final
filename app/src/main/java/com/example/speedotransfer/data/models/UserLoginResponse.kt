@@ -1,8 +1,8 @@
 package com.example.speedotransfer.data.models
 
 data class UserLoginResponse(
-    val accessToken: String,
-    val refreshToken: String
+    val refreshToken: String,
+    val accessToken: String
 )
 data class UserLoginRequest(
     val email: String = "",

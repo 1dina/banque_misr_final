@@ -1,17 +1,22 @@
 package com.example.speedotransfer.data.source
 
 import com.example.speedotransfer.Constants
+import com.google.gson.GsonBuilder
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import retrofit2.converter.scalars.ScalarsConverterFactory
 
 object BankingAPIService {
+    private val gson = GsonBuilder()
+        .setLenient()
+        .create()
     private val retrofit = Retrofit
         .Builder()
         .baseUrl(Constants.BASE_URL)
-        .addConverterFactory(GsonConverterFactory.create())
+        .addConverterFactory(ScalarsConverterFactory.create())
+        .addConverterFactory(GsonConverterFactory.create(gson))
         .build()
 
-    //Lazy properties: the value is computed "only" on first access
     val callable: BankingAPICallable by lazy {
         retrofit.create(BankingAPICallable::class.java)
     }

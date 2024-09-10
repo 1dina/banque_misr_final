@@ -74,6 +74,10 @@ dependencies {
     implementation(libs.androidx.lifecycle.viewmodel.compose)
     implementation(libs.kotlinx.coroutines.android)
     implementation (libs.java.jwt)
+    implementation (libs.androidx.security.crypto)
+    implementation (libs.converter.scalars)
+
+
 
 
 
