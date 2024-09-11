@@ -50,7 +50,7 @@ import com.example.speedotransfer.data.models.RecentTransactionItem
 import com.example.speedotransfer.ui.theme.Grey
 import com.example.speedotransfer.ui.theme.LightRed
 import com.example.speedotransfer.ui.theme.LightYellow
-import com.example.speedotransfer.ui.theme.Maroon
+import com.example.speedotransfer.ui.theme.Marron
 
 @Composable
 fun HomeScreen(navController: NavController, modifier: Modifier = Modifier,innerPadding : PaddingValues) {
@@ -94,7 +94,7 @@ fun HomeScreen(navController: NavController, modifier: Modifier = Modifier,inner
                 ) {
                     Text(
                         text = stringResource(id = R.string.welcome_back),
-                        color = Maroon,
+                        color = Marron,
                         fontSize = 14.sp
                     )
                     Text(text = "User name", fontSize = 16.sp)
@@ -112,7 +112,7 @@ fun HomeScreen(navController: NavController, modifier: Modifier = Modifier,inner
                     .padding(top = 8.dp)
                     .height(128.dp),
                 shape = RoundedCornerShape(8.dp),
-                colors = CardDefaults.cardColors(containerColor = Maroon, contentColor = White)
+                colors = CardDefaults.cardColors(containerColor = Marron, contentColor = White)
             ) {
                 Column(
                     verticalArrangement = Arrangement.SpaceEvenly,
@@ -199,7 +199,7 @@ fun RecentTransactionUI(transactionItem: RecentTransactionItem, modifier: Modifi
                 )
             }
             Spacer(modifier = modifier.weight(1f))
-            Text(text = transactionItem.price, color = Maroon, fontSize = 16.sp)
+            Text(text = transactionItem.price, color = Marron, fontSize = 16.sp)
         }
     }
 

@@ -50,9 +50,9 @@ import androidx.navigation.compose.rememberNavController
 import com.example.speedotransfer.R
 import com.example.speedotransfer.routes.AppRoutes
 import com.example.speedotransfer.ui.theme.LightRed
+import com.example.speedotransfer.ui.theme.Marron
 import java.text.SimpleDateFormat
 import java.util.Locale
-import com.example.speedotransfer.ui.theme.Maroon
 
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -228,7 +228,7 @@ fun SignUp2(navController: NavController, modifier: Modifier = Modifier) {
                     .padding(top = 40.dp)
                     .size(width = 350.dp, height = 60.dp),
                 shape = RoundedCornerShape(10.dp),
-                colors = ButtonDefaults.buttonColors(containerColor = Maroon)
+                colors = ButtonDefaults.buttonColors(containerColor = Marron)
             ) {
                 Text(
                     text = "Continue",
@@ -253,7 +253,7 @@ fun SignUp2(navController: NavController, modifier: Modifier = Modifier) {
                         .clickable {
                             navController.navigate(AppRoutes.SIGN_IN)
                         },
-                    color = Maroon,
+                    color = Marron,
                     fontSize = 16.sp,
                     fontWeight = FontWeight.Bold,
                     textDecoration = TextDecoration.Underline

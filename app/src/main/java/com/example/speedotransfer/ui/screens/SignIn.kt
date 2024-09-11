@@ -46,7 +46,7 @@ import com.example.speedotransfer.R
 import com.example.speedotransfer.routes.AppRoutes
 import com.example.speedotransfer.DashboardActivity
 import com.example.speedotransfer.ui.theme.LightRed
-import com.example.speedotransfer.ui.theme.Maroon
+import com.example.speedotransfer.ui.theme.Marron
 
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -187,7 +187,7 @@ fun SignIn(navController: NavController, modifier: Modifier = Modifier) {
                     .padding(top = 40.dp)
                     .size(width = 350.dp, height = 60.dp),
                 shape = RoundedCornerShape(10.dp),
-                colors = ButtonDefaults.buttonColors(containerColor = Maroon)
+                colors = ButtonDefaults.buttonColors(containerColor = Marron)
             ) {
                 Text(
                     text = "Sign in",
@@ -210,7 +210,7 @@ fun SignIn(navController: NavController, modifier: Modifier = Modifier) {
                     modifier = Modifier
                         .padding(top = 25.dp, start = 5.dp)
                         .clickable { navController.navigate(AppRoutes.FIRST_PAGE_SIGN_UP) },
-                    color = Maroon,
+                    color = Marron,
                     fontSize = 16.sp,
                     fontWeight = FontWeight.Bold,
                     textDecoration = TextDecoration.Underline

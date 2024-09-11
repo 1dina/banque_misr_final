@@ -32,7 +32,7 @@ import com.example.speedotransfer.routes.AppRoutes
 import com.example.speedotransfer.routes.DashboardNavGraph
 import com.example.speedotransfer.ui.screens.dashboard.components.BottomNavBarScreens
 import com.example.speedotransfer.ui.theme.Grey
-import com.example.speedotransfer.ui.theme.Maroon
+import com.example.speedotransfer.ui.theme.Marron
 import com.example.speedotransfer.ui.theme.SpeedoTransferTheme
 
 class DashboardActivity : ComponentActivity() {
@@ -85,9 +85,9 @@ class DashboardActivity : ComponentActivity() {
                                         }
                                     },
                                     colors = NavigationBarItemDefaults.colors(
-                                        selectedTextColor = Maroon,
+                                        selectedTextColor = Marron,
                                         unselectedTextColor = Grey,
-                                        selectedIconColor = Maroon,
+                                        selectedIconColor = Marron,
                                         unselectedIconColor = Grey,
                                         indicatorColor = White
                                     ),

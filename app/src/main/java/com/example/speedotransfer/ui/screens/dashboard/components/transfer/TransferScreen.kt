@@ -41,7 +41,7 @@ import com.example.speedotransfer.ui.screens.dashboard.commonUI.HeaderUI
 import com.example.speedotransfer.ui.theme.LightPink
 import com.example.speedotransfer.ui.theme.LightRed
 import com.example.speedotransfer.ui.theme.LightYellow
-import com.example.speedotransfer.ui.theme.Maroon
+import com.example.speedotransfer.ui.theme.Marron
 
 @Composable
 fun TransferScreen(
@@ -136,7 +136,7 @@ fun Stepper(
 
             if (step < steps) {
                 Divider(
-                    color = if (step < currentStep) Maroon else Gray,
+                    color = if (step < currentStep) Marron else Gray,
                     modifier = modifier
                         .padding(top = 24.dp)
                         .width(64.dp)
@@ -183,7 +183,7 @@ fun StepItem(
                 else -> "Step"
             },
             fontSize = 14.sp,
-            color = if (isSelected) Maroon else Gray,
+            color = if (isSelected) Marron else Gray,
             modifier = modifier.padding(top = 8.dp)
         )
     }

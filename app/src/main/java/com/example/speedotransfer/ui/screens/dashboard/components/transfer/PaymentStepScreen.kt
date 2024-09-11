@@ -32,7 +32,7 @@ import com.example.speedotransfer.R
 import com.example.speedotransfer.data.models.FavoriteListItem
 import com.example.speedotransfer.ui.screens.dashboard.commonUI.CommonCard
 import com.example.speedotransfer.ui.theme.Grey
-import com.example.speedotransfer.ui.theme.Maroon
+import com.example.speedotransfer.ui.theme.Marron
 
 @Composable
 fun PaymentStepScreen(
@@ -109,7 +109,7 @@ fun PaymentStepScreen(
                 .fillMaxWidth()
                 .padding(top = 32.dp),
             shape = RoundedCornerShape(6.dp),
-            colors = ButtonDefaults.buttonColors(containerColor = Maroon, contentColor = White)
+            colors = ButtonDefaults.buttonColors(containerColor = Marron, contentColor = White)
         ) {
             Text(text = "Back to Home", fontSize = 16.sp, modifier = modifier.padding(8.dp))
         }
@@ -119,11 +119,11 @@ fun PaymentStepScreen(
                 .fillMaxWidth()
                 .padding(top = 16.dp),
             shape = RoundedCornerShape(6.dp),
-            border = BorderStroke(color = Maroon, width = 1.dp)
+            border = BorderStroke(color = Marron, width = 1.dp)
         ) {
             Text(
                 text = "Add to Favourite",
-                color = Maroon,
+                color = Marron,
                 fontSize = 16.sp,
                 modifier = modifier.padding(8.dp)
             )

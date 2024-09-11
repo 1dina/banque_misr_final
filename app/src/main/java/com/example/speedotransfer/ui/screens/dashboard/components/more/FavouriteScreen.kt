@@ -55,7 +55,7 @@ import com.example.speedotransfer.ui.screens.dashboard.commonUI.HeaderUI
 import com.example.speedotransfer.ui.theme.Grey
 import com.example.speedotransfer.ui.theme.LightPink
 import com.example.speedotransfer.ui.theme.LightYellow
-import com.example.speedotransfer.ui.theme.Maroon
+import com.example.speedotransfer.ui.theme.Marron
 
 @Composable
 fun FavouriteScreen(
@@ -213,7 +213,7 @@ fun FavBottomSheetMaker(onDismiss :() -> Unit, favoriteListItem: FavoriteListIte
                Row(modifier = modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically,
                    horizontalArrangement = Arrangement.Center) {
                      Icon(painter = painterResource(id = R.drawable.ic_edit), contentDescription = "edit sheet",
-                         tint = Maroon, modifier = modifier.padding(horizontal = 4.dp))
+                         tint = Marron, modifier = modifier.padding(horizontal = 4.dp))
                      Text(text = "Edit" , fontSize = 20.sp)
                }
             Text(
@@ -231,7 +231,7 @@ fun FavBottomSheetMaker(onDismiss :() -> Unit, favoriteListItem: FavoriteListIte
                 colors = TextFieldDefaults.colors(
                     focusedContainerColor = Color.White,
                     unfocusedContainerColor = Color.White,
-                    focusedIndicatorColor = Maroon,
+                    focusedIndicatorColor = Marron,
                     unfocusedIndicatorColor = Grey
                 ),
                 modifier = modifier
@@ -255,7 +255,7 @@ fun FavBottomSheetMaker(onDismiss :() -> Unit, favoriteListItem: FavoriteListIte
                 colors = TextFieldDefaults.colors(
                     focusedContainerColor = Color.White,
                     unfocusedContainerColor = Color.White,
-                    focusedIndicatorColor = Maroon,
+                    focusedIndicatorColor = Marron,
                     unfocusedIndicatorColor = Grey
                 ),// Input text size
                 modifier = modifier
@@ -270,7 +270,7 @@ fun FavBottomSheetMaker(onDismiss :() -> Unit, favoriteListItem: FavoriteListIte
                 },
                 modifier = modifier
                     .fillMaxWidth(),
-                colors = ButtonDefaults.buttonColors(containerColor = Maroon, contentColor = Color.White),
+                colors = ButtonDefaults.buttonColors(containerColor = Marron, contentColor = Color.White),
                 shape = RoundedCornerShape(6.dp),
             ) {
                 Text(text = "Save", fontSize = 16.sp,modifier=modifier.padding(8.dp), fontWeight = FontWeight.Medium)
