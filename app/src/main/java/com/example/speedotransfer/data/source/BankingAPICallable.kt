@@ -4,6 +4,7 @@ import com.example.speedotransfer.Constants
 import com.example.speedotransfer.data.models.AccountByIdResponse
 import com.example.speedotransfer.data.models.AccountCreationRequest
 import com.example.speedotransfer.data.models.AccountCreationResponse
+import com.example.speedotransfer.data.models.FavouriteAddition
 import com.example.speedotransfer.data.models.TransactionHistoryRequest
 import com.example.speedotransfer.data.models.TransactionHistoryResponse
 import com.example.speedotransfer.data.models.TransactionRequest
@@ -15,6 +16,7 @@ import com.example.speedotransfer.data.models.UserLoginRequest
 import com.example.speedotransfer.data.models.UserLoginResponse
 import retrofit2.Response
 import retrofit2.http.Body
+import retrofit2.http.DELETE
 import retrofit2.http.GET
 import retrofit2.http.Header
 import retrofit2.http.POST
@@ -59,5 +61,25 @@ interface BankingAPICallable {
     suspend fun getTransactionHistory(
         @Header("Authorization") accessToken: String,
         @Body transactionHistoryRequest: TransactionHistoryRequest
-    ) : Response<TransactionHistoryResponse>
+    ): Response<TransactionHistoryResponse>
+
+    @POST(Constants.FAVOURITE_ADDITION_ENDPOINT)
+    suspend fun addToFav(
+        @Header("Authorization") accessToken: String,
+        @Body favouriteAddition: FavouriteAddition
+    )
+            : Response<FavouriteAddition>
+
+    @GET (Constants.ALL_FAVOURITES_ENDPOINT)
+    suspend fun  getAllFav(
+        @Header("Authorization")accessToken: String,
+        @Path("userId") userId: Int
+    ) : Response<List<FavouriteAddition>>
+
+    @DELETE (Constants.DELETE_FAVOURITE_ENDPOINT)
+    suspend fun deleteFromFav(
+        @Header("Authorization")accessToken: String,
+        @Path("accountId") accountId: Int
+    ) : Response<String>
+
 }

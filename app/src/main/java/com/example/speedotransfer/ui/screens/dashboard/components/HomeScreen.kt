@@ -32,6 +32,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -57,6 +60,7 @@ import com.example.speedotransfer.ui.theme.LightYellow
 import com.example.speedotransfer.ui.theme.Maroon
 import com.example.speedotransfer.ui.viewmodels.HomeViewModel
 import com.example.speedotransfer.utils.formatDate
+import okhttp3.internal.userAgent
 
 @Composable
 fun HomeScreen(
@@ -70,6 +74,9 @@ fun HomeScreen(
     val currentBalance by viewModel.userAccountData.collectAsState()
     val responseState by viewModel.responseStatus.collectAsState()
     val historyTransactions by viewModel.transactionHistoryList.collectAsState()
+    var userName by remember {
+        mutableStateOf("user name")
+    }
     LaunchedEffect(responseState) {
         if (responseState == true)
             viewModel.resetResponseStatus()
@@ -128,7 +135,7 @@ fun HomeScreen(
                         color = Maroon,
                         fontSize = 14.sp
                     )
-                    Text(text = "User name", fontSize = 16.sp)
+                    Text(text = userName , fontSize = 16.sp)
                 }
                 Spacer(modifier = Modifier.weight(1f))
                 Icon(
@@ -165,14 +172,14 @@ fun HomeScreen(
                 }
             }
 
-            TransactionList(transactionList = historyTransactions)
+            TransactionList(transactionList = historyTransactions , userName)
         }
 
     }
 }
 
 @Composable
-fun TransactionList(transactionList: List<Content>, modifier: Modifier = Modifier) {
+fun TransactionList(transactionList: List<Content>, userName: String,modifier: Modifier = Modifier) {
     Row(
         modifier = modifier
             .padding(top = 24.dp)
@@ -188,7 +195,7 @@ fun TransactionList(transactionList: List<Content>, modifier: Modifier = Modifie
     ) {
         LazyColumn {
             items(transactionList) {
-                RecentTransactionUI(transactionItem = it)
+                RecentTransactionUI(transactionItem = it,userName)
                 HorizontalDivider(
                     modifier = Modifier
                         .fillMaxWidth(),
@@ -201,8 +208,14 @@ fun TransactionList(transactionList: List<Content>, modifier: Modifier = Modifie
 }
 
 @Composable
-fun RecentTransactionUI(transactionItem: Content, modifier: Modifier = Modifier) {
+fun RecentTransactionUI(transactionItem: Content,userName  : String , modifier: Modifier = Modifier) {
     Card(colors = CardDefaults.cardColors(containerColor = White), shape = RectangleShape) {
+        var status by remember {
+            mutableStateOf("Received")
+        }
+        var cardName by remember {
+            mutableStateOf("")
+        }
         Row(
             modifier = modifier
                 .fillMaxWidth()
@@ -219,13 +232,20 @@ fun RecentTransactionUI(transactionItem: Content, modifier: Modifier = Modifier)
                     .padding(start = 8.dp)
                     .height(64.dp)
             ) {
+                if(userName == transactionItem.senderName) { cardName = transactionItem.receiverName ?: "card"
+                status = "Sent"
+                }else {
+                    cardName = transactionItem.senderName ?: "card"
+                    status = "Received"
+                }
+                Log.e("trace","user name $userName , card name $cardName")
                 Text(
-                    text = "personName",
+                    text = cardName,
                     fontWeight = FontWeight.Medium,
                     fontSize = 14.sp, modifier = modifier.weight(1f)
                 )
                 Text(
-                    text = "cardDetails",
+                    text = "Visa . Mater Card . 1234",
                     fontWeight = FontWeight.Normal,
                     fontSize = 12.sp, modifier = modifier.weight(1f)
                 )

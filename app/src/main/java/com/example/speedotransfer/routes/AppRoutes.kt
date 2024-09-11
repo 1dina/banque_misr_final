@@ -120,7 +120,7 @@ fun DashboardNavGraph(navController: NavController, innerPadding: PaddingValues
         composable(AppRoutes.FAVOURITES) {
             FavouriteScreen(
                 navController = navController,
-                innerPadding = innerPadding
+                innerPadding = innerPadding,
             )
         }
         composable(AppRoutes.NOTIFICATIONS) {

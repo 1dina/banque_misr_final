@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.example.speedotransfer.data.source.BankingAPICallable
 import com.example.speedotransfer.data.source.local.SecureStorageDataSource
+import com.example.speedotransfer.domain.usecases.AddToFavUseCaseImpl
 import com.example.speedotransfer.domain.usecases.CreateAccountUseCaseImp
 import com.example.speedotransfer.domain.usecases.DoTransferUseCaseImpl
 import com.example.speedotransfer.domain.usecases.GetAccountByIdUseCaseImpl
@@ -26,8 +27,9 @@ class HomeViewModelFactory(
             val getAccountByIdUseCase = GetAccountByIdUseCaseImpl(dashboardRepository)
             val doTransferUseCase = DoTransferUseCaseImpl(dashboardRepository)
             val getTransactionsUseCase = GetTransactionsUseCaseImpl(dashboardRepository)
+            val addToFavUseCase = AddToFavUseCaseImpl(dashboardRepository)
             return HomeViewModel(createAccountUseCase,getUserAccountsUseCase, getAccountByIdUseCase
-            ,doTransferUseCase,getTransactionsUseCase) as T
+            ,doTransferUseCase,getTransactionsUseCase,addToFavUseCase) as T
         }
         throw IllegalArgumentException("Unknown ViewModel class")
     }

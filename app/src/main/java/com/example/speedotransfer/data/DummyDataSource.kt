@@ -13,7 +13,7 @@ object DummyDataSource {
     fun getFavoriteRecipentData(): List<FavoriteListItem> {
         val favoriteUser = FavoriteListItem(
             "Asmaa Dosuky",
-            "xxxx7890"
+            "xxxx4567"
         )
         val list = mutableListOf<FavoriteListItem>()
         for (i in 0..9) {

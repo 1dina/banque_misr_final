@@ -1,5 +1,6 @@
 package com.example.speedotransfer.ui.screens.dashboard.components.transfer
 
+import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -15,7 +16,8 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Divider
+import androidx.compose.material3.Divider
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -39,6 +41,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import com.example.speedotransfer.R
+import com.example.speedotransfer.data.models.FavouriteAddition
 import com.example.speedotransfer.data.models.TransactionRequest
 import com.example.speedotransfer.data.models.dummy.FavoriteListItem
 import com.example.speedotransfer.routes.AppRoutes
@@ -58,12 +61,13 @@ fun TransferScreen(
     modifier: Modifier = Modifier
 ) {
     var chosenUser by remember {
-        mutableStateOf<FavoriteListItem?>(null)
+        mutableStateOf<FavoriteListItem>(FavoriteListItem("",""))
     }
+
     var isLoading by remember {
         mutableStateOf(false)
     }
-    var currentStep by remember { mutableStateOf(1) }
+    var currentStep by remember { mutableIntStateOf(1) }
     var amountOfMoney by remember {
         mutableIntStateOf(0)
     }
@@ -72,8 +76,10 @@ fun TransferScreen(
     LaunchedEffect(transferUserFound) {
         isLoading = false
         if (transferUserFound == true) {
+            if (currentStep == 1) {
+                currentStep += 1
+            }
             viewModel.resetResponseStatus()
-            currentStep++
         } else {
             if (viewModel.toastMessage.value != null)
                 Toast.makeText(
@@ -113,33 +119,37 @@ fun TransferScreen(
                 currentStep = currentStep,
                 modifier = modifier
             )
-            if (currentStep == 1)
-                AmountStepScreen { user, amount ->
+            when (currentStep) {
+                1 -> AmountStepScreen { user, amount ->
                     chosenUser = user
                     amountOfMoney = amount
                     isLoading = true
                     viewModel.transferProcess(
                         TransactionRequest(
                             reciverAccountNum = user.favoriteRecipientAccount.toInt(),
-                            amount = amountOfMoney
+                            amount = amountOfMoney,
+                            senderName = "Dina", receiverName = "Doaa"
                         )
                     )
                 }
-            else if (currentStep == 2) ConfirmationStepScreen(
-                amountOfMoney = amountOfMoney,
-                recipientUser = chosenUser!!
-            ) {
-                currentStep = it
-            }
-            else PaymentStepScreen(
-                recipientUser = chosenUser!!,
-                amountOfMoney = amountOfMoney,
-                onBackToHomeClick = {
-                    navController.navigate(AppRoutes.HOME) {
-                        popUpTo(navController.graph.findStartDestination().id) { inclusive = true }
-                    }
-                }) {
-                //handle to add to favourite
+                2 -> ConfirmationStepScreen(
+                    amountOfMoney = amountOfMoney,
+                    recipientUser = chosenUser
+                ) {
+                    currentStep = it
+                }
+                else -> PaymentStepScreen(
+                    recipientUser = chosenUser,
+                    amountOfMoney = amountOfMoney,
+                    onBackToHomeClick = {
+                        navController.navigate(AppRoutes.HOME) {
+                            popUpTo(navController.graph.findStartDestination().id) { inclusive = true }
+                        }
+                    }) {
+                    viewModel.addToFav(FavouriteAddition(accountId = chosenUser.favoriteRecipientAccount.toInt(),
+                        name = chosenUser.favoriteRecipient))
+                    Log.e("trace","saved Item is ${chosenUser.favoriteRecipientAccount.toInt()}")
+                }
             }
 
         }
@@ -153,8 +163,6 @@ fun TransferScreen(
                 IndeterminateCircularIndicator()
             }
         }
-
-
     }
 }
 
@@ -179,14 +187,12 @@ fun Stepper(
             )
 
             if (step < steps) {
-                Divider(
-                    color = if (step < currentStep) Marron else Gray,
+                HorizontalDivider(
                     modifier = modifier
                         .padding(top = 24.dp)
                         .width(64.dp)
-                        .height(1.dp)
-
-
+                        .height(1.dp),
+                    color = if (step < currentStep) Marron else Gray
                 )
             }
         }
@@ -208,9 +214,11 @@ fun StepItem(
             val iconResult = if (!isSelected) {
                 if (step == 2) R.drawable.ic_step_two else R.drawable.ic_step_three
             } else {
-                if (step == 1) R.drawable.ic_step_one
-                else if (step == 2) R.drawable.ic_step_two_selected
-                else R.drawable.ic_step_three_selected
+                when (step) {
+                    1 -> R.drawable.ic_step_one
+                    2 -> R.drawable.ic_step_two_selected
+                    else -> R.drawable.ic_step_three_selected
+                }
             }
             Icon(
                 painter = painterResource(id = iconResult),

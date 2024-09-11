@@ -3,9 +3,12 @@ package com.example.speedotransfer.ui.viewmodels
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.speedotransfer.data.models.AccountCreationRequest
 import com.example.speedotransfer.data.models.Content
+import com.example.speedotransfer.data.models.FavouriteAddition
 import com.example.speedotransfer.data.models.TransactionHistoryRequest
 import com.example.speedotransfer.data.models.TransactionRequest
+import com.example.speedotransfer.domain.usecases.AddToFavUseCase
 import com.example.speedotransfer.domain.usecases.CreateAccountUseCase
 import com.example.speedotransfer.domain.usecases.DoTransferUseCase
 import com.example.speedotransfer.domain.usecases.GetAccountByIdUseCase
@@ -21,7 +24,8 @@ class HomeViewModel(
     val getUserAccountsUseCase: GetUserAccountsUseCase,
     val getAccountByIdUseCase: GetAccountByIdUseCase,
     val doTransferUseCase: DoTransferUseCase,
-    val getTransactionsUseCase: GetTransactionsUseCase
+    val getTransactionsUseCase: GetTransactionsUseCase,
+    val addToFavUseCase: AddToFavUseCase
 ) : ViewModel() {
     private val _userAccountData = MutableStateFlow("Add your Account first")
     val userAccountData = _userAccountData.asStateFlow()
@@ -38,7 +42,7 @@ class HomeViewModel(
     val toastMessage = _toastMessage.asStateFlow()
 
     init {
-        // createAccount(AccountCreationRequest("miza",10230))
+        /// createAccount(AccountCreationRequest("miza",10230))
         getUserAccounts()
     }
 
@@ -67,6 +71,7 @@ class HomeViewModel(
     fun transferProcess(transactionRequest: TransactionRequest) {
         viewModelScope.launch {
             try {
+                transactionRequest.senderAccountNum  = accountId.value
                 val result = doTransferUseCase.execute(transactionRequest)
                 if (result.isSuccess) {
                     _responseStatus.value = true
@@ -85,6 +90,7 @@ class HomeViewModel(
                 _userFound.value = false
                 handleError(e)
             }
+            getUserAccounts()
         }
 
     }
@@ -113,24 +119,41 @@ class HomeViewModel(
 
     }
 
-    //    fun createAccount (account : AccountCreationRequest) {
-//       viewModelScope.launch {
-//          try {
-//               val result = createAccountUseCase.execute(account)
-//               if (result.isSuccess) {
-//                   val balance = result.getOrNull()?.balance ?: "Unknown Balance"
-//                   _userAccountData.value = balance.toString()
-//                   _responseStatus.value =true
-//                   _toastMessage.value ="You've successfully added your card"
-//               }
-//               else {
-//                   result.exceptionOrNull()?.let { handleError(it) }
-//               }
-//           }catch (e : Exception) {
-//             handleError(e)
-//          }
-//       }
-//    }
+    fun addToFav(favouriteAddition: FavouriteAddition){
+        viewModelScope.launch {
+            try {
+                val result = addToFavUseCase.execute(favouriteAddition)
+                if (result.isSuccess) {
+                    _responseStatus.value =true
+                    _toastMessage.value = result.getOrNull()!!
+                }
+                else {
+                    result.exceptionOrNull()?.let { handleError(it) }
+                }
+            }catch (e : Exception) {
+                handleError(e)
+            }
+        }
+    }
+
+        fun createAccount (account : AccountCreationRequest) {
+       viewModelScope.launch {
+          try {
+               val result = createAccountUseCase.execute(account)
+               if (result.isSuccess) {
+                   val balance = result.getOrNull()?.balance ?: "Unknown Balance"
+                   _userAccountData.value = balance.toString()
+                   _responseStatus.value =true
+                   _toastMessage.value ="You've successfully added your card"
+               }
+               else {
+                   result.exceptionOrNull()?.let { handleError(it) }
+               }
+           }catch (e : Exception) {
+             handleError(e)
+          }
+       }
+    }
     fun resetResponseStatus() {
         _responseStatus.value = null
     }
