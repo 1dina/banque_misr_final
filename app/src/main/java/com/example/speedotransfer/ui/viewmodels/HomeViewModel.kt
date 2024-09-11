@@ -6,9 +6,11 @@ import androidx.lifecycle.viewModelScope
 import com.example.speedotransfer.data.models.Content
 import com.example.speedotransfer.data.models.TransactionHistoryRequest
 import com.example.speedotransfer.data.models.TransactionRequest
+import com.example.speedotransfer.data.models.UserInfoResponse
 import com.example.speedotransfer.domain.usecases.CreateAccountUseCase
 import com.example.speedotransfer.domain.usecases.DoTransferUseCase
 import com.example.speedotransfer.domain.usecases.GetAccountByIdUseCase
+import com.example.speedotransfer.domain.usecases.GetInfoUseCase
 import com.example.speedotransfer.domain.usecases.GetTransactionsUseCase
 import com.example.speedotransfer.domain.usecases.GetUserAccountsUseCase
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -21,7 +23,8 @@ class HomeViewModel(
     val getUserAccountsUseCase: GetUserAccountsUseCase,
     val getAccountByIdUseCase: GetAccountByIdUseCase,
     val doTransferUseCase: DoTransferUseCase,
-    val getTransactionsUseCase: GetTransactionsUseCase
+    val getTransactionsUseCase: GetTransactionsUseCase,
+    val getInfoUseCase: GetInfoUseCase
 ) : ViewModel() {
     private val _userAccountData = MutableStateFlow("Add your Account first")
     val userAccountData = _userAccountData.asStateFlow()
@@ -36,6 +39,8 @@ class HomeViewModel(
     val transactionHistoryList = _transactionHistoryList.asStateFlow()
     private val _toastMessage = MutableStateFlow<String?>(null)
     val toastMessage = _toastMessage.asStateFlow()
+    private val _userInfoData = MutableStateFlow<UserInfoResponse?>(null)
+    val userInfoData = _userInfoData.asStateFlow()
 
     init {
         // createAccount(AccountCreationRequest("miza",10230))
@@ -112,6 +117,22 @@ class HomeViewModel(
         }
 
     }
+
+    fun getUserInfo() {
+        viewModelScope.launch {
+             try {
+                val result = getInfoUseCase.execute()
+                if (result.isSuccess){
+                    _userInfoData.value = result.getOrNull()?: UserInfoResponse(emptyList(),"","","",0,"")
+                    }
+
+
+            } catch (e: Exception) {
+                 handleError(e)
+             }
+        }
+    }
+
 
     //    fun createAccount (account : AccountCreationRequest) {
 //       viewModelScope.launch {

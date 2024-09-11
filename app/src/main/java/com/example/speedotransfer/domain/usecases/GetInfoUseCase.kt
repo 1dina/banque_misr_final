@@ -1,16 +1,16 @@
 package com.example.speedotransfer.domain.usecases
 
 import com.example.speedotransfer.data.models.UserInfoResponse
-import com.example.speedotransfer.domain.repository.ProfileRepository
+import com.example.speedotransfer.domain.repository.DashboardRepository
 
 interface GetInfoUseCase{
     suspend fun execute() : Result<UserInfoResponse>
 }
 
-class GetInfoUseCaseImpl (val profileRepository: ProfileRepository) : GetInfoUseCase{
+class GetInfoUseCaseImpl (val dashboardRepository: DashboardRepository) : GetInfoUseCase{
     override suspend fun execute(): Result<UserInfoResponse> {
         return try {
-            val response = profileRepository.getInfo()
+            val response = dashboardRepository.getInfo()
             if (response.isSuccessful) {
                 Result.success(response.body()!!)
             } else {

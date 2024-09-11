@@ -8,6 +8,7 @@ import com.example.speedotransfer.data.models.TransactionHistoryResponse
 import com.example.speedotransfer.data.models.TransactionRequest
 import com.example.speedotransfer.data.models.TransactionResponse
 import com.example.speedotransfer.data.models.UserAccountsResponseItem
+import com.example.speedotransfer.data.models.UserInfoResponse
 import retrofit2.Response
 
 interface DashboardRepository {
@@ -17,5 +18,7 @@ interface DashboardRepository {
     suspend fun doTransferProcess(transactionRequest: TransactionRequest) : Response<TransactionResponse>
     suspend fun getTransactionHistory (transactionHistoryRequest: TransactionHistoryRequest)
     : Response<TransactionHistoryResponse>
+    suspend fun getInfo(): Response<UserInfoResponse>
+
 
 }

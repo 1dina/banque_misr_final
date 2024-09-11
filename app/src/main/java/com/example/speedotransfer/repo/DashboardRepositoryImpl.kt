@@ -9,6 +9,7 @@ import com.example.speedotransfer.data.models.TransactionHistoryResponse
 import com.example.speedotransfer.data.models.TransactionRequest
 import com.example.speedotransfer.data.models.TransactionResponse
 import com.example.speedotransfer.data.models.UserAccountsResponseItem
+import com.example.speedotransfer.data.models.UserInfoResponse
 import com.example.speedotransfer.data.source.BankingAPICallable
 import com.example.speedotransfer.data.source.local.SecureStorageDataSource
 import com.example.speedotransfer.domain.repository.DashboardRepository
@@ -106,6 +107,11 @@ class DashboardRepositoryImpl(val apiService: BankingAPICallable,
         Log.e("trace", "Error occurred while fetching transaction history: ${e.message}")
         throw e
     }
+    }
+
+    override suspend fun getInfo(): Response <UserInfoResponse>{
+        val accessToken = encryptedSharedPreferences.getAccessToken()
+        return apiService.getInfo(accessToken!!)
     }
 
 

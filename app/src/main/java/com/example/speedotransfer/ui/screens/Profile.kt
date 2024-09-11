@@ -27,14 +27,17 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 import com.example.speedotransfer.R
+import com.example.speedotransfer.routes.AppRoutes
 import com.example.speedotransfer.ui.theme.LightRed
 import com.example.speedotransfer.ui.theme.LightWhite
 import com.example.speedotransfer.ui.theme.LightYellow
 
 
 @Composable
-fun Profile(modifier: Modifier = Modifier) {
+fun Profile(navController: NavController, modifier: Modifier = Modifier) {
 
     Box(
         modifier = Modifier
@@ -63,7 +66,9 @@ fun Profile(modifier: Modifier = Modifier) {
                         Modifier
                             .size(40.dp)
                             .padding(top = 16.dp)
-                            .clickable { }
+                            .clickable {
+                                navController.navigate(AppRoutes.PROFILE_INFO)
+                            }
                     )
 
                     Text(
@@ -211,5 +216,5 @@ fun Profile(modifier: Modifier = Modifier) {
 @Preview
 @Composable
 private fun ProfilePreview() {
-    Profile()
+    Profile(rememberNavController())
 }

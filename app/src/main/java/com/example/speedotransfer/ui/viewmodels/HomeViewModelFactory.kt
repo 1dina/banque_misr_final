@@ -8,6 +8,7 @@ import com.example.speedotransfer.data.source.local.SecureStorageDataSource
 import com.example.speedotransfer.domain.usecases.CreateAccountUseCaseImp
 import com.example.speedotransfer.domain.usecases.DoTransferUseCaseImpl
 import com.example.speedotransfer.domain.usecases.GetAccountByIdUseCaseImpl
+import com.example.speedotransfer.domain.usecases.GetInfoUseCaseImpl
 import com.example.speedotransfer.domain.usecases.GetTransactionsUseCaseImpl
 import com.example.speedotransfer.domain.usecases.GetUserAccountsUseCaseImpl
 import com.example.speedotransfer.repo.DashboardRepositoryImpl
@@ -26,8 +27,9 @@ class HomeViewModelFactory(
             val getAccountByIdUseCase = GetAccountByIdUseCaseImpl(dashboardRepository)
             val doTransferUseCase = DoTransferUseCaseImpl(dashboardRepository)
             val getTransactionsUseCase = GetTransactionsUseCaseImpl(dashboardRepository)
+            val getInfoUseCase = GetInfoUseCaseImpl(dashboardRepository)
             return HomeViewModel(createAccountUseCase,getUserAccountsUseCase, getAccountByIdUseCase
-            ,doTransferUseCase,getTransactionsUseCase) as T
+            ,doTransferUseCase,getTransactionsUseCase,getInfoUseCase) as T
         }
         throw IllegalArgumentException("Unknown ViewModel class")
     }

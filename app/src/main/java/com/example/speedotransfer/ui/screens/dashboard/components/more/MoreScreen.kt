@@ -134,7 +134,9 @@ fun MoreScreen(
             MoreItem(leadingIcon = R.drawable.ic_favorite, itemText = "Favourites") {
                 navController.navigate(AppRoutes.FAVOURITES)
             }
-            MoreItem(leadingIcon = R.drawable.ic_user, itemText = "Profile") {}
+            MoreItem(leadingIcon = R.drawable.ic_user, itemText = "Profile" ) {
+                navController.navigate(AppRoutes.PROFILE)
+            }
             MoreItem(leadingIcon = R.drawable.ic_help, itemText = "Help") {
                 showBottomDialog = true
             }

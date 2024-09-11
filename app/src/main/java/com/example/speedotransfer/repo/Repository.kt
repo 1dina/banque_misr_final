@@ -7,6 +7,7 @@ import com.example.speedotransfer.data.models.AccountCreationResponse
 import com.example.speedotransfer.data.models.AuthData
 import com.example.speedotransfer.data.models.UserAuthRegisterRequest
 import com.example.speedotransfer.data.models.UserAuthRegisterResponse
+import com.example.speedotransfer.data.models.UserInfoResponse
 import com.example.speedotransfer.data.models.UserLoginRequest
 import com.example.speedotransfer.data.models.UserLoginResponse
 import com.example.speedotransfer.data.source.BankingAPICallable
@@ -67,7 +68,6 @@ class Repository(
         return apiService.signOutUser(UserLoginResponse(refreshToken!!,accessToken!!))
 
     }
-
 
 
 }

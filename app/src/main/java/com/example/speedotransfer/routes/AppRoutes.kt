@@ -14,6 +14,8 @@ import com.example.speedotransfer.routes.AppRoutes.SIGN_IN
 import com.example.speedotransfer.routes.AppRoutes.SPLASH
 import com.example.speedotransfer.routes.AppRoutes.START_DESTINATION
 import com.example.speedotransfer.routes.AppRoutes.isFirstTime
+import com.example.speedotransfer.ui.screens.Profile
+import com.example.speedotransfer.ui.screens.ProfileInfo
 import com.example.speedotransfer.ui.screens.SignIn
 import com.example.speedotransfer.ui.screens.SignUp1
 import com.example.speedotransfer.ui.screens.SignUp2
@@ -48,6 +50,8 @@ object AppRoutes {
     const val TRANS_DETAILS = "transactionDetails"
     var isFirstTime = true
     var START_DESTINATION = SPLASH
+    const val PROFILE = "profile"
+    const val PROFILE_INFO = "profileInfo"
 
 
 }
@@ -132,6 +136,9 @@ fun DashboardNavGraph(navController: NavController, innerPadding: PaddingValues
         composable(AppRoutes.CURRENCY) { CardCurrency(navController = navController) }
         composable(AppRoutes.CARD_ADDITION) { CardAddition(navController = navController) }
         composable(AppRoutes.TRANS_DETAILS) { TransactionsDetails(navController = navController,innerPaddingValues = innerPadding)  }
+        composable(AppRoutes.PROFILE) { Profile(navController = navController) }
+        composable(AppRoutes.PROFILE_INFO) { ProfileInfo(navController = navController,viewModel = viewModel) }
+
 
 
     }
