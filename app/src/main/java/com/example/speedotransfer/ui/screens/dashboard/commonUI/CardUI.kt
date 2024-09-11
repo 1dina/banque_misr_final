@@ -53,7 +53,9 @@ fun CommonCard(
                     .fillMaxHeight()
                     .padding(start = 32.dp), verticalArrangement = Arrangement.SpaceEvenly
             ) {
-                Text(text = destination, color = Marron, fontSize = 16.sp)
+                if(destination!="") {
+                    Text(text = destination, color = Marron, fontSize = 16.sp)
+                }
                 Text(
                     text = cardUser,
                     color = Black,

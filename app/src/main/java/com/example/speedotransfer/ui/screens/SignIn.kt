@@ -1,6 +1,7 @@
 package com.example.speedotransfer.ui.screens
 
 import android.content.Intent
+import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -8,8 +9,10 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -19,6 +22,8 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -40,23 +45,60 @@ import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
-import com.example.speedotransfer.R
-import com.example.speedotransfer.routes.AppRoutes
 import com.example.speedotransfer.DashboardActivity
+import com.example.speedotransfer.R
+import com.example.speedotransfer.data.models.UserLoginRequest
+import com.example.speedotransfer.data.source.BankingAPIService
+import com.example.speedotransfer.routes.AppRoutes
 import com.example.speedotransfer.ui.theme.LightRed
-import com.example.speedotransfer.ui.theme.Marron
+import com.example.speedotransfer.ui.theme.Maroon
+import com.example.speedotransfer.ui.viewmodels.AuthViewModel
+import com.example.speedotransfer.ui.viewmodels.AuthViewModelFactory
 
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SignIn(navController: NavController, modifier: Modifier = Modifier) {
+    val apiService = BankingAPIService.callable
+    val context = LocalContext.current
+
+    val authViewModel: AuthViewModel = viewModel(factory = AuthViewModelFactory(apiService,context))
 
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
     var isPasswordVisible by remember { mutableStateOf(false) }
-    val context = LocalContext.current
+    val toLogin by authViewModel.responseStatus.collectAsState()
+    var isButtonEnabled by remember {
+        mutableStateOf(false)
+    }
+    var isLoading by remember {
+        mutableStateOf(false)
+    }
+    isButtonEnabled = if (!(email.isBlank() || password.isBlank())) true
+    else false
+    LaunchedEffect(toLogin) {
+        if (toLogin == true) {
+            isLoading = false
+            authViewModel.resetResponseStatus()
+            val intent = Intent(context, DashboardActivity::class.java).apply {
+                flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+            }
+            context.startActivity(intent)
+        } else {
+            isLoading = false
+            if (authViewModel.toastMessage.value != null)
+                Toast.makeText(
+                    context,
+                    authViewModel.toastMessage.value,
+                    Toast.LENGTH_SHORT
+                ).show()
+            authViewModel.resetToastMessage()
+            authViewModel.resetResponseStatus()
+        }
+    }
 
 
     Box(
@@ -75,7 +117,9 @@ fun SignIn(navController: NavController, modifier: Modifier = Modifier) {
         Column(
             verticalArrangement = Arrangement.Top,
             horizontalAlignment = Alignment.CenterHorizontally,
-            modifier = Modifier.fillMaxSize()
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(16.dp)
         ) {
 
 
@@ -89,7 +133,7 @@ fun SignIn(navController: NavController, modifier: Modifier = Modifier) {
             Text(
                 text = stringResource(id = R.string.app),
                 fontSize = 24.sp,
-                modifier = Modifier.padding(top = 32.dp),
+                modifier = Modifier.padding(top = 64.dp),
                 fontWeight = FontWeight.Medium
             )
 
@@ -117,9 +161,9 @@ fun SignIn(navController: NavController, modifier: Modifier = Modifier) {
                     shape = RoundedCornerShape(10.dp),
                     colors = TextFieldDefaults.outlinedTextFieldColors(
                         containerColor = Color.White
-                    ),
+                    ), maxLines = 1,
                     modifier = Modifier
-                        .size(350.dp, 110.dp)
+                        .fillMaxWidth()
                         .padding(top = 40.dp),
 
                     trailingIcon = {
@@ -128,7 +172,7 @@ fun SignIn(navController: NavController, modifier: Modifier = Modifier) {
                             contentDescription = "Name",
                             Modifier
                                 .alpha(0.5f)
-                                .size(30.dp)
+                                .size(24.dp)
                         )
                     }
                 )
@@ -150,14 +194,14 @@ fun SignIn(navController: NavController, modifier: Modifier = Modifier) {
                             color = colorResource(id = R.color.black),
                             textAlign = TextAlign.Start
                         )
-                    },
+                    },maxLines = 1,
                     shape = RoundedCornerShape(10.dp),
                     colors = TextFieldDefaults.outlinedTextFieldColors(
                         containerColor = Color.White
                     ),
                     modifier = Modifier
-                        .size(350.dp, 100.dp)
-                        .padding(top = 30.dp),
+                        .fillMaxWidth()
+                        .padding(top = 40.dp),
                     visualTransformation = if (isPasswordVisible) VisualTransformation.None else PasswordVisualTransformation(),
                     trailingIcon = {
                         Icon(
@@ -166,7 +210,7 @@ fun SignIn(navController: NavController, modifier: Modifier = Modifier) {
                             contentDescription = "Password",
                             Modifier
                                 .alpha(0.5f)
-                                .size(30.dp)
+                                .size(24.dp)
                                 .clickable {
                                     isPasswordVisible = !isPasswordVisible
                                 }
@@ -179,28 +223,35 @@ fun SignIn(navController: NavController, modifier: Modifier = Modifier) {
             }
 
             Button(
-                onClick = {     val intent = Intent(context, DashboardActivity::class.java).apply {
-                    flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-                }
-                          context.startActivity(intent)},
+                onClick = {
+                    isLoading = true
+                    val userLoginRequest = UserLoginRequest(email, password)
+                    authViewModel.submitLoginData(userLoginRequest)
+                },
                 modifier = Modifier
                     .padding(top = 40.dp)
-                    .size(width = 350.dp, height = 60.dp),
+                    .fillMaxWidth(),
+                enabled = isButtonEnabled,
                 shape = RoundedCornerShape(10.dp),
-                colors = ButtonDefaults.buttonColors(containerColor = Marron)
+                colors = ButtonDefaults.buttonColors(containerColor = Maroon)
             ) {
                 Text(
                     text = "Sign in",
-                    fontSize = 16.sp
+                    fontSize = 16.sp,
+                    modifier = modifier.padding(10.dp)
                 )
 
             }
 
-            Row {
+            Row(
+                horizontalArrangement = Arrangement.Center,
+                modifier = modifier
+                    .fillMaxWidth()
+                    .padding(top = 24.dp)
+            ) {
                 Text(
                     text = "Don't have an account?",
                     modifier = Modifier
-                        .padding(top = 25.dp, start = 30.dp)
                         .alpha(0.6f),
                     color = colorResource(id = R.color.black),
                     fontSize = 16.sp
@@ -208,9 +259,13 @@ fun SignIn(navController: NavController, modifier: Modifier = Modifier) {
                 Text(
                     text = "Sign Up",
                     modifier = Modifier
-                        .padding(top = 25.dp, start = 5.dp)
-                        .clickable { navController.navigate(AppRoutes.FIRST_PAGE_SIGN_UP) },
-                    color = Marron,
+                        .padding(start = 4.dp)
+                        .clickable {
+                            navController.navigate(AppRoutes.FIRST_PAGE_SIGN_UP) {
+                                popUpTo(AppRoutes.SIGN_IN) { inclusive = true }
+                            }
+                        },
+                    color = Maroon,
                     fontSize = 16.sp,
                     fontWeight = FontWeight.Bold,
                     textDecoration = TextDecoration.Underline
@@ -218,14 +273,25 @@ fun SignIn(navController: NavController, modifier: Modifier = Modifier) {
 
                 )
             }
+            
         }
+        if (isLoading) {
+            Box(
+                modifier = modifier
+                    .fillMaxSize()
+                    .background(Color.Black.copy(alpha = 0.5f), RoundedCornerShape(8.dp))
+                    .wrapContentSize(Alignment.Center)
+            ) {
+                IndeterminateCircularIndicator()
+            }
+        }
+
     }
 }
 
-@Preview(showSystemUi = true)
+
+@Preview
 @Composable
 private fun SignInPreview() {
-
-    SignIn(rememberNavController())
-
+    SignIn(navController = rememberNavController())
 }

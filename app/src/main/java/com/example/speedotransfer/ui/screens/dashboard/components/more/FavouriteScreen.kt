@@ -7,13 +7,11 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -50,11 +48,12 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.example.speedotransfer.R
 import com.example.speedotransfer.data.DummyDataSource
-import com.example.speedotransfer.data.models.FavoriteListItem
+import com.example.speedotransfer.data.models.dummy.FavoriteListItem
 import com.example.speedotransfer.ui.screens.dashboard.commonUI.HeaderUI
 import com.example.speedotransfer.ui.theme.Grey
 import com.example.speedotransfer.ui.theme.LightPink
 import com.example.speedotransfer.ui.theme.LightYellow
+import com.example.speedotransfer.ui.theme.Maroon
 import com.example.speedotransfer.ui.theme.Marron
 
 @Composable
@@ -68,11 +67,11 @@ fun FavouriteScreen(
         mutableStateOf(false)
     }
     var chosenItem by remember {
-        mutableStateOf(FavoriteListItem("",""))
+        mutableStateOf(FavoriteListItem("", ""))
     }
-    if(showBottomDialog){
+    if (showBottomDialog) {
         FavBottomSheetMaker(onDismiss = {
-        showBottomDialog=false
+            showBottomDialog = false
         }, favoriteListItem = chosenItem)
     }
     Box(
@@ -87,7 +86,7 @@ fun FavouriteScreen(
             )
             .padding(innerPadding)
     ) {
-        Column  (modifier = modifier.padding(horizontal = 16.dp)){
+        Column(modifier = modifier.padding(horizontal = 16.dp)) {
             HeaderUI(headerTitle = "Favourite", onClickBackButton = {
                 navController.popBackStack()
             })
@@ -100,12 +99,16 @@ fun FavouriteScreen(
                 fontSize = 20.sp,
                 fontWeight = FontWeight.SemiBold
             )
-            FavoriteScreenListMaker(favoriteListItems = dummyData, modifier = modifier , onEditClick = {
-                  showBottomDialog =true
-                chosenItem = it
-            }, onDeleteClick ={
-                 chosenItem=it
-            } )
+            FavoriteScreenListMaker(
+                favoriteListItems = dummyData,
+                modifier = modifier,
+                onEditClick = {
+                    showBottomDialog = true
+                    chosenItem = it
+                },
+                onDeleteClick = {
+                    chosenItem = it
+                })
 
         }
     }
@@ -121,9 +124,9 @@ fun FavoriteScreenListMaker(
     LazyColumn(modifier = modifier.fillMaxHeight()) {
         items(favoriteListItems) { item ->
             FavoriteScreenListItem(favoriteListItem = item, onEditClick = {
-                 onEditClick(item)
+                onEditClick(item)
             }) {
-              onDeleteClick(item)
+                onDeleteClick(item)
             }
 
         }
@@ -203,21 +206,37 @@ fun FavoriteScreenListItem(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun FavBottomSheetMaker(onDismiss :() -> Unit, favoriteListItem: FavoriteListItem, modifier: Modifier = Modifier) {
-    ModalBottomSheet(onDismissRequest = { onDismiss() },
+fun FavBottomSheetMaker(
+    onDismiss: () -> Unit,
+    favoriteListItem: FavoriteListItem,
+    modifier: Modifier = Modifier
+) {
+    ModalBottomSheet(
+        onDismissRequest = { onDismiss() },
         containerColor = White,
-        modifier = modifier.wrapContentSize()) {
-        Column(modifier = modifier
-            .height(500.dp)
-            .padding(16.dp)) {
-               Row(modifier = modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically,
-                   horizontalArrangement = Arrangement.Center) {
-                     Icon(painter = painterResource(id = R.drawable.ic_edit), contentDescription = "edit sheet",
-                         tint = Marron, modifier = modifier.padding(horizontal = 4.dp))
-                     Text(text = "Edit" , fontSize = 20.sp)
-               }
+        modifier = modifier.wrapContentSize()
+    ) {
+        Column(
+            modifier = modifier
+                .height(500.dp)
+                .padding(16.dp)
+        ) {
+            Row(
+                modifier = modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.Center
+            ) {
+                Icon(
+                    painter = painterResource(id = R.drawable.ic_edit),
+                    contentDescription = "edit sheet",
+                    tint = Maroon,
+                    modifier = modifier.padding(horizontal = 4.dp)
+                )
+                Text(text = "Edit", fontSize = 20.sp)
+            }
             Text(
-                text = "Recipient Account", modifier = modifier.padding(bottom = 8.dp,top=16.dp), fontSize = 16.sp
+                text = "Recipient Account",
+                modifier = modifier.padding(bottom = 8.dp, top = 16.dp),
+                fontSize = 16.sp
             )
             OutlinedTextField(
                 value = favoriteListItem.favoriteRecipientAccount,
@@ -231,7 +250,7 @@ fun FavBottomSheetMaker(onDismiss :() -> Unit, favoriteListItem: FavoriteListIte
                 colors = TextFieldDefaults.colors(
                     focusedContainerColor = Color.White,
                     unfocusedContainerColor = Color.White,
-                    focusedIndicatorColor = Marron,
+                    focusedIndicatorColor = Maroon,
                     unfocusedIndicatorColor = Grey
                 ),
                 modifier = modifier
@@ -255,7 +274,7 @@ fun FavBottomSheetMaker(onDismiss :() -> Unit, favoriteListItem: FavoriteListIte
                 colors = TextFieldDefaults.colors(
                     focusedContainerColor = Color.White,
                     unfocusedContainerColor = Color.White,
-                    focusedIndicatorColor = Marron,
+                    focusedIndicatorColor = Maroon,
                     unfocusedIndicatorColor = Grey
                 ),// Input text size
                 modifier = modifier
@@ -265,20 +284,27 @@ fun FavBottomSheetMaker(onDismiss :() -> Unit, favoriteListItem: FavoriteListIte
             )
             Button(
                 onClick = {
-                          onDismiss()
-                          //update saved item data
+                    onDismiss()
+                    //update saved item data
                 },
                 modifier = modifier
                     .fillMaxWidth(),
-                colors = ButtonDefaults.buttonColors(containerColor = Marron, contentColor = Color.White),
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = Maroon,
+                    contentColor = Color.White
+                ),
                 shape = RoundedCornerShape(6.dp),
             ) {
-                Text(text = "Save", fontSize = 16.sp,modifier=modifier.padding(8.dp), fontWeight = FontWeight.Medium)
-            } 
+                Text(
+                    text = "Save",
+                    fontSize = 16.sp,
+                    modifier = modifier.padding(8.dp),
+                    fontWeight = FontWeight.Medium
+                )
+            }
         }
     }
 }
-
 
 
 @Preview(showSystemUi = true)

@@ -69,6 +69,17 @@ dependencies {
     debugImplementation(libs.androidx.ui.test.manifest)
     implementation(libs.androidx.navigation.compose)
     implementation(libs.androidx.material)
+    implementation (libs.retrofit)
+    implementation (libs.converter.gson)
+    implementation(libs.androidx.lifecycle.viewmodel.compose)
+    implementation(libs.kotlinx.coroutines.android)
+    implementation (libs.java.jwt)
+    implementation (libs.androidx.security.crypto)
+    implementation (libs.converter.scalars)
+    implementation (libs.logging.interceptor)
+
+
+
 
 
 

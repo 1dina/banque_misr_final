@@ -3,8 +3,10 @@ package com.example.speedotransfer.ui.screens
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
@@ -12,6 +14,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Divider
@@ -29,14 +32,18 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 import com.example.speedotransfer.R
+import com.example.speedotransfer.ui.screens.dashboard.commonUI.HeaderUI
 import com.example.speedotransfer.ui.theme.LightRed
 import com.example.speedotransfer.ui.theme.LightWhite
 import com.example.speedotransfer.ui.theme.LightYellow
 import com.example.speedotransfer.ui.theme.Marron
+import retrofit2.http.Header
 
 @Composable
-fun TransactionsDetails( modifier: Modifier = Modifier) {
+fun TransactionsDetails(navController: NavController, innerPaddingValues: PaddingValues,modifier: Modifier = Modifier) {
 
     Box(
         modifier = Modifier
@@ -49,174 +56,191 @@ fun TransactionsDetails( modifier: Modifier = Modifier) {
                     )
                 )
             )
+            .padding(innerPaddingValues)
     ) {
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(top = 20.dp)
-        ) {
-            Icon(
-                painter = painterResource(id = R.drawable.ic_arrow_back),
-                contentDescription = "Back",
-                Modifier
-                    .size(40.dp)
-                    .padding(top = 16.dp)
-                    .clickable { }
-            )
+        Column(modifier = modifier
+            .fillMaxSize()
+            .padding(horizontal = 16.dp)) {
+            HeaderUI(headerTitle = "Successful Transactions", onClickBackButton = {
+                navController.popBackStack()
 
-            Text(
-                text = "Successful Transactions",
-                fontSize = 20.sp,
+            })
+
+            Column(
+                horizontalAlignment = Alignment.CenterHorizontally,
                 modifier = Modifier
-                    .padding(top = 15.dp, start = 60.dp)
-
-            )
-        }
-
-        Column(
-            horizontalAlignment = Alignment.CenterHorizontally,
-            modifier = Modifier
-                .padding(top = 90.dp)
-                .fillMaxSize()
-        ) {
-
-            Image(
-                painter = painterResource(id = R.drawable.completed),
-                contentDescription = "Transaction Completed",
-                modifier = Modifier
-                    .size(150.dp)
-            )
-
-            Row() {
-                Text(
-                    text = "1000",
-                    fontSize = 21.sp,
-                    fontWeight = FontWeight.Bold,
-                    modifier = Modifier
-                        .padding(end = 2.dp)
-                )
-
-                Text(
-                    text = "USD",
-                    fontSize = 21.sp,
-                    fontWeight = FontWeight.Bold,
-                    modifier = Modifier
-                        .padding(start = 1.dp , top =3.dp),
-                    style = TextStyle(color = Marron)
-                )
-            }
-
-            Text(
-                text = "Transfer amount",
-                fontSize = 16.sp,
-                fontWeight = FontWeight.Medium,
-                modifier = Modifier
-                    .padding(start = 1.dp, top = 2.dp)
-                    .alpha(0.6f)
-            )
-
-            Text(
-                text = "Send money",
-                fontSize = 16.sp,
-                modifier = Modifier
-                    .padding(start = 1.dp , top =3.dp),
-                style = TextStyle(color = Marron)
-            )
-
-
-            Box(
-                modifier = modifier
-                    .fillMaxWidth(0.95f)
-                    .padding(top = 8.dp)
+                    .padding(top = 32.dp)
+                    .fillMaxSize()
             ) {
-                Column {
-                    TransferProcessCard(
-                        destination = "From",
-                        cardUser = "Asmaa Dosuky",
-                        cardAccount = "xxxx7890",
-                    )
-                    TransferProcessCard(
-                        destination = "To",
-                        cardUser = "Jonathon Smith",
-                        cardAccount = "xxxx7890",
-
-                        )
-                }
 
                 Image(
                     painter = painterResource(id = R.drawable.completed),
-                    contentDescription = "completed",
-                    modifier = modifier
-                        .align(Alignment.Center)
-
-                )
-            }
-            Card(
-                modifier = modifier
-                    .padding(top = 20.dp)
-                    .fillMaxWidth(0.95f)
-                    .fillMaxHeight(0.7f),
-                colors = CardDefaults.cardColors(containerColor = LightWhite)
-            ){
-                Row (
-                    modifier = Modifier.padding(top = 25.dp, start = 15.dp)
-                ){
-                    Text(text = "Transfer amount amount",
-                        fontSize = 15.sp,
-                        modifier = Modifier.alpha(0.7f))
-
-                    Text(text = "48,4220",
-                        fontSize = 15.sp,
-                        modifier = Modifier
-                            .alpha(0.4f)
-                            .padding(start = 100.dp))
-
-                    Text(text = "EGP",
-                        fontSize = 15.sp,
-                        modifier = Modifier
-                            .alpha(0.4f)
-                            .padding(start = 5.dp))
-
-                }
-                Divider(
+                    contentDescription = "Transaction Completed",
                     modifier = Modifier
-                        .padding(vertical = 20.dp)
-                        .padding(start = 10.dp)
-                        .width(350.dp)
-                        .alpha(0.4f),
-                    color = Color.Gray,
-                    thickness = 1.dp
+                        .size(150.dp)
                 )
 
-                Row (
-                    modifier = Modifier.padding(start = 15.dp)
-                ){
-                    Text(text = "Reference",
-                        fontSize = 15.sp,
-                        modifier = Modifier.alpha(0.7f))
-
-                    Text(text = "123456789101",
-                        fontSize = 15.sp,
+                Row() {
+                    Text(
+                        text = "1000",
+                        fontSize = 21.sp,
+                        fontWeight = FontWeight.Bold,
                         modifier = Modifier
-                            .alpha(0.4f)
-                            .padding(start = 180.dp))
+                            .padding(end = 2.dp, top = 3.dp)
+                    )
 
-                }
-                Row (
-                    modifier = Modifier.padding(top = 10.dp,start = 15.dp)
-                ){
-                    Text(text = "Date",
-                        fontSize = 15.sp,
-                        modifier = Modifier.alpha(0.7f))
-
-                    Text(text = "20 JUL 2024 7:50 PM",
-                        fontSize = 15.sp,
+                    Text(
+                        text = "USD",
+                        fontSize = 21.sp,
+                        fontWeight = FontWeight.Bold,
                         modifier = Modifier
-                            .alpha(0.4f)
-                            .padding(start = 180.dp))
-
+                            .padding(start = 1.dp, top = 3.dp),
+                        style = TextStyle(color = Marron)
+                    )
                 }
 
+                Text(
+                    text = "Transfer amount",
+                    fontSize = 16.sp,
+                    fontWeight = FontWeight.Medium,
+                    modifier = Modifier
+                        .padding(start = 1.dp, top = 2.dp)
+                        .alpha(0.6f)
+                )
+
+                Text(
+                    text = "Send money",
+                    fontSize = 16.sp,
+                    modifier = Modifier
+                        .padding(start = 1.dp, top = 3.dp),
+                    style = TextStyle(color = Marron)
+                )
+
+
+                Box(
+                    modifier = modifier
+                        .fillMaxWidth()
+                        .padding(top = 8.dp)
+                ) {
+                    Column {
+                        TransferProcessCard(
+                            destination = "From",
+                            cardUser = "Asmaa Dosuky",
+                            cardAccount = "xxxx7890",
+                        )
+                        TransferProcessCard(
+                            destination = "To",
+                            cardUser = "Jonathon Smith",
+                            cardAccount = "xxxx7890",
+
+                            )
+                    }
+
+                    Image(
+                        painter = painterResource(id = R.drawable.completed),
+                        contentDescription = "completed",
+                        modifier = modifier
+                            .align(Alignment.Center)
+
+                    )
+                }
+                Card(
+                    modifier = modifier
+                        .padding(top = 20.dp)
+                        .fillMaxWidth()
+                        .wrapContentHeight(),
+                    colors = CardDefaults.cardColors(containerColor = LightWhite)
+                ) {
+                    Column(modifier = modifier.padding(vertical = 24.dp)
+                        .wrapContentHeight()) {
+                        Row(
+                            modifier = modifier
+                                .padding( start = 15.dp, end = 15.dp)
+                                .fillMaxWidth(),
+                            horizontalArrangement = Arrangement.SpaceBetween
+                        ) {
+                            Text(
+                                text = "Transfer amount amount",
+                                fontSize = 15.sp,
+                                modifier = Modifier.alpha(0.7f)
+                            )
+
+                            Row {
+                                Text(
+                                    text = "48,4220",
+                                    fontSize = 15.sp,
+                                    modifier = Modifier
+                                        .alpha(0.4f)
+                                )
+
+                                Text(
+                                    text = "EGP",
+                                    fontSize = 15.sp,
+                                    modifier = Modifier
+                                        .alpha(0.4f)
+                                        .padding(start = 5.dp)
+                                )
+                            }
+
+
+                        }
+                        Divider(
+                            modifier = modifier
+                                .padding(vertical = 16.dp)
+                                .fillMaxWidth(0.9f)
+                                .align(Alignment.CenterHorizontally)
+                                .alpha(0.4f),
+                            color = Color.Gray,
+                            thickness = 1.dp
+                        )
+
+                        Row(
+                            modifier = modifier
+                                .padding(horizontal = 15.dp)
+                                .fillMaxWidth(),
+                            horizontalArrangement = Arrangement.SpaceBetween
+                        ) {
+                            Text(
+                                text = "Reference",
+                                fontSize = 15.sp,
+                                modifier = modifier.alpha(0.7f)
+                            )
+
+                            Text(
+                                text = "123456789101",
+                                fontSize = 15.sp,
+                                modifier = modifier
+                                    .alpha(0.4f)
+                            )
+                        }
+                        Row(
+                            modifier = modifier
+                                .fillMaxWidth()
+                                .padding(
+                                    start = 15.dp, end = 15.dp,
+                                ),
+                            horizontalArrangement = Arrangement.SpaceBetween
+                        ) {
+                            Text(
+                                text = "Date",
+                                fontSize = 15.sp,
+                                modifier = modifier.alpha(0.7f)
+                            )
+
+                            Text(
+                                text = "20 JUL 2024 7:50 PM",
+                                fontSize = 15.sp,
+                                modifier = modifier
+                                    .alpha(0.4f)
+
+
+
+                            )
+
+                        }
+                    }
+
+                }
             }
         }
 
@@ -228,5 +252,5 @@ fun TransactionsDetails( modifier: Modifier = Modifier) {
 @Preview
 @Composable
 private fun TransactionsDetailsPreview() {
-    TransactionsDetails()
+    TransactionsDetails(rememberNavController(),innerPaddingValues = PaddingValues())
 }

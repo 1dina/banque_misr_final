@@ -26,7 +26,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.speedotransfer.R
-import com.example.speedotransfer.data.models.FavoriteListItem
+import com.example.speedotransfer.data.models.dummy.FavoriteListItem
 import com.example.speedotransfer.ui.screens.dashboard.commonUI.CommonCard
 import com.example.speedotransfer.ui.theme.Grey
 import com.example.speedotransfer.ui.theme.Marron
@@ -41,7 +41,7 @@ fun ConfirmationStepScreen(
     Column(
         modifier = modifier
             .fillMaxSize()
-            .padding(bottom =8.dp)
+            .padding(bottom = 8.dp)
 
     ) {
         Text(

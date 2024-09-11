@@ -40,14 +40,17 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.speedotransfer.R
 import com.example.speedotransfer.data.DummyDataSource
-import com.example.speedotransfer.data.models.FavoriteListItem
+import com.example.speedotransfer.data.models.dummy.FavoriteListItem
 import com.example.speedotransfer.ui.theme.Grey
 import com.example.speedotransfer.ui.theme.LightPink
 import com.example.speedotransfer.ui.theme.Marron
+import com.example.speedotransfer.ui.viewmodels.HomeViewModel
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun AmountStepScreen(modifier: Modifier = Modifier,recipientUserChosen : (FavoriteListItem,Int) -> Unit) {
+fun AmountStepScreen(
+    modifier: Modifier = Modifier,
+    recipientUserChosen: (FavoriteListItem, Int) -> Unit
+) {
     var amountOfMoney by remember {
         mutableStateOf("0")
     }
@@ -61,12 +64,18 @@ fun AmountStepScreen(modifier: Modifier = Modifier,recipientUserChosen : (Favori
     var showBottomSheet by remember {
         mutableStateOf(false)
     }
+    var isButtonEnabled by remember {
+        mutableStateOf(false)
+    }
+    isButtonEnabled =
+        !(recipientName.isBlank() || recipientAccount.isBlank()
+                    || amountOfMoney.isBlank() )
 
-    if (showBottomSheet) BottomSheetFav(onDismiss = {showBottomSheet =it} ) {
+    if (showBottomSheet) BottomSheetFav(onDismiss = { showBottomSheet = it }) {
 
         recipientName = it.favoriteRecipient
         recipientAccount = it.favoriteRecipientAccount
-        showBottomSheet =false
+        showBottomSheet = false
     }
     Column(
         modifier = modifier
@@ -93,7 +102,8 @@ fun AmountStepScreen(modifier: Modifier = Modifier,recipientUserChosen : (Favori
                 Text(text = "Amount", fontSize = 16.sp, fontWeight = FontWeight.SemiBold)
                 OutlinedTextField(
                     value = amountOfMoney,
-                    onValueChange = {  amountOfMoney = it }, keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                    onValueChange = { amountOfMoney = it },
+                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
                     modifier = modifier
                         .fillMaxWidth()
                         .height(52.dp),
@@ -180,12 +190,13 @@ fun AmountStepScreen(modifier: Modifier = Modifier,recipientUserChosen : (Favori
         )
         Button(
             onClick = {
-                val userChosen = FavoriteListItem(recipientName,recipientAccount)
-                recipientUserChosen(userChosen,amountOfMoney.toInt())
+                val userChosen = FavoriteListItem(recipientName, recipientAccount)
+                recipientUserChosen(userChosen, amountOfMoney.toInt())
             },
             modifier = modifier
                 .fillMaxWidth()
                 .height(48.dp),
+            enabled = isButtonEnabled,
             colors = ButtonDefaults.buttonColors(containerColor = Marron, contentColor = White),
             shape = RoundedCornerShape(6.dp),
         ) {
@@ -196,12 +207,18 @@ fun AmountStepScreen(modifier: Modifier = Modifier,recipientUserChosen : (Favori
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun BottomSheetFav(modifier: Modifier = Modifier , onDismiss : (Boolean)->Unit,onItemClicked: (FavoriteListItem) -> Unit) {
+fun BottomSheetFav(
+    modifier: Modifier = Modifier,
+    onDismiss: (Boolean) -> Unit,
+    onItemClicked: (FavoriteListItem) -> Unit
+) {
     val favoriteList = DummyDataSource.getFavoriteRecipentData()
-    ModalBottomSheet(onDismissRequest = { onDismiss(false)}) {
-        Column(modifier = modifier
-            .fillMaxSize()
-            .padding(16.dp)) {
+    ModalBottomSheet(onDismissRequest = { onDismiss(false) }) {
+        Column(
+            modifier = modifier
+                .fillMaxSize()
+                .padding(16.dp)
+        ) {
             Row(
                 modifier = modifier.fillMaxWidth(),
                 verticalAlignment = Alignment.CenterVertically,
@@ -220,7 +237,7 @@ fun BottomSheetFav(modifier: Modifier = Modifier , onDismiss : (Boolean)->Unit,o
                     fontWeight = FontWeight.Normal
                 )
             }
-            FavoriteListMaker(favItems = favoriteList, modifier = modifier){
+            FavoriteListMaker(favItems = favoriteList, modifier = modifier) {
                 onItemClicked(it)
             }
         }
@@ -228,7 +245,11 @@ fun BottomSheetFav(modifier: Modifier = Modifier , onDismiss : (Boolean)->Unit,o
 }
 
 @Composable
-fun FavoriteListMaker(favItems: List<FavoriteListItem>, modifier: Modifier,selectedItem : (FavoriteListItem) -> Unit) {
+fun FavoriteListMaker(
+    favItems: List<FavoriteListItem>,
+    modifier: Modifier,
+    selectedItem: (FavoriteListItem) -> Unit
+) {
     LazyColumn(modifier = modifier.padding(top = 24.dp)) {
         items(favItems) { item ->
             FavoriteListItemUI(item, onItemClicked = {
@@ -239,13 +260,18 @@ fun FavoriteListMaker(favItems: List<FavoriteListItem>, modifier: Modifier,selec
 }
 
 @Composable
-fun FavoriteListItemUI(favoriteListItem: FavoriteListItem, modifier: Modifier = Modifier, onItemClicked:(FavoriteListItem)->Unit) {
+fun FavoriteListItemUI(
+    favoriteListItem: FavoriteListItem,
+    modifier: Modifier = Modifier,
+    onItemClicked: (FavoriteListItem) -> Unit
+) {
     Card(
-        onClick = { onItemClicked(favoriteListItem)},
+        onClick = { onItemClicked(favoriteListItem) },
         colors = CardDefaults.cardColors(containerColor = LightPink),
         modifier = modifier.padding(bottom = 8.dp)
     ) {
-        Row( verticalAlignment = Alignment.CenterVertically,
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
             modifier = modifier
                 .fillMaxWidth()
                 .padding(8.dp)
@@ -262,7 +288,11 @@ fun FavoriteListItemUI(favoriteListItem: FavoriteListItem, modifier: Modifier = 
                     .padding(start = 8.dp),
                 verticalArrangement = Arrangement.Center
             ) {
-                Text(text = favoriteListItem.favoriteRecipient, fontSize = 16.sp,modifier = modifier.padding(bottom = 4.dp))
+                Text(
+                    text = favoriteListItem.favoriteRecipient,
+                    fontSize = 16.sp,
+                    modifier = modifier.padding(bottom = 4.dp)
+                )
                 Text(
                     text = "Account ${favoriteListItem.favoriteRecipientAccount}",
                     fontSize = 16.sp,

@@ -25,21 +25,30 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import androidx.security.crypto.EncryptedSharedPreferences
+import androidx.security.crypto.MasterKey
+import com.example.speedotransfer.data.source.BankingAPIService
 import com.example.speedotransfer.routes.AppRoutes
 import com.example.speedotransfer.routes.DashboardNavGraph
 import com.example.speedotransfer.ui.screens.dashboard.components.BottomNavBarScreens
 import com.example.speedotransfer.ui.theme.Grey
 import com.example.speedotransfer.ui.theme.Marron
 import com.example.speedotransfer.ui.theme.SpeedoTransferTheme
+import com.example.speedotransfer.ui.viewmodels.HomeViewModel
+import com.example.speedotransfer.ui.viewmodels.HomeViewModelFactory
 
 class DashboardActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
+            val apiService = BankingAPIService.callable
+            val viewModel: HomeViewModel =
+                viewModel(factory = HomeViewModelFactory(apiService, context = this))
             SpeedoTransferTheme {
                 val navController = rememberNavController()
                 Scaffold(
@@ -96,7 +105,8 @@ class DashboardActivity : ComponentActivity() {
 
                         }
                     }
-                ) { innerPadding -> DashboardNavGraph(navController,innerPadding = innerPadding)
+                ) { innerPadding ->
+                    DashboardNavGraph(navController, innerPadding = innerPadding,viewModel)
                 }
             }
         }
