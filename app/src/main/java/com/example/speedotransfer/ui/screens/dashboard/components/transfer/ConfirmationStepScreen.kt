@@ -26,10 +26,10 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.speedotransfer.R
-import com.example.speedotransfer.data.models.FavoriteListItem
+import com.example.speedotransfer.data.models.dummy.FavoriteListItem
 import com.example.speedotransfer.ui.screens.dashboard.commonUI.CommonCard
 import com.example.speedotransfer.ui.theme.Grey
-import com.example.speedotransfer.ui.theme.Maroon
+import com.example.speedotransfer.ui.theme.Marron
 
 @Composable
 fun ConfirmationStepScreen(
@@ -41,7 +41,7 @@ fun ConfirmationStepScreen(
     Column(
         modifier = modifier
             .fillMaxSize()
-            .padding(bottom =8.dp)
+            .padding(bottom = 8.dp)
 
     ) {
         Text(
@@ -99,7 +99,7 @@ fun ConfirmationStepScreen(
                 .fillMaxWidth()
                 .padding(top = 24.dp),
             shape = RoundedCornerShape(6.dp),
-            colors = ButtonDefaults.buttonColors(containerColor = Maroon, contentColor = White)
+            colors = ButtonDefaults.buttonColors(containerColor = Marron, contentColor = White)
         ) {
             Text(text = "Confirm", fontSize = 16.sp, modifier = modifier.padding(8.dp))
         }
@@ -109,11 +109,11 @@ fun ConfirmationStepScreen(
                 .fillMaxWidth()
                 .padding(top = 16.dp),
             shape = RoundedCornerShape(6.dp),
-            border = BorderStroke(color = Maroon, width = 1.dp)
+            border = BorderStroke(color = Marron, width = 1.dp)
         ) {
             Text(
                 text = "Previous",
-                color = Maroon,
+                color = Marron,
                 fontSize = 16.sp,
                 modifier = modifier.padding(8.dp)
             )

@@ -1,5 +1,8 @@
 package com.example.speedotransfer.ui.screens.dashboard.components.more
 
+import android.content.Intent
+import android.net.Uri
+import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -15,6 +18,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentSize
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -22,6 +26,8 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -29,25 +35,38 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Color.Companion.Black
 import androidx.compose.ui.graphics.Color.Companion.Unspecified
 import androidx.compose.ui.graphics.Color.Companion.White
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.core.content.ContextCompat.startActivity
+import androidx.core.net.toUri
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import androidx.navigation.NavDeepLinkRequest
 import androidx.navigation.NavGraph.Companion.findStartDestination
+import androidx.navigation.Navigation.findNavController
 import androidx.navigation.compose.rememberNavController
+import com.example.speedotransfer.AuthActivity
 import com.example.speedotransfer.R
+import com.example.speedotransfer.data.source.BankingAPIService
 import com.example.speedotransfer.routes.AppRoutes
+import com.example.speedotransfer.ui.screens.IndeterminateCircularIndicator
 import com.example.speedotransfer.ui.screens.dashboard.commonUI.HeaderUI
 import com.example.speedotransfer.ui.screens.dashboard.commonUI.MoreItem
 import com.example.speedotransfer.ui.theme.Grey
 import com.example.speedotransfer.ui.theme.LightRed
 import com.example.speedotransfer.ui.theme.LightYellow
+import com.example.speedotransfer.ui.theme.Marron
 import com.example.speedotransfer.ui.theme.Maroon
+import com.example.speedotransfer.ui.viewmodels.AuthViewModel
+import com.example.speedotransfer.ui.viewmodels.AuthViewModelFactory
 
 @Composable
 fun MoreScreen(
@@ -55,13 +74,43 @@ fun MoreScreen(
     innerPadding: PaddingValues,
     modifier: Modifier = Modifier
 ) {
+    val context = LocalContext.current
+    val apiService = BankingAPIService.callable
+    val viewModel: AuthViewModel =
+        viewModel(factory = AuthViewModelFactory(apiService, context = context))
     var showBottomDialog by remember {
+        mutableStateOf(false)
+    }
+    var isLoading by remember {
         mutableStateOf(false)
     }
     if (showBottomDialog) HelpBottomSheetMaker(
         onDismiss = { showBottomDialog = false },
         onCallClick = { showBottomDialog = false },
         onEmailClick = { showBottomDialog = false })
+    val toSignOut by viewModel.responseStatus.collectAsState()
+
+    LaunchedEffect(toSignOut) {
+        if (toSignOut == true) {
+            isLoading = false
+            viewModel.resetResponseStatus()
+            val intent = Intent(context, AuthActivity::class.java).apply {
+                flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+            }
+            AppRoutes.isFirstTime=false
+            context.startActivity(intent)
+        } else {
+            isLoading = false
+            if (viewModel.toastMessage.value != null)
+                Toast.makeText(
+                    context,
+                    viewModel.toastMessage.value,
+                    Toast.LENGTH_SHORT
+                ).show()
+            viewModel.resetToastMessage()
+            viewModel.resetResponseStatus()
+        }
+    }
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -95,7 +144,9 @@ fun MoreScreen(
                     .fillMaxWidth()
                     .height(64.dp)
                     .padding(8.dp)
-                    .clickable { //here to return to loginScreen
+                    .clickable {
+                        isLoading = true
+                        viewModel.signOut()
                     },
                 verticalAlignment = Alignment.CenterVertically
             ) {
@@ -116,6 +167,16 @@ fun MoreScreen(
             }
 
 
+        }
+        if (isLoading) {
+            Box(
+                modifier = modifier
+                    .fillMaxSize()
+                    .background(Color.Black.copy(alpha = 0.5f), RoundedCornerShape(8.dp))
+                    .wrapContentSize(Alignment.Center)
+            ) {
+                IndeterminateCircularIndicator()
+            }
         }
 
     }
@@ -194,15 +255,17 @@ fun HelpBottomSheetMaker(
                     Text(
                         text = "0000000",
                         fontSize = 14.sp,
-                        color = Maroon,
+                        color = Marron,
 
                         )
                 }
 
             }
         }
+
     }
 }
+
 
 @Preview(showSystemUi = true)
 @Composable

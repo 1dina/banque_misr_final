@@ -23,7 +23,7 @@ import androidx.compose.ui.unit.sp
 import com.example.speedotransfer.R
 import com.example.speedotransfer.ui.theme.Grey
 import com.example.speedotransfer.ui.theme.LightGrey
-import com.example.speedotransfer.ui.theme.Maroon
+import com.example.speedotransfer.ui.theme.Marron
 
 @Composable
 fun CommonCard(
@@ -53,7 +53,9 @@ fun CommonCard(
                     .fillMaxHeight()
                     .padding(start = 32.dp), verticalArrangement = Arrangement.SpaceEvenly
             ) {
-                Text(text = destination, color = Maroon, fontSize = 16.sp)
+                if(destination!="") {
+                    Text(text = destination, color = Marron, fontSize = 16.sp)
+                }
                 Text(
                     text = cardUser,
                     color = Black,

@@ -1,5 +1,6 @@
 package com.example.speedotransfer.ui.screens.dashboard.components.transfer
 
+import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -12,10 +13,14 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.wrapContentSize
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Divider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
@@ -24,37 +29,61 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Color.Companion.Gray
 import androidx.compose.ui.graphics.Color.Companion.Unspecified
-import androidx.compose.ui.graphics.Color.Companion.Yellow
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.NavGraph.Companion.findStartDestination
-import androidx.navigation.compose.rememberNavController
 import com.example.speedotransfer.R
-import com.example.speedotransfer.data.models.FavoriteListItem
+import com.example.speedotransfer.data.models.TransactionRequest
+import com.example.speedotransfer.data.models.dummy.FavoriteListItem
 import com.example.speedotransfer.routes.AppRoutes
+import com.example.speedotransfer.ui.screens.IndeterminateCircularIndicator
 import com.example.speedotransfer.ui.screens.dashboard.commonUI.HeaderUI
 import com.example.speedotransfer.ui.theme.LightPink
 import com.example.speedotransfer.ui.theme.LightRed
 import com.example.speedotransfer.ui.theme.LightYellow
-import com.example.speedotransfer.ui.theme.Maroon
+import com.example.speedotransfer.ui.theme.Marron
+import com.example.speedotransfer.ui.viewmodels.HomeViewModel
 
 @Composable
 fun TransferScreen(
     navController: NavController,
     innerPadding: PaddingValues,
+    viewModel: HomeViewModel,
     modifier: Modifier = Modifier
 ) {
     var chosenUser by remember {
         mutableStateOf<FavoriteListItem?>(null)
     }
+    var isLoading by remember {
+        mutableStateOf(false)
+    }
     var currentStep by remember { mutableStateOf(1) }
     var amountOfMoney by remember {
         mutableIntStateOf(0)
+    }
+    val context = LocalContext.current
+    val transferUserFound by viewModel.responseStatus.collectAsState()
+    LaunchedEffect(transferUserFound) {
+        isLoading = false
+        if (transferUserFound == true) {
+            viewModel.resetResponseStatus()
+            currentStep++
+        } else {
+            if (viewModel.toastMessage.value != null)
+                Toast.makeText(
+                    context,
+                    viewModel.toastMessage.value,
+                    Toast.LENGTH_SHORT
+                ).show()
+            viewModel.resetToastMessage()
+            viewModel.resetResponseStatus()
+        }
     }
     Box(
         modifier = Modifier
@@ -68,7 +97,7 @@ fun TransferScreen(
             )
             .padding(innerPadding)
     ) {
-        Column(modifier = modifier.padding(horizontal =16.dp)) {
+        Column(modifier = modifier.padding(horizontal = 16.dp)) {
 
             HeaderUI(headerTitle = "Transfer", onClickBackButton = {
                 if (currentStep != 2) {
@@ -88,8 +117,13 @@ fun TransferScreen(
                 AmountStepScreen { user, amount ->
                     chosenUser = user
                     amountOfMoney = amount
-                    currentStep++
-
+                    isLoading = true
+                    viewModel.transferProcess(
+                        TransactionRequest(
+                            reciverAccountNum = user.favoriteRecipientAccount.toInt(),
+                            amount = amountOfMoney
+                        )
+                    )
                 }
             else if (currentStep == 2) ConfirmationStepScreen(
                 amountOfMoney = amountOfMoney,
@@ -108,6 +142,16 @@ fun TransferScreen(
                 //handle to add to favourite
             }
 
+        }
+        if (isLoading) {
+            Box(
+                modifier = modifier
+                    .fillMaxSize()
+                    .background(Color.Black.copy(alpha = 0.5f), RoundedCornerShape(8.dp))
+                    .wrapContentSize(Alignment.Center)
+            ) {
+                IndeterminateCircularIndicator()
+            }
         }
 
 
@@ -136,7 +180,7 @@ fun Stepper(
 
             if (step < steps) {
                 Divider(
-                    color = if (step < currentStep) Maroon else Gray,
+                    color = if (step < currentStep) Marron else Gray,
                     modifier = modifier
                         .padding(top = 24.dp)
                         .width(64.dp)
@@ -151,8 +195,7 @@ fun Stepper(
 
 @Composable
 fun StepItem(
-    step: Int, isSelected: Boolean
-    ,modifier: Modifier
+    step: Int, isSelected: Boolean, modifier: Modifier
 ) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.Center
@@ -183,7 +226,7 @@ fun StepItem(
                 else -> "Step"
             },
             fontSize = 14.sp,
-            color = if (isSelected) Maroon else Gray,
+            color = if (isSelected) Marron else Gray,
             modifier = modifier.padding(top = 8.dp)
         )
     }
@@ -191,8 +234,3 @@ fun StepItem(
 }
 
 
-@Preview
-@Composable
-private fun TransferScreenPreview() {
-    TransferScreen(rememberNavController(), innerPadding = PaddingValues(16.dp))
-}
