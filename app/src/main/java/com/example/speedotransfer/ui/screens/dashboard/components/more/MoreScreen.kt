@@ -63,6 +63,7 @@ import com.example.speedotransfer.ui.screens.dashboard.commonUI.MoreItem
 import com.example.speedotransfer.ui.theme.Grey
 import com.example.speedotransfer.ui.theme.LightRed
 import com.example.speedotransfer.ui.theme.LightYellow
+import com.example.speedotransfer.ui.theme.Marron
 import com.example.speedotransfer.ui.theme.Maroon
 import com.example.speedotransfer.ui.viewmodels.AuthViewModel
 import com.example.speedotransfer.ui.viewmodels.AuthViewModelFactory
@@ -254,7 +255,7 @@ fun HelpBottomSheetMaker(
                     Text(
                         text = "0000000",
                         fontSize = 14.sp,
-                        color = Maroon,
+                        color = Marron,
 
                         )
                 }

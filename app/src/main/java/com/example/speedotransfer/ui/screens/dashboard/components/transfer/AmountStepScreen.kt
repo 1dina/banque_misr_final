@@ -43,7 +43,7 @@ import com.example.speedotransfer.data.DummyDataSource
 import com.example.speedotransfer.data.models.dummy.FavoriteListItem
 import com.example.speedotransfer.ui.theme.Grey
 import com.example.speedotransfer.ui.theme.LightPink
-import com.example.speedotransfer.ui.theme.Maroon
+import com.example.speedotransfer.ui.theme.Marron
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -102,7 +102,7 @@ fun AmountStepScreen(
                         .fillMaxWidth()
                         .height(52.dp),
                     colors = TextFieldDefaults.colors(
-                        focusedIndicatorColor = Maroon,
+                        focusedIndicatorColor = Marron,
                         unfocusedIndicatorColor = Grey, focusedContainerColor = White,
                         unfocusedContainerColor = White,
                     ),
@@ -125,13 +125,13 @@ fun AmountStepScreen(
                 Icon(
                     painter = painterResource(id = R.drawable.ic_favorite),
                     contentDescription = "favorite",
-                    tint = Maroon
+                    tint = Marron
                 )
-                Text(text = "Favourite", color = Maroon)
+                Text(text = "Favourite", color = Marron)
                 Icon(
                     painter = painterResource(id = R.drawable.ic_drop_down),
                     contentDescription = "drop down",
-                    tint = Maroon
+                    tint = Marron
                 )
             }
         }
@@ -150,7 +150,7 @@ fun AmountStepScreen(
             colors = TextFieldDefaults.colors(
                 focusedContainerColor = White,
                 unfocusedContainerColor = White,
-                focusedIndicatorColor = Maroon,
+                focusedIndicatorColor = Marron,
                 unfocusedIndicatorColor = Grey
             ),
             modifier = modifier
@@ -174,7 +174,7 @@ fun AmountStepScreen(
             colors = TextFieldDefaults.colors(
                 focusedContainerColor = White,
                 unfocusedContainerColor = White,
-                focusedIndicatorColor = Maroon,
+                focusedIndicatorColor = Marron,
                 unfocusedIndicatorColor = Grey
             ),// Input text size
             modifier = modifier
@@ -190,7 +190,7 @@ fun AmountStepScreen(
             modifier = modifier
                 .fillMaxWidth()
                 .height(48.dp),
-            colors = ButtonDefaults.buttonColors(containerColor = Maroon, contentColor = White),
+            colors = ButtonDefaults.buttonColors(containerColor = Marron, contentColor = White),
             shape = RoundedCornerShape(6.dp),
         ) {
             Text(text = "Continue", fontSize = 16.sp, fontWeight = FontWeight.Medium)
@@ -221,11 +221,11 @@ fun BottomSheetFav(
                     painter = painterResource(id = R.drawable.ic_favorite),
                     contentDescription = "Favorite list",
                     modifier = modifier.padding(horizontal = 8.dp),
-                    tint = Maroon
+                    tint = Marron
                 )
                 Text(
                     text = "Favourite List",
-                    color = Maroon,
+                    color = Marron,
                     fontSize = 18.sp,
                     fontWeight = FontWeight.Normal
                 )
