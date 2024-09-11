@@ -76,6 +76,8 @@ dependencies {
     implementation (libs.java.jwt)
     implementation (libs.androidx.security.crypto)
     implementation (libs.converter.scalars)
+    implementation (libs.logging.interceptor)
+
 
 
 

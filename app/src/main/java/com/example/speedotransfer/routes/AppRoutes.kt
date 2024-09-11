@@ -29,6 +29,7 @@ import com.example.speedotransfer.ui.screens.dashboard.components.mycards.CardCu
 import com.example.speedotransfer.ui.screens.dashboard.components.mycards.MyCardScreen
 import com.example.speedotransfer.ui.screens.dashboard.components.transfer.TransferScreen
 import com.example.speedotransfer.ui.viewmodels.AuthViewModel
+import com.example.speedotransfer.ui.viewmodels.HomeViewModel
 
 object AppRoutes {
     const val SPLASH = "splash"
@@ -81,18 +82,21 @@ fun AuthNavGraph(navController: NavController, authViewModel: AuthViewModel) {
 }
 
 @Composable
-fun DashboardNavGraph(navController: NavController, innerPadding: PaddingValues) {
+fun DashboardNavGraph(navController: NavController, innerPadding: PaddingValues
+,viewModel: HomeViewModel) {
     NavHost(navController = navController as NavHostController, startDestination = HOME) {
         composable(AppRoutes.HOME) {
             HomeScreen(
                 navController = navController,
-                innerPadding = innerPadding
+                innerPadding = innerPadding,
+                viewModel = viewModel
             )
         }
         composable(AppRoutes.TRANSFER) {
             TransferScreen(
                 navController = navController,
-                innerPadding = innerPadding
+                innerPadding = innerPadding,
+                viewModel = viewModel
             )
         }
         composable(AppRoutes.TRANSACTION) {

@@ -1,5 +1,7 @@
 package com.example.speedotransfer.domain.repository
 
+import com.example.speedotransfer.data.models.AccountCreationRequest
+import com.example.speedotransfer.data.models.AccountCreationResponse
 import com.example.speedotransfer.data.models.AuthData
 import com.example.speedotransfer.data.models.UserAuthRegisterRequest
 import com.example.speedotransfer.data.models.UserAuthRegisterResponse

@@ -44,8 +44,8 @@ import com.example.speedotransfer.data.models.dummy.FavoriteListItem
 import com.example.speedotransfer.ui.theme.Grey
 import com.example.speedotransfer.ui.theme.LightPink
 import com.example.speedotransfer.ui.theme.Marron
+import com.example.speedotransfer.ui.viewmodels.HomeViewModel
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AmountStepScreen(
     modifier: Modifier = Modifier,
@@ -64,6 +64,12 @@ fun AmountStepScreen(
     var showBottomSheet by remember {
         mutableStateOf(false)
     }
+    var isButtonEnabled by remember {
+        mutableStateOf(false)
+    }
+    isButtonEnabled =
+        !(recipientName.isBlank() || recipientAccount.isBlank()
+                    || amountOfMoney.isBlank() )
 
     if (showBottomSheet) BottomSheetFav(onDismiss = { showBottomSheet = it }) {
 
@@ -190,6 +196,7 @@ fun AmountStepScreen(
             modifier = modifier
                 .fillMaxWidth()
                 .height(48.dp),
+            enabled = isButtonEnabled,
             colors = ButtonDefaults.buttonColors(containerColor = Marron, contentColor = White),
             shape = RoundedCornerShape(6.dp),
         ) {
