@@ -15,6 +15,7 @@ import com.example.speedotransfer.domain.usecases.GetInfoUseCase
 import com.example.speedotransfer.domain.usecases.GetTransactionsUseCase
 import com.example.speedotransfer.domain.usecases.GetUserAccountsUseCase
 import com.example.speedotransfer.domain.usecases.UpdatePasswordUseCase
+import com.example.speedotransfer.ui.screens.TransactionsDetails
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
@@ -46,6 +47,8 @@ class HomeViewModel(
     val userInfoData = _userInfoData.asStateFlow()
     private val _password = MutableStateFlow<Passwords?>(null)
     val password = _password.asStateFlow()
+    var succtrans = false
+
 
     init {
         // createAccount(AccountCreationRequest("miza",10230))
@@ -82,6 +85,7 @@ class HomeViewModel(
                     _responseStatus.value = true
                     _toastMessage.value = ""
                     _userFound.value = true
+                    succtrans = true
                     Log.e("trace", "transfer is success")
                     getUserAccounts()
                 } else {

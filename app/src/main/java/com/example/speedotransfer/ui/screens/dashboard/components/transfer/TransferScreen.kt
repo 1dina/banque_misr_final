@@ -1,5 +1,9 @@
 package com.example.speedotransfer.ui.screens.dashboard.components.transfer
 
+import android.app.Notification
+import android.app.NotificationChannel
+import android.app.NotificationManager
+import android.content.Context
 import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -36,6 +40,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.core.app.NotificationManagerCompat
 import androidx.navigation.NavController
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import com.example.speedotransfer.R
@@ -130,6 +135,12 @@ fun TransferScreen(
                 recipientUser = chosenUser!!
             ) {
                 currentStep = it
+                if(currentStep == 3 && viewModel.succtrans==true) {
+                    sendNotification("Notification", "Your transaction is successful", context)
+                    viewModel.succtrans = false
+                }
+
+
             }
             else PaymentStepScreen(
                 recipientUser = chosenUser!!,
@@ -231,6 +242,28 @@ fun StepItem(
         )
     }
 
+}
+
+private fun createNotificationChannel(context: Context) {
+    val name = "Notification Channel"
+    val importance = NotificationManager.IMPORTANCE_DEFAULT
+    val channel = NotificationChannel("1", name, importance).apply {
+        description = "Scheduled notification"
+    }
+    val manager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+    manager.createNotificationChannel(channel)
+}
+
+fun sendNotification(title: String, text: String, context: Context) {
+    createNotificationChannel(context)
+
+    val builder = Notification.Builder(context, "1")
+        .setContentTitle(title)
+        .setContentText(text)
+        .setAutoCancel(true)
+        .setSmallIcon(R.drawable.ic_succtrans)
+
+    NotificationManagerCompat.from(context).notify(99, builder.build())
 }
 
 

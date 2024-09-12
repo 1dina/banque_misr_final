@@ -77,6 +77,8 @@ dependencies {
     implementation (libs.androidx.security.crypto)
     implementation (libs.converter.scalars)
     implementation (libs.logging.interceptor)
+    implementation ("androidx.core:core-ktx:1.10.1")
+
 
 
 
