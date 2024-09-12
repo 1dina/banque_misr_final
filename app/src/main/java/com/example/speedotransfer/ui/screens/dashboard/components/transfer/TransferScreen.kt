@@ -1,5 +1,9 @@
 package com.example.speedotransfer.ui.screens.dashboard.components.transfer
 
+import android.app.Notification
+import android.app.NotificationChannel
+import android.app.NotificationManager
+import android.content.Context
 import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -15,7 +19,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Divider
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -36,13 +40,14 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.core.app.NotificationManagerCompat
 import androidx.navigation.NavController
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import com.example.speedotransfer.R
+import com.example.speedotransfer.data.models.FavouriteAddition
 import com.example.speedotransfer.data.models.TransactionRequest
-import com.example.speedotransfer.data.models.dummy.FavoriteListItem
 import com.example.speedotransfer.routes.AppRoutes
-import com.example.speedotransfer.ui.screens.IndeterminateCircularIndicator
+import com.example.speedotransfer.ui.screens.auth.IndeterminateCircularIndicator
 import com.example.speedotransfer.ui.screens.dashboard.commonUI.HeaderUI
 import com.example.speedotransfer.ui.theme.LightPink
 import com.example.speedotransfer.ui.theme.LightRed
@@ -58,22 +63,25 @@ fun TransferScreen(
     modifier: Modifier = Modifier
 ) {
     var chosenUser by remember {
-        mutableStateOf<FavoriteListItem?>(null)
+        mutableStateOf(FavouriteAddition(0, ""))
     }
+
     var isLoading by remember {
         mutableStateOf(false)
     }
-    var currentStep by remember { mutableStateOf(1) }
+    var currentStep by remember { mutableIntStateOf(1) }
     var amountOfMoney by remember {
         mutableIntStateOf(0)
     }
     val context = LocalContext.current
-    val transferUserFound by viewModel.responseStatus.collectAsState()
+    val transferUserFound by viewModel.userFound.collectAsState()
     LaunchedEffect(transferUserFound) {
         isLoading = false
         if (transferUserFound == true) {
+            if (currentStep == 1) {
+                currentStep += 1
+            }
             viewModel.resetResponseStatus()
-            currentStep++
         } else {
             if (viewModel.toastMessage.value != null)
                 Toast.makeText(
@@ -113,48 +121,59 @@ fun TransferScreen(
                 currentStep = currentStep,
                 modifier = modifier
             )
-            if (currentStep == 1)
-                AmountStepScreen { user, amount ->
+            when (currentStep) {
+                1 -> AmountStepScreen { user, amount ->
                     chosenUser = user
                     amountOfMoney = amount
                     isLoading = true
                     viewModel.transferProcess(
                         TransactionRequest(
-                            reciverAccountNum = user.favoriteRecipientAccount.toInt(),
-                            amount = amountOfMoney
+                            reciverAccountNum = user.accountId,
+                            amount = amount,
+                            senderName = "userName", receiverName = user.name
                         )
                     )
                 }
-            else if (currentStep == 2) ConfirmationStepScreen(
-                amountOfMoney = amountOfMoney,
-                recipientUser = chosenUser!!
-            ) {
-                currentStep = it
-            }
-            else PaymentStepScreen(
-                recipientUser = chosenUser!!,
-                amountOfMoney = amountOfMoney,
-                onBackToHomeClick = {
-                    navController.navigate(AppRoutes.HOME) {
-                        popUpTo(navController.graph.findStartDestination().id) { inclusive = true }
+
+                2 -> ConfirmationStepScreen(
+                    amountOfMoney = amountOfMoney,
+                    recipientUser = chosenUser!!
+                ) {
+                    currentStep = it
+                    if (currentStep == 3 && viewModel.succtrans == true) {
+                        sendNotification("Notification", "Your transaction is successful", context)
+                        viewModel.succtrans = false
                     }
-                }) {
-                //handle to add to favourite
+
+
+                }
+
+                else -> PaymentStepScreen(
+                    recipientUser = chosenUser!!,
+                    amountOfMoney = amountOfMoney,
+                    onBackToHomeClick = {
+                        navController.navigate(AppRoutes.HOME) {
+                            popUpTo(navController.graph.findStartDestination().id) {
+                                inclusive = true
+                            }
+                        }
+                    }) {
+                    viewModel.addToFav(chosenUser)
+                }
+
+
             }
-
-        }
-        if (isLoading) {
-            Box(
-                modifier = modifier
-                    .fillMaxSize()
-                    .background(Color.Black.copy(alpha = 0.5f), RoundedCornerShape(8.dp))
-                    .wrapContentSize(Alignment.Center)
-            ) {
-                IndeterminateCircularIndicator()
+            if (isLoading) {
+                Box(
+                    modifier = modifier
+                        .fillMaxSize()
+                        .background(Color.Black.copy(alpha = 0.5f), RoundedCornerShape(8.dp))
+                        .wrapContentSize(Alignment.Center)
+                ) {
+                    IndeterminateCircularIndicator()
+                }
             }
         }
-
-
     }
 }
 
@@ -179,14 +198,12 @@ fun Stepper(
             )
 
             if (step < steps) {
-                Divider(
-                    color = if (step < currentStep) Marron else Gray,
+                HorizontalDivider(
                     modifier = modifier
                         .padding(top = 24.dp)
                         .width(64.dp)
-                        .height(1.dp)
-
-
+                        .height(1.dp),
+                    color = if (step < currentStep) Marron else Gray
                 )
             }
         }
@@ -198,7 +215,8 @@ fun StepItem(
     step: Int, isSelected: Boolean, modifier: Modifier
 ) {
     Column(
-        horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.Center
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center
     ) {
         Box(
             contentAlignment = Alignment.Center,
@@ -208,9 +226,11 @@ fun StepItem(
             val iconResult = if (!isSelected) {
                 if (step == 2) R.drawable.ic_step_two else R.drawable.ic_step_three
             } else {
-                if (step == 1) R.drawable.ic_step_one
-                else if (step == 2) R.drawable.ic_step_two_selected
-                else R.drawable.ic_step_three_selected
+                when (step) {
+                    1 -> R.drawable.ic_step_one
+                    2 -> R.drawable.ic_step_two_selected
+                    else -> R.drawable.ic_step_three_selected
+                }
             }
             Icon(
                 painter = painterResource(id = iconResult),
@@ -231,6 +251,28 @@ fun StepItem(
         )
     }
 
+}
+
+fun createNotificationChannel(context: Context) {
+    val name = "Notification Channel"
+    val importance = NotificationManager.IMPORTANCE_DEFAULT
+    val channel = NotificationChannel("1", name, importance).apply {
+        description = "Scheduled notification"
+    }
+    val manager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+    manager.createNotificationChannel(channel)
+}
+
+fun sendNotification(title: String, text: String, context: Context) {
+    createNotificationChannel(context)
+
+    val builder = Notification.Builder(context, "1")
+        .setContentTitle(title)
+        .setContentText(text)
+        .setAutoCancel(true)
+        .setSmallIcon(R.drawable.ic_succtrans)
+
+    NotificationManagerCompat.from(context).notify(99, builder.build())
 }
 
 

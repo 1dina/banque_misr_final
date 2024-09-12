@@ -13,19 +13,25 @@ import com.example.speedotransfer.routes.AppRoutes.LAST_PAGE_SIGN_UP
 import com.example.speedotransfer.routes.AppRoutes.SIGN_IN
 import com.example.speedotransfer.routes.AppRoutes.SPLASH
 import com.example.speedotransfer.routes.AppRoutes.START_DESTINATION
+import com.example.speedotransfer.routes.AppRoutes.TRANS_DETAILS
 import com.example.speedotransfer.routes.AppRoutes.isFirstTime
-import com.example.speedotransfer.ui.screens.SignIn
-import com.example.speedotransfer.ui.screens.SignUp1
-import com.example.speedotransfer.ui.screens.SignUp2
-import com.example.speedotransfer.ui.screens.SplashScreen
-import com.example.speedotransfer.ui.screens.TransactionScreen
-import com.example.speedotransfer.ui.screens.TransactionsDetails
+import com.example.speedotransfer.ui.screens.auth.OnBoarding1
+import com.example.speedotransfer.ui.screens.auth.OnBoarding2
+import com.example.speedotransfer.ui.screens.auth.OnBoarding3
+import com.example.speedotransfer.ui.screens.dashboard.ChangePassword
+import com.example.speedotransfer.ui.screens.dashboard.Profile
+import com.example.speedotransfer.ui.screens.dashboard.ProfileInfo
+import com.example.speedotransfer.ui.screens.dashboard.Settings
+import com.example.speedotransfer.ui.screens.auth.SignIn
+import com.example.speedotransfer.ui.screens.auth.SignUp1
+import com.example.speedotransfer.ui.screens.auth.SignUp2
+import com.example.speedotransfer.ui.screens.auth.SplashScreen
+import com.example.speedotransfer.ui.screens.dashboard.TransactionScreen
+import com.example.speedotransfer.ui.screens.dashboard.TransactionsDetails
 import com.example.speedotransfer.ui.screens.dashboard.components.HomeScreen
 import com.example.speedotransfer.ui.screens.dashboard.components.NotificationScreen
 import com.example.speedotransfer.ui.screens.dashboard.components.more.FavouriteScreen
 import com.example.speedotransfer.ui.screens.dashboard.components.more.MoreScreen
-import com.example.speedotransfer.ui.screens.dashboard.components.mycards.CardAddition
-import com.example.speedotransfer.ui.screens.dashboard.components.mycards.CardCurrency
 import com.example.speedotransfer.ui.screens.dashboard.components.mycards.MyCardScreen
 import com.example.speedotransfer.ui.screens.dashboard.components.transfer.TransferScreen
 import com.example.speedotransfer.ui.viewmodels.AuthViewModel
@@ -43,11 +49,17 @@ object AppRoutes {
     const val MORE = "more"
     const val FAVOURITES = "favourites"
     const val NOTIFICATIONS = "notification"
-    const val CURRENCY = "cardCurrency"
-    const val CARD_ADDITION = "cardAddition"
     const val TRANS_DETAILS = "transactionDetails"
     var isFirstTime = true
     var START_DESTINATION = SPLASH
+    const val PROFILE = "profile"
+    const val PROFILE_INFO = "profileInfo"
+    const val UPDATE_PASSWORD = "updatepassword"
+    const val SETTINGS = "settings"
+    const val FIRST_ONBOARD = "first_onboard"
+    const val SECOND_ONBOARD = "second_onboard"
+    const val THIRD_ONBOARD = "third_onboard"
+
 
 
 }
@@ -78,12 +90,17 @@ fun AuthNavGraph(navController: NavController, authViewModel: AuthViewModel) {
 
         }
         composable(AppRoutes.FIRST_PAGE_SIGN_UP) { SignUp1(navController = navController) }
+        composable(AppRoutes.FIRST_ONBOARD) { OnBoarding1(navController = navController)  }
+        composable(AppRoutes.SECOND_ONBOARD) { OnBoarding2(navController = navController)  }
+        composable(AppRoutes.THIRD_ONBOARD) { OnBoarding3(navController = navController)  }
+
     }
 }
 
 @Composable
-fun DashboardNavGraph(navController: NavController, innerPadding: PaddingValues
-,viewModel: HomeViewModel) {
+fun DashboardNavGraph(
+    navController: NavController, innerPadding: PaddingValues, viewModel: HomeViewModel
+) {
     NavHost(navController = navController as NavHostController, startDestination = HOME) {
         composable(AppRoutes.HOME) {
             HomeScreen(
@@ -102,7 +119,8 @@ fun DashboardNavGraph(navController: NavController, innerPadding: PaddingValues
         composable(AppRoutes.TRANSACTION) {
             TransactionScreen(
                 navController = navController,
-                innerPadding = innerPadding
+                innerPadding = innerPadding,
+                viewModel = viewModel
             )
         }
         composable(AppRoutes.MY_CARD) {
@@ -120,7 +138,7 @@ fun DashboardNavGraph(navController: NavController, innerPadding: PaddingValues
         composable(AppRoutes.FAVOURITES) {
             FavouriteScreen(
                 navController = navController,
-                innerPadding = innerPadding
+                innerPadding = innerPadding,
             )
         }
         composable(AppRoutes.NOTIFICATIONS) {
@@ -129,9 +147,32 @@ fun DashboardNavGraph(navController: NavController, innerPadding: PaddingValues
                 innerPadding = innerPadding
             )
         }
-        composable(AppRoutes.CURRENCY) { CardCurrency(navController = navController) }
-        composable(AppRoutes.CARD_ADDITION) { CardAddition(navController = navController) }
-        composable(AppRoutes.TRANS_DETAILS) { TransactionsDetails(navController = navController,innerPaddingValues = innerPadding)  }
+        composable(route = "$TRANS_DETAILS/{name}/{amount}/{date}/{accountNum}",
+            arguments = listOf(navArgument("name") { type = NavType.StringType },
+                navArgument("amount") { type = NavType.IntType },
+                navArgument("date") { type = NavType.StringType },
+                navArgument("accountNum") { type = NavType.IntType }
+            )) {
+            val name = it.arguments?.getString("name")!!
+            val amount = it.arguments?.getInt("amount")!!
+            val date = it.arguments?.getString("date")!!
+            val accountNum = it.arguments?.getInt("accountNum")!!
+            TransactionsDetails(
+                navController = navController,
+                innerPaddingValues = innerPadding,
+                name = name,
+                amount = amount,
+                date = date,
+                accountNum = accountNum,
+                viewModel = viewModel
+            )
+
+        }
+        composable(AppRoutes.PROFILE) { Profile(navController = navController) }
+        composable(AppRoutes.PROFILE_INFO) { ProfileInfo(navController = navController,viewModel = viewModel) }
+        composable(AppRoutes.UPDATE_PASSWORD) { ChangePassword(navController)  }
+        composable(AppRoutes.SETTINGS) { Settings(navController = navController) }
+
 
 
     }

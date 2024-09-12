@@ -43,4 +43,7 @@ class SecureStorageDataSource(context: Context) {
         return sharedPreferences.getString("refresh_token", null)
 
     }
+    fun clearAccessToken() {
+        sharedPreferences.edit().remove("access_token").apply()
+    }
 }

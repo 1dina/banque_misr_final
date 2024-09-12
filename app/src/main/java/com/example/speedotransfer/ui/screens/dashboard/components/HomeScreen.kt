@@ -28,10 +28,14 @@ import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -70,6 +74,8 @@ fun HomeScreen(
     val currentBalance by viewModel.userAccountData.collectAsState()
     val responseState by viewModel.responseStatus.collectAsState()
     val historyTransactions by viewModel.transactionHistoryList.collectAsState()
+    val userData by viewModel.userInfoData.collectAsState()
+
     LaunchedEffect(responseState) {
         if (responseState == true)
             viewModel.resetResponseStatus()
@@ -128,7 +134,7 @@ fun HomeScreen(
                         color = Maroon,
                         fontSize = 14.sp
                     )
-                    Text(text = "User name", fontSize = 16.sp)
+                    Text(text = userData.name, fontSize = 16.sp)
                 }
                 Spacer(modifier = Modifier.weight(1f))
                 Icon(
@@ -165,14 +171,21 @@ fun HomeScreen(
                 }
             }
 
-            TransactionList(transactionList = historyTransactions)
+            TransactionList(transactionList = historyTransactions, userData.name, onAllViewClick = {
+                navController.navigate(AppRoutes.TRANSACTION)
+            })
         }
 
     }
 }
 
 @Composable
-fun TransactionList(transactionList: List<Content>, modifier: Modifier = Modifier) {
+fun TransactionList(
+    transactionList: List<Content>,
+    userName: String,
+    onAllViewClick: () -> Unit,
+    modifier: Modifier = Modifier
+) {
     Row(
         modifier = modifier
             .padding(top = 24.dp)
@@ -180,7 +193,14 @@ fun TransactionList(transactionList: List<Content>, modifier: Modifier = Modifie
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
         Text(text = "Recent transactions", fontSize = 14.sp, fontWeight = FontWeight.Normal)
-        Text(text = "View all", fontSize = 14.sp, color = Grey, fontWeight = FontWeight.Normal)
+        TextButton(onClick = { onAllViewClick() }) {
+            Text(
+                text = "View all",
+                fontSize = 14.sp,
+                color = Grey,
+                fontWeight = FontWeight.Normal
+            )
+        }
     }
     Surface(
         shape = RoundedCornerShape(4.dp), modifier = modifier.padding(top = 8.dp),
@@ -188,7 +208,7 @@ fun TransactionList(transactionList: List<Content>, modifier: Modifier = Modifie
     ) {
         LazyColumn {
             items(transactionList) {
-                RecentTransactionUI(transactionItem = it)
+                RecentTransactionUI(transactionItem = it, userName)
                 HorizontalDivider(
                     modifier = Modifier
                         .fillMaxWidth(),
@@ -201,8 +221,14 @@ fun TransactionList(transactionList: List<Content>, modifier: Modifier = Modifie
 }
 
 @Composable
-fun RecentTransactionUI(transactionItem: Content, modifier: Modifier = Modifier) {
+fun RecentTransactionUI(transactionItem: Content, userName: String, modifier: Modifier = Modifier) {
     Card(colors = CardDefaults.cardColors(containerColor = White), shape = RectangleShape) {
+        var status by remember {
+            mutableStateOf("Received")
+        }
+        var cardName by remember {
+            mutableStateOf("")
+        }
         Row(
             modifier = modifier
                 .fillMaxWidth()
@@ -219,17 +245,23 @@ fun RecentTransactionUI(transactionItem: Content, modifier: Modifier = Modifier)
                     .padding(start = 8.dp)
                     .height(64.dp)
             ) {
+                if (userName == transactionItem.senderName) {
+                    cardName = transactionItem.receiverName ?: "card"
+                    status = "Sent"
+                } else {
+                    cardName = transactionItem.senderName ?: "card"
+                    status = "Received"
+                }
                 Text(
-                    text = "personName",
+                    text = cardName,
                     fontWeight = FontWeight.Medium,
                     fontSize = 14.sp, modifier = modifier.weight(1f)
                 )
                 Text(
-                    text = "cardDetails",
+                    text = "Visa . Mater Card . 1234",
                     fontWeight = FontWeight.Normal,
                     fontSize = 12.sp, modifier = modifier.weight(1f)
                 )
-                Log.e("trace",transactionItem.createdTimeStamp)
                 val formattedDate = formatDate(transactionItem.createdTimeStamp)
                 Text(
                     text = formattedDate,

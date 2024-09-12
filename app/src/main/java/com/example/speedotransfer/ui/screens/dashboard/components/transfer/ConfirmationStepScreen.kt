@@ -22,11 +22,10 @@ import androidx.compose.ui.graphics.Color.Companion.White
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.speedotransfer.R
-import com.example.speedotransfer.data.models.dummy.FavoriteListItem
+import com.example.speedotransfer.data.models.FavouriteAddition
 import com.example.speedotransfer.ui.screens.dashboard.commonUI.CommonCard
 import com.example.speedotransfer.ui.theme.Grey
 import com.example.speedotransfer.ui.theme.Marron
@@ -35,7 +34,7 @@ import com.example.speedotransfer.ui.theme.Marron
 fun ConfirmationStepScreen(
     modifier: Modifier = Modifier,
     amountOfMoney: Int,
-    recipientUser: FavoriteListItem,
+    recipientUser: FavouriteAddition,
     currentStep: (Int) -> Unit
 ) {
     Column(
@@ -78,8 +77,8 @@ fun ConfirmationStepScreen(
                 )
                 CommonCard(
                     destination = "To",
-                    cardUser = recipientUser.favoriteRecipient,
-                    cardAccount = recipientUser.favoriteRecipientAccount,
+                    cardUser = recipientUser.name,
+                    cardAccount = recipientUser.accountId.toString(),
 
                     )
             }
@@ -94,7 +93,8 @@ fun ConfirmationStepScreen(
             )
         }
         Button(
-            onClick = { currentStep(3) },
+            onClick = { currentStep(3)
+            },
             modifier = modifier
                 .fillMaxWidth()
                 .padding(top = 24.dp),
@@ -122,12 +122,5 @@ fun ConfirmationStepScreen(
     }
 }
 
-@Preview(showSystemUi = true)
-@Composable
-private fun ConfirmationStepScreenPreview() {
-    ConfirmationStepScreen(
-        amountOfMoney = 100,
-        recipientUser = FavoriteListItem("Dina Fadel", "xxxx7890"), currentStep = {
 
-        })
-}
+

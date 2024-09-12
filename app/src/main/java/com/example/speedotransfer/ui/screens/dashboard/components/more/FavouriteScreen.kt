@@ -27,6 +27,7 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -37,6 +38,7 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Color.Companion.Unspecified
 import androidx.compose.ui.graphics.Color.Companion.White
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -44,17 +46,19 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.example.speedotransfer.R
-import com.example.speedotransfer.data.DummyDataSource
-import com.example.speedotransfer.data.models.dummy.FavoriteListItem
+import com.example.speedotransfer.data.models.FavouriteAddition
+import com.example.speedotransfer.data.source.remote.BankingAPIService
 import com.example.speedotransfer.ui.screens.dashboard.commonUI.HeaderUI
 import com.example.speedotransfer.ui.theme.Grey
 import com.example.speedotransfer.ui.theme.LightPink
 import com.example.speedotransfer.ui.theme.LightYellow
 import com.example.speedotransfer.ui.theme.Maroon
-import com.example.speedotransfer.ui.theme.Marron
+import com.example.speedotransfer.ui.viewmodels.FavouriteViewModel
+import com.example.speedotransfer.ui.viewmodels.FavouriteViewModelFactory
 
 @Composable
 fun FavouriteScreen(
@@ -62,12 +66,17 @@ fun FavouriteScreen(
     innerPadding: PaddingValues,
     modifier: Modifier = Modifier
 ) {
-    val dummyData = DummyDataSource.getFavoriteRecipentData()
+    val context = LocalContext.current
+    val apiService = BankingAPIService.callable
+    val viewModel: FavouriteViewModel =
+        viewModel(factory = FavouriteViewModelFactory(apiService, context))
+    val favList  by viewModel.favListItems.collectAsState()
     var showBottomDialog by remember {
         mutableStateOf(false)
     }
+
     var chosenItem by remember {
-        mutableStateOf(FavoriteListItem("", ""))
+        mutableStateOf(FavouriteAddition(0, ""))
     }
     if (showBottomDialog) {
         FavBottomSheetMaker(onDismiss = {
@@ -100,7 +109,7 @@ fun FavouriteScreen(
                 fontWeight = FontWeight.SemiBold
             )
             FavoriteScreenListMaker(
-                favoriteListItems = dummyData,
+                favoriteListItems = favList,
                 modifier = modifier,
                 onEditClick = {
                     showBottomDialog = true
@@ -108,6 +117,7 @@ fun FavouriteScreen(
                 },
                 onDeleteClick = {
                     chosenItem = it
+                    viewModel.deleteFromFav(chosenItem.accountId)
                 })
 
         }
@@ -116,9 +126,9 @@ fun FavouriteScreen(
 
 @Composable
 fun FavoriteScreenListMaker(
-    favoriteListItems: List<FavoriteListItem>,
-    onEditClick: (FavoriteListItem) -> Unit,
-    onDeleteClick: (FavoriteListItem) -> Unit,
+    favoriteListItems: List<FavouriteAddition>,
+    onEditClick: (FavouriteAddition) -> Unit,
+    onDeleteClick: (FavouriteAddition) -> Unit,
     modifier: Modifier = Modifier
 ) {
     LazyColumn(modifier = modifier.fillMaxHeight()) {
@@ -135,7 +145,7 @@ fun FavoriteScreenListMaker(
 
 @Composable
 fun FavoriteScreenListItem(
-    favoriteListItem: FavoriteListItem,
+    favoriteListItem: FavouriteAddition,
     modifier: Modifier = Modifier,
     onEditClick: () -> Unit,
     onDeleteClick: () -> Unit
@@ -165,12 +175,12 @@ fun FavoriteScreenListItem(
                     verticalArrangement = Arrangement.Center
                 ) {
                     Text(
-                        text = favoriteListItem.favoriteRecipient,
+                        text = favoriteListItem.name,
                         fontSize = 16.sp,
                         modifier = modifier.padding(bottom = 4.dp)
                     )
                     Text(
-                        text = "Account ${favoriteListItem.favoriteRecipientAccount}",
+                        text = "Account ${favoriteListItem.accountId}",
                         fontSize = 16.sp,
                         color = Grey
                     )
@@ -208,9 +218,12 @@ fun FavoriteScreenListItem(
 @Composable
 fun FavBottomSheetMaker(
     onDismiss: () -> Unit,
-    favoriteListItem: FavoriteListItem,
+    favoriteListItem: FavouriteAddition,
     modifier: Modifier = Modifier
 ) {
+    val chosenItem by remember {
+        mutableStateOf(favoriteListItem)
+    }
     ModalBottomSheet(
         onDismissRequest = { onDismiss() },
         containerColor = White,
@@ -239,8 +252,8 @@ fun FavBottomSheetMaker(
                 fontSize = 16.sp
             )
             OutlinedTextField(
-                value = favoriteListItem.favoriteRecipientAccount,
-                onValueChange = { favoriteListItem.favoriteRecipientAccount = it },
+                value = chosenItem.accountId.toString(),
+                onValueChange = { chosenItem.accountId = it.toInt() },
                 placeholder = {
                     Text(
                         text = "Enter Cardholder Account", fontSize = 14.sp, color = Grey
@@ -263,8 +276,8 @@ fun FavBottomSheetMaker(
                 fontSize = 16.sp
             )
             OutlinedTextField(
-                value = favoriteListItem.favoriteRecipient,
-                onValueChange = { favoriteListItem.favoriteRecipient = it },
+                value = chosenItem.name,
+                onValueChange = { chosenItem.name = it },
                 placeholder = {
                     Text(
                         text = "Enter Cardholder Name", fontSize = 14.sp, color = Grey

@@ -24,6 +24,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -32,25 +33,32 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color.Companion.Unspecified
 import androidx.compose.ui.graphics.Color.Companion.White
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.speedotransfer.R
-import com.example.speedotransfer.data.DummyDataSource
-import com.example.speedotransfer.data.models.dummy.FavoriteListItem
+import com.example.speedotransfer.data.models.FavouriteAddition
+import com.example.speedotransfer.data.source.remote.BankingAPIService
 import com.example.speedotransfer.ui.theme.Grey
 import com.example.speedotransfer.ui.theme.LightPink
 import com.example.speedotransfer.ui.theme.Marron
-import com.example.speedotransfer.ui.viewmodels.HomeViewModel
+import com.example.speedotransfer.ui.viewmodels.FavouriteViewModel
+import com.example.speedotransfer.ui.viewmodels.FavouriteViewModelFactory
 
 @Composable
 fun AmountStepScreen(
     modifier: Modifier = Modifier,
-    recipientUserChosen: (FavoriteListItem, Int) -> Unit
+    recipientUserChosen: (FavouriteAddition, Int) -> Unit
 ) {
+    val context = LocalContext.current
+    val apiService = BankingAPIService.callable
+    val viewModel: FavouriteViewModel =
+        viewModel(factory = FavouriteViewModelFactory(apiService, context))
     var amountOfMoney by remember {
         mutableStateOf("0")
     }
@@ -69,12 +77,13 @@ fun AmountStepScreen(
     }
     isButtonEnabled =
         !(recipientName.isBlank() || recipientAccount.isBlank()
-                    || amountOfMoney.isBlank() )
+                || amountOfMoney.isBlank())
 
-    if (showBottomSheet) BottomSheetFav(onDismiss = { showBottomSheet = it }) {
+    if (showBottomSheet) BottomSheetFav(onDismiss = { showBottomSheet = it },
+        viewModel = viewModel) {
 
-        recipientName = it.favoriteRecipient
-        recipientAccount = it.favoriteRecipientAccount
+        recipientName = it.name
+        recipientAccount = it.accountId.toString()
         showBottomSheet = false
     }
     Column(
@@ -190,7 +199,7 @@ fun AmountStepScreen(
         )
         Button(
             onClick = {
-                val userChosen = FavoriteListItem(recipientName, recipientAccount)
+                val userChosen = FavouriteAddition(recipientAccount.toInt(), recipientName)
                 recipientUserChosen(userChosen, amountOfMoney.toInt())
             },
             modifier = modifier
@@ -209,10 +218,11 @@ fun AmountStepScreen(
 @Composable
 fun BottomSheetFav(
     modifier: Modifier = Modifier,
+    viewModel: FavouriteViewModel,
     onDismiss: (Boolean) -> Unit,
-    onItemClicked: (FavoriteListItem) -> Unit
+    onItemClicked: (FavouriteAddition) -> Unit
 ) {
-    val favoriteList = DummyDataSource.getFavoriteRecipentData()
+    val favoriteList by viewModel.favListItems.collectAsState()
     ModalBottomSheet(onDismissRequest = { onDismiss(false) }) {
         Column(
             modifier = modifier
@@ -246,9 +256,9 @@ fun BottomSheetFav(
 
 @Composable
 fun FavoriteListMaker(
-    favItems: List<FavoriteListItem>,
+    favItems: List<FavouriteAddition>,
     modifier: Modifier,
-    selectedItem: (FavoriteListItem) -> Unit
+    selectedItem: (FavouriteAddition) -> Unit
 ) {
     LazyColumn(modifier = modifier.padding(top = 24.dp)) {
         items(favItems) { item ->
@@ -261,9 +271,9 @@ fun FavoriteListMaker(
 
 @Composable
 fun FavoriteListItemUI(
-    favoriteListItem: FavoriteListItem,
+    favoriteListItem: FavouriteAddition,
     modifier: Modifier = Modifier,
-    onItemClicked: (FavoriteListItem) -> Unit
+    onItemClicked: (FavouriteAddition) -> Unit
 ) {
     Card(
         onClick = { onItemClicked(favoriteListItem) },
@@ -289,12 +299,12 @@ fun FavoriteListItemUI(
                 verticalArrangement = Arrangement.Center
             ) {
                 Text(
-                    text = favoriteListItem.favoriteRecipient,
+                    text = favoriteListItem.name,
                     fontSize = 16.sp,
                     modifier = modifier.padding(bottom = 4.dp)
                 )
                 Text(
-                    text = "Account ${favoriteListItem.favoriteRecipientAccount}",
+                    text = "Account ${favoriteListItem.accountId}",
                     fontSize = 16.sp,
                     color = Grey
                 )

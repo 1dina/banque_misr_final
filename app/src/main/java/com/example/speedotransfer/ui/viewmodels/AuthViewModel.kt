@@ -48,7 +48,7 @@ class AuthViewModel(
                     _toastMessage.value = "User created successfully"
                     _responseStatus.value = true
                 } else {
-                    handleError(result.exceptionOrNull() ?: Exception("Unknown error"))
+                    handleError(Exception(result.exceptionOrNull()?.message) )
                 }
             } catch (e: Exception) {
                 handleError(e)
@@ -64,7 +64,7 @@ class AuthViewModel(
                     _responseStatus.value = true
                     _toastMessage.value = "Login successful"
                 } else {
-                    handleError(authDataResult.exceptionOrNull() ?: Exception("Unknown error"))
+                    handleError(Exception(authDataResult.exceptionOrNull()?.message) )
                 }
             } catch (e: Exception) {
                 handleError(e)
@@ -81,7 +81,7 @@ class AuthViewModel(
                     Log.e("trace","SignOut")
                 } else {
                     signOutResult.exceptionOrNull()?.message?.let { Log.e("trace", it) }
-                    handleError(signOutResult.exceptionOrNull() ?: Exception("Unknown error"))
+                    handleError(Exception(signOutResult.exceptionOrNull()?.message) )
 
 
                 }
@@ -104,7 +104,7 @@ class AuthViewModel(
         val errorMessage = when (exception) {
             is UnknownHostException -> "Please check your internet connection."
 
-            else -> { val shownMessage = "server take long time to respond"
+            else -> { val shownMessage = exception.message
                 "Error: $shownMessage"
             }
         }
