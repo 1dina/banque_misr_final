@@ -1,4 +1,4 @@
-package com.example.speedotransfer.ui.screens
+package com.example.speedotransfer.ui.screens.auth
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -34,7 +34,7 @@ import com.example.speedotransfer.ui.theme.LightRed
 
 
 @Composable
-fun OnBoarding1(navController: NavController, modifier: Modifier = Modifier) {
+fun OnBoarding3(navController: NavController, modifier: Modifier = Modifier) {
 
     Box(
         modifier = Modifier
@@ -44,7 +44,6 @@ fun OnBoarding1(navController: NavController, modifier: Modifier = Modifier) {
                     colors = listOf(
                         Color.White,
                         LightRed
-
                     )
                 )
             )
@@ -72,25 +71,25 @@ fun OnBoarding1(navController: NavController, modifier: Modifier = Modifier) {
 
 
             Image(
-                painter = painterResource(id = R.drawable.fastmoney),
-                contentDescription = "Send Money Fast",
+                painter = painterResource(id = R.drawable.payments),
+                contentDescription = "Confirm",
                 modifier = Modifier.size(300.dp)
             )
 
             Image(
-                painter = painterResource(id = R.drawable.onboard1),
-                contentDescription = "First Onboard",
+                painter = painterResource(id = R.drawable.onboard3),
+                contentDescription = "Second Onboard",
                 modifier = Modifier.size(70.dp)
             )
 
             Text(
-                text = "Amount",
+                text = "Payment",
                 fontWeight = FontWeight.Medium,
                 fontSize = 24.sp
             )
 
             Text(
-                text = "Send money fast with simple steps. Create account, Confirmation, Payment. Simple.",
+                text = "Enjoy peace of mind with our secure platform Transfer funds instantly to friends.",
                 textAlign = TextAlign.Center,
                 fontSize = 16.sp,
                 modifier = Modifier.padding(top = 20.dp)
@@ -98,8 +97,7 @@ fun OnBoarding1(navController: NavController, modifier: Modifier = Modifier) {
 
             Button(
                 onClick = {
-
-                    //navController.navigate(Route.ONBOARD2)
+                    // navigate to SignUp
                 },
                 modifier = Modifier
                     .padding(top = 40.dp)
@@ -122,6 +120,6 @@ fun OnBoarding1(navController: NavController, modifier: Modifier = Modifier) {
 
 @Preview(showSystemUi = true)
 @Composable
-private fun OnBoarding1Preview() {
-    OnBoarding1(rememberNavController())
+private fun OnBoarding3Preview() {
+    OnBoarding3(rememberNavController())
 }

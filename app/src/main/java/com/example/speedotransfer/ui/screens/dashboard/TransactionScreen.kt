@@ -1,5 +1,6 @@
-package com.example.speedotransfer.ui.screens
+package com.example.speedotransfer.ui.screens.dashboard
 
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
@@ -56,6 +57,7 @@ fun TransactionScreen(
     modifier: Modifier = Modifier
 ) {
     val transactionList = viewModel.transactionHistoryList.collectAsState()
+    Log.e("trace list ",transactionList.value.toString())
     Box(
         modifier = Modifier
             .fillMaxSize()

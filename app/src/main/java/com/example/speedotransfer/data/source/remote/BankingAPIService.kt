@@ -1,4 +1,4 @@
-package com.example.speedotransfer.data.source
+package com.example.speedotransfer.data.source.remote
 
 import com.example.speedotransfer.Constants
 import com.google.gson.GsonBuilder

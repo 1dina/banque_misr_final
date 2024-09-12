@@ -1,4 +1,4 @@
-package com.example.speedotransfer
+package com.example.speedotransfer.ui.screens.auth
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -9,7 +9,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.rememberNavController
-import com.example.speedotransfer.data.source.BankingAPIService
+import com.example.speedotransfer.data.source.remote.BankingAPIService
 import com.example.speedotransfer.routes.AuthNavGraph
 import com.example.speedotransfer.ui.theme.SpeedoTransferTheme
 import com.example.speedotransfer.ui.viewmodels.AuthViewModel

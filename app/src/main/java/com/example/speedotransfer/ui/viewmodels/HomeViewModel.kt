@@ -3,7 +3,6 @@ package com.example.speedotransfer.ui.viewmodels
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.speedotransfer.data.models.AccountCreationRequest
 import com.example.speedotransfer.data.models.Content
 import com.example.speedotransfer.data.models.Passwords
 import com.example.speedotransfer.data.models.FavouriteAddition
@@ -11,31 +10,26 @@ import com.example.speedotransfer.data.models.TransactionHistoryRequest
 import com.example.speedotransfer.data.models.TransactionRequest
 import com.example.speedotransfer.data.models.UserInfoResponse
 import com.example.speedotransfer.domain.usecases.AddToFavUseCase
-import com.example.speedotransfer.domain.usecases.CreateAccountUseCase
 import com.example.speedotransfer.domain.usecases.DoTransferUseCase
-import com.example.speedotransfer.domain.usecases.GetAccountByIdUseCase
 import com.example.speedotransfer.domain.usecases.GetInfoUseCase
 import com.example.speedotransfer.domain.usecases.GetTransactionsUseCase
 import com.example.speedotransfer.domain.usecases.GetUserAccountsUseCase
 import com.example.speedotransfer.domain.usecases.UpdatePasswordUseCase
-import com.example.speedotransfer.ui.screens.TransactionsDetails
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import java.net.UnknownHostException
 
 class HomeViewModel(
-    val createAccountUseCase: CreateAccountUseCase,
     val getUserAccountsUseCase: GetUserAccountsUseCase,
-    val getAccountByIdUseCase: GetAccountByIdUseCase,
     val doTransferUseCase: DoTransferUseCase,
     val getInfoUseCase: GetInfoUseCase,
-    val passwordUseCase: UpdatePasswordUseCase
+    val passwordUseCase: UpdatePasswordUseCase,
     val getTransactionsUseCase: GetTransactionsUseCase,
     val addToFavUseCase: AddToFavUseCase
 ) : ViewModel() {
-    private val _userAccountData = MutableStateFlow("Add your Account first")
-    val userAccountData = _userAccountData.asStateFlow()
+    private val _userAccountBalance = MutableStateFlow("Add your Account first")
+    val userAccountData = _userAccountBalance.asStateFlow()
     private val _userFound = MutableStateFlow<Boolean?>(null)
     val userFound = _userFound.asStateFlow()
     private val _responseStatus = MutableStateFlow<Boolean?>(null)
@@ -47,15 +41,16 @@ class HomeViewModel(
     val transactionHistoryList = _transactionHistoryList.asStateFlow()
     private val _toastMessage = MutableStateFlow<String?>(null)
     val toastMessage = _toastMessage.asStateFlow()
-    private val _userInfoData = MutableStateFlow<UserInfoResponse?>(null)
+    private val _userInfoData = MutableStateFlow<UserInfoResponse>(
+        UserInfoResponse(emptyList(),"","","",0,"")
+    )
     val userInfoData = _userInfoData.asStateFlow()
     private val _password = MutableStateFlow<Passwords?>(null)
     val password = _password.asStateFlow()
     var succtrans = false
 
-
     init {
-        getUserAccounts()
+        getUserInfo()
     }
 
     private fun getUserAccounts() {
@@ -64,7 +59,7 @@ class HomeViewModel(
                 val result = getUserAccountsUseCase.execute()
                 if (result.isSuccess) {
                     val balance = result.getOrNull()?.get(0)?.balance ?: "Unknown Balance"
-                    _userAccountData.value = "$balance EGP"
+                    _userAccountBalance.value = "$balance EGP"
                     _responseStatus.value = true
                     accountId.value = result.getOrNull()?.get(0)?.id ?: -1
                     Log.e("trace Id", accountId.value.toString())
@@ -83,7 +78,7 @@ class HomeViewModel(
     fun transferProcess(transactionRequest: TransactionRequest) {
         viewModelScope.launch {
             try {
-                transactionRequest.senderAccountNum  = accountId.value
+                transactionRequest.senderAccountNum = accountId.value
                 val result = doTransferUseCase.execute(transactionRequest)
                 if (result.isSuccess) {
                     _responseStatus.value = true
@@ -116,7 +111,8 @@ class HomeViewModel(
                     _responseStatus.value = true
                     _userFound.value = true
                     _transactionHistoryList.value = result.getOrNull()?.content!!
-                    Log.e("trace", "history is here")
+                    Log.e("trace", "history is here " +
+                            "${_transactionHistoryList.value}")
                 } else {
                     _toastMessage.value = result.exceptionOrNull()?.message
                     _responseStatus.value = false
@@ -137,7 +133,10 @@ class HomeViewModel(
              try {
                 val result = getInfoUseCase.execute()
                 if (result.isSuccess){
-                    _userInfoData.value = result.getOrNull()?: UserInfoResponse(emptyList(),"","","",0,"")
+                    val balance = result.getOrNull()?.accounts?.get(0)?.balance ?: "Unknown Balance"
+                    _userAccountBalance.value = "$balance EGP"
+                    _userInfoData.value = result.getOrNull()?:
+                    UserInfoResponse(emptyList(),"","","",0,"")
                     }
 
 
@@ -163,41 +162,23 @@ class HomeViewModel(
     }
 
 
-    fun addToFav(favouriteAddition: FavouriteAddition){
+    fun addToFav(favouriteAddition: FavouriteAddition) {
         viewModelScope.launch {
             try {
                 val result = addToFavUseCase.execute(favouriteAddition)
                 if (result.isSuccess) {
-                    _responseStatus.value =true
+                    _responseStatus.value = true
                     _toastMessage.value = result.getOrNull()!!
-                }
-                else {
+                } else {
                     result.exceptionOrNull()?.let { handleError(it) }
                 }
-            }catch (e : Exception) {
+            } catch (e: Exception) {
                 handleError(e)
             }
         }
     }
 
-        fun createAccount (account : AccountCreationRequest) {
-       viewModelScope.launch {
-          try {
-               val result = createAccountUseCase.execute(account)
-               if (result.isSuccess) {
-                   val balance = result.getOrNull()?.balance ?: "Unknown Balance"
-                   _userAccountData.value = balance.toString()
-                   _responseStatus.value =true
-                   _toastMessage.value ="You've successfully added your card"
-               }
-               else {
-                   result.exceptionOrNull()?.let { handleError(it) }
-               }
-           }catch (e : Exception) {
-             handleError(e)
-          }
-       }
-    }
+
     fun resetResponseStatus() {
         _responseStatus.value = null
     }
@@ -209,14 +190,15 @@ class HomeViewModel(
     private fun handleError(exception: Throwable) {
         val errorMessage = when (exception) {
             is UnknownHostException -> "Please check your internet connection."
-
             else -> {
-                val shownMessage = "server take long time to respond"
+                val shownMessage = exception.message
                 "Error: $shownMessage"
             }
         }
         _responseStatus.value = false
         _toastMessage.value = errorMessage
     }
+
+
 
 }

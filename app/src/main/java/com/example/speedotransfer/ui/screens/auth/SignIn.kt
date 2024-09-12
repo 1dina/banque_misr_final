@@ -1,4 +1,4 @@
-package com.example.speedotransfer.ui.screens
+package com.example.speedotransfer.ui.screens.auth
 
 import android.content.Intent
 import android.widget.Toast
@@ -48,10 +48,10 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
-import com.example.speedotransfer.DashboardActivity
+import com.example.speedotransfer.ui.screens.dashboard.DashboardActivity
 import com.example.speedotransfer.R
 import com.example.speedotransfer.data.models.UserLoginRequest
-import com.example.speedotransfer.data.source.BankingAPIService
+import com.example.speedotransfer.data.source.remote.BankingAPIService
 import com.example.speedotransfer.routes.AppRoutes
 import com.example.speedotransfer.ui.theme.LightRed
 import com.example.speedotransfer.ui.theme.Maroon

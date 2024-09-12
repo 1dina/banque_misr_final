@@ -1,4 +1,4 @@
-package com.example.speedotransfer.ui.screens
+package com.example.speedotransfer.ui.screens.dashboard
 
 
 import androidx.compose.foundation.background

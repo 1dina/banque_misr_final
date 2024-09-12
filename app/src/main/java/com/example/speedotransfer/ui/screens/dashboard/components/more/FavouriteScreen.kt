@@ -51,7 +51,7 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.example.speedotransfer.R
 import com.example.speedotransfer.data.models.FavouriteAddition
-import com.example.speedotransfer.data.source.BankingAPIService
+import com.example.speedotransfer.data.source.remote.BankingAPIService
 import com.example.speedotransfer.ui.screens.dashboard.commonUI.HeaderUI
 import com.example.speedotransfer.ui.theme.Grey
 import com.example.speedotransfer.ui.theme.LightPink

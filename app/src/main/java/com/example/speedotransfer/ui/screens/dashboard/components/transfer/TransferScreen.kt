@@ -1,6 +1,5 @@
 package com.example.speedotransfer.ui.screens.dashboard.components.transfer
 
-import android.util.Log
 import android.app.Notification
 import android.app.NotificationChannel
 import android.app.NotificationManager
@@ -20,7 +19,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Divider
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
@@ -48,9 +46,8 @@ import androidx.navigation.NavGraph.Companion.findStartDestination
 import com.example.speedotransfer.R
 import com.example.speedotransfer.data.models.FavouriteAddition
 import com.example.speedotransfer.data.models.TransactionRequest
-import com.example.speedotransfer.data.models.dummy.FavoriteListItem
 import com.example.speedotransfer.routes.AppRoutes
-import com.example.speedotransfer.ui.screens.IndeterminateCircularIndicator
+import com.example.speedotransfer.ui.screens.auth.IndeterminateCircularIndicator
 import com.example.speedotransfer.ui.screens.dashboard.commonUI.HeaderUI
 import com.example.speedotransfer.ui.theme.LightPink
 import com.example.speedotransfer.ui.theme.LightRed
@@ -66,7 +63,7 @@ fun TransferScreen(
     modifier: Modifier = Modifier
 ) {
     var chosenUser by remember {
-        mutableStateOf<FavoriteListItem>(FavoriteListItem("",""))
+        mutableStateOf(FavouriteAddition(0, ""))
     }
 
     var isLoading by remember {
@@ -77,7 +74,7 @@ fun TransferScreen(
         mutableIntStateOf(0)
     }
     val context = LocalContext.current
-    val transferUserFound by viewModel.responseStatus.collectAsState()
+    val transferUserFound by viewModel.userFound.collectAsState()
     LaunchedEffect(transferUserFound) {
         isLoading = false
         if (transferUserFound == true) {
@@ -131,44 +128,50 @@ fun TransferScreen(
                     isLoading = true
                     viewModel.transferProcess(
                         TransactionRequest(
-                            reciverAccountNum = user.favoriteRecipientAccount.toInt(),
-                            amount = amountOfMoney,
-                            senderName = "Dina", receiverName = "Doaa"
+                            reciverAccountNum = user.accountId,
+                            amount = amount,
+                            senderName = "userName", receiverName = user.name
                         )
                     )
                 }
-                2 -> ConfirmationStepScreen(amountOfMoney = amountOfMoney,
+
+                2 -> ConfirmationStepScreen(
+                    amountOfMoney = amountOfMoney,
                     recipientUser = chosenUser!!
                 ) {
                     currentStep = it
-                    if(currentStep == 3 && viewModel.succtrans==true) {
+                    if (currentStep == 3 && viewModel.succtrans == true) {
                         sendNotification("Notification", "Your transaction is successful", context)
                         viewModel.succtrans = false
                     }
 
 
                 }
+
                 else -> PaymentStepScreen(
                     recipientUser = chosenUser!!,
                     amountOfMoney = amountOfMoney,
                     onBackToHomeClick = {
                         navController.navigate(AppRoutes.HOME) {
-                            popUpTo(navController.graph.findStartDestination().id) { inclusive = true }
+                            popUpTo(navController.graph.findStartDestination().id) {
+                                inclusive = true
+                            }
                         }
                     }) {
-                    //handle to add to favourite
+                    viewModel.addToFav(chosenUser)
                 }
 
 
             }
-        if (isLoading) {
-            Box(
-                modifier = modifier
-                    .fillMaxSize()
-                    .background(Color.Black.copy(alpha = 0.5f), RoundedCornerShape(8.dp))
-                    .wrapContentSize(Alignment.Center)
-            ) {
-                IndeterminateCircularIndicator()
+            if (isLoading) {
+                Box(
+                    modifier = modifier
+                        .fillMaxSize()
+                        .background(Color.Black.copy(alpha = 0.5f), RoundedCornerShape(8.dp))
+                        .wrapContentSize(Alignment.Center)
+                ) {
+                    IndeterminateCircularIndicator()
+                }
             }
         }
     }
@@ -212,7 +215,8 @@ fun StepItem(
     step: Int, isSelected: Boolean, modifier: Modifier
 ) {
     Column(
-        horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.Center
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center
     ) {
         Box(
             contentAlignment = Alignment.Center,
@@ -249,7 +253,7 @@ fun StepItem(
 
 }
 
-private fun createNotificationChannel(context: Context) {
+fun createNotificationChannel(context: Context) {
     val name = "Notification Channel"
     val importance = NotificationManager.IMPORTANCE_DEFAULT
     val channel = NotificationChannel("1", name, importance).apply {

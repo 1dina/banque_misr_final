@@ -1,4 +1,4 @@
-package com.example.speedotransfer.ui.screens
+package com.example.speedotransfer.ui.screens.auth
 
 import android.widget.Toast
 import androidx.compose.foundation.background
@@ -56,7 +56,7 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.example.speedotransfer.R
 import com.example.speedotransfer.data.models.UserAuthRegisterRequest
-import com.example.speedotransfer.data.source.BankingAPIService
+import com.example.speedotransfer.data.source.remote.BankingAPIService
 import com.example.speedotransfer.routes.AppRoutes
 import com.example.speedotransfer.ui.theme.LightGrey
 import com.example.speedotransfer.ui.theme.LightRed

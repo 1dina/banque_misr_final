@@ -74,9 +74,8 @@ fun HomeScreen(
     val currentBalance by viewModel.userAccountData.collectAsState()
     val responseState by viewModel.responseStatus.collectAsState()
     val historyTransactions by viewModel.transactionHistoryList.collectAsState()
-    var userName by remember {
-        mutableStateOf("user name")
-    }
+    val userData by viewModel.userInfoData.collectAsState()
+
     LaunchedEffect(responseState) {
         if (responseState == true)
             viewModel.resetResponseStatus()
@@ -135,7 +134,7 @@ fun HomeScreen(
                         color = Maroon,
                         fontSize = 14.sp
                     )
-                    Text(text = userName, fontSize = 16.sp)
+                    Text(text = userData.name, fontSize = 16.sp)
                 }
                 Spacer(modifier = Modifier.weight(1f))
                 Icon(
@@ -172,7 +171,7 @@ fun HomeScreen(
                 }
             }
 
-            TransactionList(transactionList = historyTransactions, userName, onAllViewClick = {
+            TransactionList(transactionList = historyTransactions, userData.name, onAllViewClick = {
                 navController.navigate(AppRoutes.TRANSACTION)
             })
         }

@@ -1,4 +1,4 @@
-package com.example.speedotransfer.ui.screens
+package com.example.speedotransfer.ui.screens.dashboard.commonUI
 
 
 import androidx.compose.foundation.Image

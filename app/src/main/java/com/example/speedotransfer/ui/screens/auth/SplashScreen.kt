@@ -1,4 +1,4 @@
-package com.example.speedotransfer.ui.screens
+package com.example.speedotransfer.ui.screens.auth
 
 import android.content.Intent
 import androidx.compose.foundation.background
@@ -15,7 +15,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
-import com.example.speedotransfer.DashboardActivity
+import com.example.speedotransfer.ui.screens.dashboard.DashboardActivity
 import com.example.speedotransfer.R
 import com.example.speedotransfer.data.source.local.SecureStorageDataSource
 import com.example.speedotransfer.routes.AppRoutes

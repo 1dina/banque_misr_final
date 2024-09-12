@@ -1,4 +1,4 @@
-package com.example.speedotransfer.data.source
+package com.example.speedotransfer.data.source.remote
 
 import com.example.speedotransfer.Constants
 import com.example.speedotransfer.data.models.AccountByIdResponse
@@ -77,8 +77,7 @@ interface BankingAPICallable {
     suspend fun addToFav(
         @Header("Authorization") accessToken: String,
         @Body favouriteAddition: FavouriteAddition
-    )
-            : Response<FavouriteAddition>
+    ): Response<FavouriteAddition>
 
     @GET (Constants.ALL_FAVOURITES_ENDPOINT)
     suspend fun  getAllFav(

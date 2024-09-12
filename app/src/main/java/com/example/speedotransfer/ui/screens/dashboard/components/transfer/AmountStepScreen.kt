@@ -42,22 +42,18 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.speedotransfer.R
-import com.example.speedotransfer.data.DummyDataSource
 import com.example.speedotransfer.data.models.FavouriteAddition
-import com.example.speedotransfer.data.models.dummy.FavoriteListItem
-import com.example.speedotransfer.data.source.BankingAPIService
+import com.example.speedotransfer.data.source.remote.BankingAPIService
 import com.example.speedotransfer.ui.theme.Grey
 import com.example.speedotransfer.ui.theme.LightPink
 import com.example.speedotransfer.ui.theme.Marron
 import com.example.speedotransfer.ui.viewmodels.FavouriteViewModel
 import com.example.speedotransfer.ui.viewmodels.FavouriteViewModelFactory
-import com.example.speedotransfer.ui.viewmodels.HomeViewModel
-import com.example.speedotransfer.ui.viewmodels.HomeViewModelFactory
 
 @Composable
 fun AmountStepScreen(
     modifier: Modifier = Modifier,
-    recipientUserChosen: (FavoriteListItem, Int) -> Unit
+    recipientUserChosen: (FavouriteAddition, Int) -> Unit
 ) {
     val context = LocalContext.current
     val apiService = BankingAPIService.callable
@@ -81,9 +77,10 @@ fun AmountStepScreen(
     }
     isButtonEnabled =
         !(recipientName.isBlank() || recipientAccount.isBlank()
-                    || amountOfMoney.isBlank() )
+                || amountOfMoney.isBlank())
 
-    if (showBottomSheet) BottomSheetFav(onDismiss = { showBottomSheet = it } , viewModel = viewModel) {
+    if (showBottomSheet) BottomSheetFav(onDismiss = { showBottomSheet = it },
+        viewModel = viewModel) {
 
         recipientName = it.name
         recipientAccount = it.accountId.toString()
@@ -202,7 +199,7 @@ fun AmountStepScreen(
         )
         Button(
             onClick = {
-                val userChosen = FavoriteListItem(recipientName, recipientAccount)
+                val userChosen = FavouriteAddition(recipientAccount.toInt(), recipientName)
                 recipientUserChosen(userChosen, amountOfMoney.toInt())
             },
             modifier = modifier

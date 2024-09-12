@@ -1,4 +1,4 @@
-package com.example.speedotransfer.ui.screens
+package com.example.speedotransfer.ui.screens.auth
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -30,11 +30,12 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.example.speedotransfer.R
+import com.example.speedotransfer.routes.AppRoutes
 import com.example.speedotransfer.ui.theme.LightRed
 
 
 @Composable
-fun OnBoarding3(navController: NavController, modifier: Modifier = Modifier) {
+fun OnBoarding1(navController: NavController, modifier: Modifier = Modifier) {
 
     Box(
         modifier = Modifier
@@ -44,6 +45,7 @@ fun OnBoarding3(navController: NavController, modifier: Modifier = Modifier) {
                     colors = listOf(
                         Color.White,
                         LightRed
+
                     )
                 )
             )
@@ -58,8 +60,10 @@ fun OnBoarding3(navController: NavController, modifier: Modifier = Modifier) {
                 modifier = Modifier
                     .padding(top = 20.dp, end = 20.dp)
                     .clickable {
+                        navController.navigate(AppRoutes.FIRST_PAGE_SIGN_UP).apply {
 
-                        //Navigate to Sign Up as its the first time for the user
+                        }
+
                     })
         }
 
@@ -71,25 +75,25 @@ fun OnBoarding3(navController: NavController, modifier: Modifier = Modifier) {
 
 
             Image(
-                painter = painterResource(id = R.drawable.payments),
-                contentDescription = "Confirm",
+                painter = painterResource(id = R.drawable.fastmoney),
+                contentDescription = "Send Money Fast",
                 modifier = Modifier.size(300.dp)
             )
 
             Image(
-                painter = painterResource(id = R.drawable.onboard3),
-                contentDescription = "Second Onboard",
+                painter = painterResource(id = R.drawable.onboard1),
+                contentDescription = "First Onboard",
                 modifier = Modifier.size(70.dp)
             )
 
             Text(
-                text = "Payment",
+                text = "Amount",
                 fontWeight = FontWeight.Medium,
                 fontSize = 24.sp
             )
 
             Text(
-                text = "Enjoy peace of mind with our secure platform Transfer funds instantly to friends.",
+                text = "Send money fast with simple steps. Create account, Confirmation, Payment. Simple.",
                 textAlign = TextAlign.Center,
                 fontSize = 16.sp,
                 modifier = Modifier.padding(top = 20.dp)
@@ -97,7 +101,8 @@ fun OnBoarding3(navController: NavController, modifier: Modifier = Modifier) {
 
             Button(
                 onClick = {
-                    // navigate to SignUp
+
+                    //navController.navigate(Route.ONBOARD2)
                 },
                 modifier = Modifier
                     .padding(top = 40.dp)
@@ -120,6 +125,6 @@ fun OnBoarding3(navController: NavController, modifier: Modifier = Modifier) {
 
 @Preview(showSystemUi = true)
 @Composable
-private fun OnBoarding3Preview() {
-    OnBoarding3(rememberNavController())
+private fun OnBoarding1Preview() {
+    OnBoarding1(rememberNavController())
 }

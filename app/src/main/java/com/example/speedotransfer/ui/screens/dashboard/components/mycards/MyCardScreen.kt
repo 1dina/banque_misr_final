@@ -1,5 +1,6 @@
 package com.example.speedotransfer.ui.screens.dashboard.components.mycards
 
+import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -8,31 +9,37 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
-import com.example.speedotransfer.data.DummyDataSource
-import com.example.speedotransfer.data.models.dummy.MyCardsItemData
-import com.example.speedotransfer.routes.AppRoutes
+import com.example.speedotransfer.data.models.UserAccountsResponseItem
+import com.example.speedotransfer.data.source.remote.BankingAPIService
 import com.example.speedotransfer.ui.screens.dashboard.commonUI.CommonCard
 import com.example.speedotransfer.ui.screens.dashboard.commonUI.HeaderUI
 import com.example.speedotransfer.ui.theme.LightPink
 import com.example.speedotransfer.ui.theme.LightYellow
 import com.example.speedotransfer.ui.theme.Maroon
 import com.example.speedotransfer.ui.theme.MediumGrey
+import com.example.speedotransfer.ui.viewmodels.MyCardsViewModel
+import com.example.speedotransfer.ui.viewmodels.MyCardsViewModelFactory
 
 @Composable
 fun MyCardScreen(
@@ -40,7 +47,26 @@ fun MyCardScreen(
     innerPadding: PaddingValues,
     modifier: Modifier = Modifier
 ) {
-    val myCardsInfo = DummyDataSource.getCardInfo()
+    val context = LocalContext.current
+    val apiService = BankingAPIService.callable
+    val viewModel: MyCardsViewModel =
+        viewModel(factory = MyCardsViewModelFactory(apiService, context))
+    val cardList by viewModel.myCardsList.collectAsState()
+    val isCardCreated by viewModel.responseStatus.collectAsState()
+    LaunchedEffect(isCardCreated) {
+        if (isCardCreated == true) {
+            viewModel.resetResponseStatus()
+        } else {
+            if (viewModel.toastMessage.value != null)
+                Toast.makeText(
+                    context,
+                    viewModel.toastMessage.value,
+                    Toast.LENGTH_SHORT
+                ).show()
+            viewModel.resetToastMessage()
+            viewModel.resetResponseStatus()
+        }
+    }
     Box(
         modifier = modifier
             .fillMaxSize()
@@ -60,10 +86,10 @@ fun MyCardScreen(
         ) {
             HeaderUI(headerTitle = "My Cards", onClickBackButton = { navController.popBackStack() })
             Column(modifier = modifier.fillMaxSize()) {
-                MyCardsListMaker(myCardsList = myCardsInfo, modifier = modifier.weight(2f))
+                MyCardsListMaker(myCardsList = cardList, modifier = modifier.weight(2f))
 
                 Button(
-                    onClick = { navController.navigate(AppRoutes.CURRENCY) },
+                    onClick = { viewModel.createAccount() },
                     modifier = modifier
                         .fillMaxWidth()
                         .padding(bottom = 64.dp),
@@ -85,27 +111,30 @@ fun MyCardScreen(
 }
 
 @Composable
-fun MyCardsListMaker(myCardsList: List<MyCardsItemData>, modifier: Modifier) {
+fun MyCardsListMaker(myCardsList: List<UserAccountsResponseItem>, modifier: Modifier) {
     LazyColumn(
         modifier = modifier
             .fillMaxWidth()
             .padding(vertical = 16.dp)
     ) {
-        items(myCardsList) {
-            MyCardsListItemUI(myCardsListItem = it)
+        itemsIndexed(myCardsList) { index, item ->
+            MyCardsListItemUI(myCardsListItem = item, index = index)
         }
     }
 }
 
 @Composable
-fun MyCardsListItemUI(myCardsListItem: MyCardsItemData, modifier: Modifier = Modifier) {
+fun MyCardsListItemUI(
+    myCardsListItem: UserAccountsResponseItem,
+    index: Int, modifier: Modifier = Modifier
+) {
     Box {
         CommonCard(
             destination = "",
-            cardUser = myCardsListItem.cardName,
-            cardAccount = "Account ${myCardsListItem.cardAccount}"
+            cardUser = "myCardsListItem.cardName",
+            cardAccount = "Account ${myCardsListItem.id}"
         )
-        if (myCardsListItem.isDefault)
+        if (index == 0)
 
             Surface(
                 color = MediumGrey,

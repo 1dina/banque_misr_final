@@ -1,4 +1,4 @@
-package com.example.speedotransfer.repo
+package com.example.speedotransfer.data.repo
 
 import android.util.Log
 import com.auth0.jwt.JWT
@@ -13,15 +13,15 @@ import com.example.speedotransfer.data.models.TransactionRequest
 import com.example.speedotransfer.data.models.TransactionResponse
 import com.example.speedotransfer.data.models.UserAccountsResponseItem
 import com.example.speedotransfer.data.models.UserInfoResponse
-import com.example.speedotransfer.data.source.BankingAPICallable
+import com.example.speedotransfer.data.source.remote.BankingAPICallable
 import com.example.speedotransfer.data.source.local.SecureStorageDataSource
 import com.example.speedotransfer.domain.repository.DashboardRepository
 import retrofit2.Response
-import kotlin.properties.Delegates
 
-class DashboardRepositoryImpl(val apiService: BankingAPICallable,
-                              val encryptedSharedPreferences: SecureStorageDataSource
-): DashboardRepository {
+class DashboardRepositoryImpl(
+    val apiService: BankingAPICallable,
+    val encryptedSharedPreferences: SecureStorageDataSource
+) : DashboardRepository {
     var accountId = 0
     override suspend fun createAccount(
         account: AccountCreationRequest
@@ -145,23 +145,19 @@ class DashboardRepositoryImpl(val apiService: BankingAPICallable,
 
     override suspend fun getAllFav(): Response<List<FavouriteAddition>> {
         return try {
-            // Retrieve and log the access token
             val accessToken = encryptedSharedPreferences.getAccessToken()
             Log.e("trace", "Access Token: $accessToken")
-
-            // Decode the JWT to extract user information
             val decodedJWT = JWT.decode(accessToken)
             val userId = decodedJWT.getClaim("id").asInt()
             Log.e("trace", "User ID from JWT: $userId")
 
-            // Make the API request with the token and userId
             val response = apiService.getAllFav("Bearer $accessToken", userId)
 
             if (response.isSuccessful) {
                 Log.e("trace", "Faved Items fetched: ${response.body()?.toString()}")
             } else {
                 val errorCode = response.code()
-                val errorBody = response.errorBody()?.string()
+                val errorBody = response.message()
                 Log.e("trace", "Error fetching FavItems: Code $errorCode, Body: $errorBody")
             }
             response
