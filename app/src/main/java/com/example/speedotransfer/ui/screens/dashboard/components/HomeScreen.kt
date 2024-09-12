@@ -28,6 +28,7 @@ import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -60,7 +61,6 @@ import com.example.speedotransfer.ui.theme.LightYellow
 import com.example.speedotransfer.ui.theme.Maroon
 import com.example.speedotransfer.ui.viewmodels.HomeViewModel
 import com.example.speedotransfer.utils.formatDate
-import okhttp3.internal.userAgent
 
 @Composable
 fun HomeScreen(
@@ -135,7 +135,7 @@ fun HomeScreen(
                         color = Maroon,
                         fontSize = 14.sp
                     )
-                    Text(text = userName , fontSize = 16.sp)
+                    Text(text = userName, fontSize = 16.sp)
                 }
                 Spacer(modifier = Modifier.weight(1f))
                 Icon(
@@ -172,14 +172,21 @@ fun HomeScreen(
                 }
             }
 
-            TransactionList(transactionList = historyTransactions , userName)
+            TransactionList(transactionList = historyTransactions, userName, onAllViewClick = {
+                navController.navigate(AppRoutes.TRANSACTION)
+            })
         }
 
     }
 }
 
 @Composable
-fun TransactionList(transactionList: List<Content>, userName: String,modifier: Modifier = Modifier) {
+fun TransactionList(
+    transactionList: List<Content>,
+    userName: String,
+    onAllViewClick: () -> Unit,
+    modifier: Modifier = Modifier
+) {
     Row(
         modifier = modifier
             .padding(top = 24.dp)
@@ -187,7 +194,14 @@ fun TransactionList(transactionList: List<Content>, userName: String,modifier: M
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
         Text(text = "Recent transactions", fontSize = 14.sp, fontWeight = FontWeight.Normal)
-        Text(text = "View all", fontSize = 14.sp, color = Grey, fontWeight = FontWeight.Normal)
+        TextButton(onClick = { onAllViewClick() }) {
+            Text(
+                text = "View all",
+                fontSize = 14.sp,
+                color = Grey,
+                fontWeight = FontWeight.Normal
+            )
+        }
     }
     Surface(
         shape = RoundedCornerShape(4.dp), modifier = modifier.padding(top = 8.dp),
@@ -195,7 +209,7 @@ fun TransactionList(transactionList: List<Content>, userName: String,modifier: M
     ) {
         LazyColumn {
             items(transactionList) {
-                RecentTransactionUI(transactionItem = it,userName)
+                RecentTransactionUI(transactionItem = it, userName)
                 HorizontalDivider(
                     modifier = Modifier
                         .fillMaxWidth(),
@@ -208,7 +222,7 @@ fun TransactionList(transactionList: List<Content>, userName: String,modifier: M
 }
 
 @Composable
-fun RecentTransactionUI(transactionItem: Content,userName  : String , modifier: Modifier = Modifier) {
+fun RecentTransactionUI(transactionItem: Content, userName: String, modifier: Modifier = Modifier) {
     Card(colors = CardDefaults.cardColors(containerColor = White), shape = RectangleShape) {
         var status by remember {
             mutableStateOf("Received")
@@ -232,13 +246,13 @@ fun RecentTransactionUI(transactionItem: Content,userName  : String , modifier: 
                     .padding(start = 8.dp)
                     .height(64.dp)
             ) {
-                if(userName == transactionItem.senderName) { cardName = transactionItem.receiverName ?: "card"
-                status = "Sent"
-                }else {
+                if (userName == transactionItem.senderName) {
+                    cardName = transactionItem.receiverName ?: "card"
+                    status = "Sent"
+                } else {
                     cardName = transactionItem.senderName ?: "card"
                     status = "Received"
                 }
-                Log.e("trace","user name $userName , card name $cardName")
                 Text(
                     text = cardName,
                     fontWeight = FontWeight.Medium,
@@ -249,7 +263,6 @@ fun RecentTransactionUI(transactionItem: Content,userName  : String , modifier: 
                     fontWeight = FontWeight.Normal,
                     fontSize = 12.sp, modifier = modifier.weight(1f)
                 )
-                Log.e("trace",transactionItem.createdTimeStamp)
                 val formattedDate = formatDate(transactionItem.createdTimeStamp)
                 Text(
                     text = formattedDate,

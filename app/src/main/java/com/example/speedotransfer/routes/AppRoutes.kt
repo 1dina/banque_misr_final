@@ -13,6 +13,7 @@ import com.example.speedotransfer.routes.AppRoutes.LAST_PAGE_SIGN_UP
 import com.example.speedotransfer.routes.AppRoutes.SIGN_IN
 import com.example.speedotransfer.routes.AppRoutes.SPLASH
 import com.example.speedotransfer.routes.AppRoutes.START_DESTINATION
+import com.example.speedotransfer.routes.AppRoutes.TRANS_DETAILS
 import com.example.speedotransfer.routes.AppRoutes.isFirstTime
 import com.example.speedotransfer.ui.screens.SignIn
 import com.example.speedotransfer.ui.screens.SignUp1
@@ -25,7 +26,6 @@ import com.example.speedotransfer.ui.screens.dashboard.components.NotificationSc
 import com.example.speedotransfer.ui.screens.dashboard.components.more.FavouriteScreen
 import com.example.speedotransfer.ui.screens.dashboard.components.more.MoreScreen
 import com.example.speedotransfer.ui.screens.dashboard.components.mycards.CardAddition
-import com.example.speedotransfer.ui.screens.dashboard.components.mycards.CardCurrency
 import com.example.speedotransfer.ui.screens.dashboard.components.mycards.MyCardScreen
 import com.example.speedotransfer.ui.screens.dashboard.components.transfer.TransferScreen
 import com.example.speedotransfer.ui.viewmodels.AuthViewModel
@@ -82,8 +82,9 @@ fun AuthNavGraph(navController: NavController, authViewModel: AuthViewModel) {
 }
 
 @Composable
-fun DashboardNavGraph(navController: NavController, innerPadding: PaddingValues
-,viewModel: HomeViewModel) {
+fun DashboardNavGraph(
+    navController: NavController, innerPadding: PaddingValues, viewModel: HomeViewModel
+) {
     NavHost(navController = navController as NavHostController, startDestination = HOME) {
         composable(AppRoutes.HOME) {
             HomeScreen(
@@ -102,7 +103,8 @@ fun DashboardNavGraph(navController: NavController, innerPadding: PaddingValues
         composable(AppRoutes.TRANSACTION) {
             TransactionScreen(
                 navController = navController,
-                innerPadding = innerPadding
+                innerPadding = innerPadding,
+                viewModel = viewModel
             )
         }
         composable(AppRoutes.MY_CARD) {
@@ -129,9 +131,28 @@ fun DashboardNavGraph(navController: NavController, innerPadding: PaddingValues
                 innerPadding = innerPadding
             )
         }
-        composable(AppRoutes.CURRENCY) { CardCurrency(navController = navController) }
         composable(AppRoutes.CARD_ADDITION) { CardAddition(navController = navController) }
-        composable(AppRoutes.TRANS_DETAILS) { TransactionsDetails(navController = navController,innerPaddingValues = innerPadding)  }
+        composable(route = "$TRANS_DETAILS/{name}/{amount}/{date}/{accountNum}",
+            arguments = listOf(navArgument("name") { type = NavType.StringType },
+                navArgument("amount") { type = NavType.IntType },
+                navArgument("date") { type = NavType.StringType },
+                navArgument("accountNum"){type = NavType.IntType}
+            )) {
+            val name = it.arguments?.getString("name")!!
+            val amount = it.arguments?.getInt("amount")!!
+            val date = it.arguments?.getString("date")!!
+            val accountNum = it.arguments?.getInt("accountNum")!!
+            TransactionsDetails(
+                navController = navController,
+                innerPaddingValues = innerPadding,
+                name = name,
+                amount = amount,
+                date = date,
+                accountNum = accountNum ,
+                viewModel = viewModel
+            )
+
+        }
 
 
     }

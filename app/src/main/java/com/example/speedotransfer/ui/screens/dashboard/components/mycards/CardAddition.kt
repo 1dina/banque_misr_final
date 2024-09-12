@@ -25,9 +25,11 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 import com.example.speedotransfer.ui.screens.dashboard.commonUI.HeaderUIWithCancel
 import com.example.speedotransfer.ui.theme.Grey
 import com.example.speedotransfer.ui.theme.LightPink
@@ -191,4 +193,10 @@ fun CardAddition(navController: NavController, modifier: Modifier = Modifier) {
 
     }
 
+}
+
+@Preview
+@Composable
+private fun preview() {
+    CardAddition(navController = rememberNavController())
 }

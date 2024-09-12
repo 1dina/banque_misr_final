@@ -22,6 +22,7 @@ import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
@@ -31,32 +32,30 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import androidx.navigation.compose.rememberNavController
 import com.example.speedotransfer.R
-import com.example.speedotransfer.data.DummyDataSource
-import com.example.speedotransfer.data.models.dummy.TransactionCard
+import com.example.speedotransfer.data.models.Content
 import com.example.speedotransfer.routes.AppRoutes
 import com.example.speedotransfer.ui.screens.dashboard.commonUI.HeaderUI
 import com.example.speedotransfer.ui.theme.Green
 import com.example.speedotransfer.ui.theme.LightRed
 import com.example.speedotransfer.ui.theme.LightYellow
 import com.example.speedotransfer.ui.theme.Marron
-import com.example.speedotransfer.ui.theme.Red
 import com.example.speedotransfer.ui.theme.TransparentGreen
-import com.example.speedotransfer.ui.theme.TransparentRed
+import com.example.speedotransfer.ui.viewmodels.HomeViewModel
+import com.example.speedotransfer.utils.formatDate
 
 
 @Composable
 fun TransactionScreen(
     navController: NavController,
     innerPadding: PaddingValues,
+    viewModel: HomeViewModel,
     modifier: Modifier = Modifier
 ) {
-    val dummyData = DummyDataSource.getTransactionCards()
+    val transactionList = viewModel.transactionHistoryList.collectAsState()
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -72,7 +71,7 @@ fun TransactionScreen(
     ) {
         Column(modifier = modifier.padding(horizontal = 16.dp)) {
             HeaderUI("Transactions", onClickBackButton = {
-            navController.popBackStack()
+                navController.popBackStack()
             })
             Text(
                 text = "Your Last Transactions",
@@ -84,8 +83,10 @@ fun TransactionScreen(
                 textAlign = TextAlign.Center
             )
 
-            CardTransactionList(transactionList = dummyData, onClickItem = {
-                navController.navigate(AppRoutes.TRANS_DETAILS)
+            CardTransactionList(transactionList = transactionList.value, onClickItem = { it ->
+                navController.navigate(
+                    "${AppRoutes.TRANS_DETAILS}/${it.receiverName}/${it.amount}/${it.createdTimeStamp}" +
+                            "/${it.reciverAccountId}")
             }, modifier)
         }
     }
@@ -94,16 +95,18 @@ fun TransactionScreen(
 
 @Composable
 fun CardTransactionList(
-    transactionList: List<TransactionCard>,
-    onClickItem: () -> Unit,
+    transactionList: List<Content>,
+    onClickItem: (Content) -> Unit,
     modifier: Modifier
 ) {
-    LazyColumn(modifier = modifier
-        .wrapContentHeight()
-        .padding(top = 24.dp)) {
+    LazyColumn(
+        modifier = modifier
+            .wrapContentHeight()
+            .padding(top = 24.dp)
+    ) {
         items(transactionList) {
             CardTransactionItemUI(transactionCard = it) {
-                onClickItem()
+                onClickItem(it)
             }
         }
     }
@@ -111,10 +114,8 @@ fun CardTransactionList(
 
 @Composable
 fun CardTransactionItemUI(
-    transactionCard: TransactionCard, onClickItem: () -> Unit
+    transactionCard: Content, onClickItem: (Content) -> Unit
 ) {
-    val resultImage = if (transactionCard.isSuccess) R.drawable.ic_visa_transaction
-    else R.drawable.ic_bank_transaction
     Card(
         modifier = Modifier
             .padding(top = 16.dp)
@@ -133,7 +134,7 @@ fun CardTransactionItemUI(
                         .size(60.dp, 60.dp),
                 ) {
                     Icon(
-                        painter = painterResource(id = resultImage),
+                        painter = painterResource(id = R.drawable.ic_visa_transaction),
                         contentDescription = "Visa Image",
                         modifier = Modifier
                             .fillMaxSize(),
@@ -148,23 +149,24 @@ fun CardTransactionItemUI(
                     .fillMaxHeight()
             ) {
                 Text(
-                    text = transactionCard.userName,
+                    text = transactionCard.receiverName,
                     fontSize = 14.sp,
                     fontWeight = FontWeight.Medium
                 )
                 Text(
-                    text = transactionCard.visaType,
+                    text = "Visa . Mater Card . 1234",
                     fontSize = 12.sp,
                     modifier = Modifier.alpha(0.8f)
                 )
+                val formattedDate = formatDate(transactionCard.createdTimeStamp)
                 Text(
-                    text = "${transactionCard.date} - ${transactionCard.state}",
+                    text = "${formattedDate} - Received",
                     fontSize = 12.sp,
                     modifier = Modifier.alpha(0.6f)
                 )
 
                 Text(
-                    text = "$${transactionCard.amountOfMoney}",
+                    text = "$${transactionCard.amount}",
                     fontSize = 18.sp,
                     fontWeight = FontWeight.Medium,
                     modifier = Modifier
@@ -184,64 +186,35 @@ fun CardTransactionItemUI(
                         .padding(top = 16.dp)
                         .alpha(0.5f)
                         .clickable {
-                            onClickItem()
+                            onClickItem(transactionCard)
                         }
                 )
 
-                if (transactionCard.isSuccess) {
-                    Box(
-                        modifier = Modifier
-                            .wrapContentSize()
-                            .padding(end = 10.dp, top = 20.dp)
-                            .background(
-                                color = TransparentGreen,
-                                shape = RoundedCornerShape(8.dp)
-                            )
-
-                    ) {
-
-                        Text(
-                            text = "Successful",
-                            fontSize = 12.sp,
-                            modifier = Modifier
-                                .align(Alignment.Center)
-                                .padding(horizontal = 8.dp, vertical = 2.dp),
-                            style = TextStyle(color = Green)
+                Box(
+                    modifier = Modifier
+                        .wrapContentSize()
+                        .padding(end = 10.dp, top = 20.dp)
+                        .background(
+                            color = TransparentGreen,
+                            shape = RoundedCornerShape(8.dp)
                         )
 
-                    }
-                } else {
-                    Box(
+                ) {
+
+                    Text(
+                        text = "Successful",
+                        fontSize = 12.sp,
                         modifier = Modifier
-                            .wrapContentSize()
-                            .padding(end = 10.dp, top = 20.dp)
-                            .background(
-                                color = TransparentRed,
-                                shape = RoundedCornerShape(8.dp)
-                            )
+                            .align(Alignment.Center)
+                            .padding(horizontal = 8.dp, vertical = 2.dp),
+                        style = TextStyle(color = Green)
+                    )
 
-                    ) {
-
-                        Text(
-                            text = "Failed",
-                            fontSize = 12.sp,
-                            modifier = Modifier
-                                .align(Alignment.Center)
-                                .padding(horizontal = 8.dp, vertical = 2.dp),
-                            style = TextStyle(color = Red)
-                        )
-
-                    }
                 }
+
             }
         }
 
     }
 
-}
-
-@Preview(showSystemUi = true)
-@Composable
-private fun TransactionsPreview() {
-    TransactionScreen(navController = rememberNavController(), PaddingValues())
 }

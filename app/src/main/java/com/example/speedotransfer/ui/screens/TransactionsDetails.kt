@@ -2,23 +2,19 @@ package com.example.speedotransfer.ui.screens
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Divider
-import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -40,10 +36,15 @@ import com.example.speedotransfer.ui.theme.LightRed
 import com.example.speedotransfer.ui.theme.LightWhite
 import com.example.speedotransfer.ui.theme.LightYellow
 import com.example.speedotransfer.ui.theme.Marron
-import retrofit2.http.Header
+import com.example.speedotransfer.ui.viewmodels.HomeViewModel
 
 @Composable
-fun TransactionsDetails(navController: NavController, innerPaddingValues: PaddingValues,modifier: Modifier = Modifier) {
+fun TransactionsDetails(
+    navController: NavController, innerPaddingValues: PaddingValues,
+    name: String, amount: Int, date: String,
+    accountNum : Int,
+    viewModel: HomeViewModel, modifier: Modifier = Modifier
+) {
 
     Box(
         modifier = Modifier
@@ -58,9 +59,11 @@ fun TransactionsDetails(navController: NavController, innerPaddingValues: Paddin
             )
             .padding(innerPaddingValues)
     ) {
-        Column(modifier = modifier
-            .fillMaxSize()
-            .padding(horizontal = 16.dp)) {
+        Column(
+            modifier = modifier
+                .fillMaxSize()
+                .padding(horizontal = 16.dp)
+        ) {
             HeaderUI(headerTitle = "Successful Transactions", onClickBackButton = {
                 navController.popBackStack()
 
@@ -82,7 +85,7 @@ fun TransactionsDetails(navController: NavController, innerPaddingValues: Paddin
 
                 Row() {
                     Text(
-                        text = "1000",
+                        text = amount.toString(),
                         fontSize = 21.sp,
                         fontWeight = FontWeight.Bold,
                         modifier = Modifier
@@ -90,7 +93,7 @@ fun TransactionsDetails(navController: NavController, innerPaddingValues: Paddin
                     )
 
                     Text(
-                        text = "USD",
+                        text = "EGP",
                         fontSize = 21.sp,
                         fontWeight = FontWeight.Bold,
                         modifier = Modifier
@@ -130,8 +133,8 @@ fun TransactionsDetails(navController: NavController, innerPaddingValues: Paddin
                         )
                         TransferProcessCard(
                             destination = "To",
-                            cardUser = "Jonathon Smith",
-                            cardAccount = "xxxx7890",
+                            cardUser = name,
+                            cardAccount = accountNum.toString(),
 
                             )
                     }
@@ -151,23 +154,26 @@ fun TransactionsDetails(navController: NavController, innerPaddingValues: Paddin
                         .wrapContentHeight(),
                     colors = CardDefaults.cardColors(containerColor = LightWhite)
                 ) {
-                    Column(modifier = modifier.padding(vertical = 24.dp)
-                        .wrapContentHeight()) {
+                    Column(
+                        modifier = modifier
+                            .padding(vertical = 24.dp)
+                            .wrapContentHeight()
+                    ) {
                         Row(
                             modifier = modifier
-                                .padding( start = 15.dp, end = 15.dp)
+                                .padding(start = 15.dp, end = 15.dp)
                                 .fillMaxWidth(),
                             horizontalArrangement = Arrangement.SpaceBetween
                         ) {
                             Text(
-                                text = "Transfer amount amount",
+                                text = "Transfer amount",
                                 fontSize = 15.sp,
                                 modifier = Modifier.alpha(0.7f)
                             )
 
                             Row {
                                 Text(
-                                    text = "48,4220",
+                                    text = amount.toString(),
                                     fontSize = 15.sp,
                                     modifier = Modifier
                                         .alpha(0.4f)
@@ -228,11 +234,10 @@ fun TransactionsDetails(navController: NavController, innerPaddingValues: Paddin
                             )
 
                             Text(
-                                text = "20 JUL 2024 7:50 PM",
+                                text = date,
                                 fontSize = 15.sp,
                                 modifier = modifier
                                     .alpha(0.4f)
-
 
 
                             )
@@ -249,8 +254,3 @@ fun TransactionsDetails(navController: NavController, innerPaddingValues: Paddin
 }
 
 
-@Preview
-@Composable
-private fun TransactionsDetailsPreview() {
-    TransactionsDetails(rememberNavController(),innerPaddingValues = PaddingValues())
-}
