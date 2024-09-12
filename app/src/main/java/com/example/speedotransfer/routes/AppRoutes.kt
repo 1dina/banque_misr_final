@@ -17,6 +17,7 @@ import com.example.speedotransfer.routes.AppRoutes.isFirstTime
 import com.example.speedotransfer.ui.screens.ChangePassword
 import com.example.speedotransfer.ui.screens.Profile
 import com.example.speedotransfer.ui.screens.ProfileInfo
+import com.example.speedotransfer.ui.screens.Settings
 import com.example.speedotransfer.ui.screens.SignIn
 import com.example.speedotransfer.ui.screens.SignUp1
 import com.example.speedotransfer.ui.screens.SignUp2
@@ -142,6 +143,7 @@ fun DashboardNavGraph(navController: NavController, innerPadding: PaddingValues
         composable(AppRoutes.PROFILE) { Profile(navController = navController) }
         composable(AppRoutes.PROFILE_INFO) { ProfileInfo(navController = navController,viewModel = viewModel) }
         composable(AppRoutes.UPDATE_PASSWORD) { ChangePassword(navController)  }
+        composable(AppRoutes.SETTINGS) { Settings(navController = navController) }
 
 
 

@@ -1,3 +1,3 @@
 package com.example.speedotransfer.data.models
 
-data class Passwords(var currentPassword: String , var oldPassword: String)
+data class Passwords( var oldPassword: String , var newPassword: String)

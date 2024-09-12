@@ -6,7 +6,6 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -33,7 +32,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
@@ -45,25 +43,24 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.example.speedotransfer.R
 import com.example.speedotransfer.data.models.Passwords
-import com.example.speedotransfer.data.models.UserLoginRequest
 import com.example.speedotransfer.data.source.BankingAPIService
+import com.example.speedotransfer.ui.screens.dashboard.commonUI.HeaderUI
 import com.example.speedotransfer.ui.theme.LightRed
 import com.example.speedotransfer.ui.theme.LightYellow
 import com.example.speedotransfer.ui.theme.Maroon
-import com.example.speedotransfer.ui.viewmodels.AuthViewModel
-import com.example.speedotransfer.ui.viewmodels.AuthViewModelFactory
 import com.example.speedotransfer.ui.viewmodels.HomeViewModel
 import com.example.speedotransfer.ui.viewmodels.HomeViewModelFactory
 
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ChangePassword(navController: NavController, modifier : Modifier = Modifier) {
+fun ChangePassword(navController: NavController, modifier: Modifier = Modifier) {
 
     val apiService = BankingAPIService.callable
     val context = LocalContext.current
 
-    val homeViewModel: HomeViewModel = viewModel(factory = HomeViewModelFactory(apiService,context))
+    val homeViewModel: HomeViewModel =
+        viewModel(factory = HomeViewModelFactory(apiService, context))
 
     var currentPassword by remember { mutableStateOf("") }
     var newPassword by remember { mutableStateOf("") }
@@ -96,33 +93,11 @@ fun ChangePassword(navController: NavController, modifier : Modifier = Modifier)
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
             modifier = Modifier.fillMaxSize()
+                .padding(16.dp)
         ) {
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(top = 20.dp)
-            ) {
-                Icon(
-                    painter = painterResource(id = R.drawable.ic_arrow_back),
-                    contentDescription = "Back",
-                    Modifier
-                        .size(40.dp)
-                        .padding(top = 16.dp)
-                        .clickable {
-                            navController.popBackStack()
-                        }
-                )
-
-                Text(
-                    text = "Change Password",
-                    fontSize = 20.sp,
-                    fontWeight = FontWeight.Medium,
-                    modifier = Modifier
-                        .padding(top = 15.dp, start = 80.dp)
-
-                )
-            }
-
+            HeaderUI(
+                headerTitle = "Change Password",
+                onClickBackButton = { navController.popBackStack() })
             Column(
                 verticalArrangement = Arrangement.spacedBy(-25.dp),
                 modifier = Modifier.fillMaxHeight()
@@ -147,7 +122,7 @@ fun ChangePassword(navController: NavController, modifier : Modifier = Modifier)
                         containerColor = Color.White
                     ),
                     modifier = Modifier
-                        .size(350.dp, 100.dp)
+                        .fillMaxWidth()
                         .padding(top = 30.dp),
                     visualTransformation = if (isPasswordVisible) VisualTransformation.None else PasswordVisualTransformation(),
                     trailingIcon = {
@@ -172,7 +147,7 @@ fun ChangePassword(navController: NavController, modifier : Modifier = Modifier)
                 OutlinedTextField(
                     value = newPassword,
                     onValueChange = { newText -> newPassword = newText },
-                    label = {
+                    placeholder = {
                         Text(
                             text = "Enter your password",
                             Modifier.alpha(0.4f),
@@ -185,7 +160,7 @@ fun ChangePassword(navController: NavController, modifier : Modifier = Modifier)
                         containerColor = Color.White
                     ),
                     modifier = Modifier
-                        .size(350.dp, 100.dp)
+                        .fillMaxWidth()
                         .padding(top = 30.dp),
                     visualTransformation = if (isPasswordVisible1) VisualTransformation.None else PasswordVisualTransformation(),
                     trailingIcon = {
@@ -204,33 +179,32 @@ fun ChangePassword(navController: NavController, modifier : Modifier = Modifier)
 
 
                 )
+
+
+                Button(
+                    onClick = {
+                        val updatePassword = Passwords(currentPassword, newPassword)
+                        homeViewModel.updatePassword(updatePassword)
+                    },
+                    modifier = Modifier
+                        .padding(top = 64.dp)
+                        .fillMaxWidth(),
+                    enabled = isButtonEnabled,
+                    shape = RoundedCornerShape(10.dp),
+                    colors = ButtonDefaults.buttonColors(containerColor = Maroon)
+                ) {
+                    Text(
+                        text = "Save", fontSize = 16.sp, modifier = modifier.padding(10.dp)
+                    )
+
+                }
             }
 
-            Button(
-                onClick = {
-                    val updatePassword = Passwords(currentPassword, newPassword)
-                    homeViewModel.updatePassword(updatePassword) },
-                modifier = Modifier
-                    .padding(top = 64.dp)
-                    .fillMaxWidth(),
-                enabled = isButtonEnabled,
-                shape = RoundedCornerShape(10.dp),
-                colors = ButtonDefaults.buttonColors(containerColor = Maroon)
-            ) {
-                Text(
-                    text = "Save", fontSize = 16.sp, modifier = modifier.padding(10.dp)
-                )
-
-            }
         }
-
-        
     }
 
 
 }
-
-
 
 
 @Preview

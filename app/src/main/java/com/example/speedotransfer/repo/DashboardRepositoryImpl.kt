@@ -136,7 +136,16 @@ class DashboardRepositoryImpl(val apiService: BankingAPICallable,
         return try {
             val accessToken = encryptedSharedPreferences.getAccessToken()
                 ?: throw Exception("Access Token is null")
-            apiService.updatePassword("Bearer $accessToken", passwords)
+            val response = apiService.updatePassword("Bearer $accessToken",passwords)
+            if (response.isSuccessful) {
+                Log.e("trace", "password being updated: ${response.body()!!}")
+            } else {
+                Log.e(
+                    "trace",
+                    "Error updating user pass : ${response.code()}"
+                )
+            }
+            response
         } catch (e: Exception) {
             Log.e("trace", "Error updating password: ${e.message}")
             throw e

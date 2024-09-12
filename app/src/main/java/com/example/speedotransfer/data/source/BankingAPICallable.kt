@@ -62,11 +62,14 @@ interface BankingAPICallable {
     suspend fun getTransactionHistory(
         @Header("Authorization") accessToken: String,
         @Body transactionHistoryRequest: TransactionHistoryRequest
-    ) : Response<TransactionHistoryResponse>
+    ): Response<TransactionHistoryResponse>
 
     @GET(Constants.INFO_ENDPOINT)
     suspend fun getInfo(@Header("Authorization") accessToken: String): Response<UserInfoResponse>
 
     @PUT(Constants.UPDATE_PASSWORD)
-    suspend fun updatePassword(@Header("Authorization") accessToken: String, @Body passwords: Passwords): Response<String>
+    suspend fun updatePassword(
+        @Header("Authorization") accessToken: String,
+        @Body passwords: Passwords
+    ): Response<String>
 }

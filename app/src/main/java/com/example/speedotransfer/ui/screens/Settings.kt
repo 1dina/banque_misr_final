@@ -21,6 +21,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.modifier.modifierLocalConsumer
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
@@ -29,6 +30,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.speedotransfer.R
 import com.example.speedotransfer.routes.AppRoutes
+import com.example.speedotransfer.ui.screens.dashboard.commonUI.HeaderUI
 import com.example.speedotransfer.ui.theme.LightRed
 import com.example.speedotransfer.ui.theme.LightYellow
 
@@ -48,95 +50,67 @@ fun Settings(navController: NavController, modifier : Modifier = Modifier) {
                 )
             )
     ) {
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(top = 20.dp)
-        ) {
-            Icon(
-                painter = painterResource(id = R.drawable.ic_arrow_back),
-                contentDescription = "Back",
-                Modifier
-                    .size(40.dp)
-                    .padding(top = 16.dp)
-                    .clickable { }
-            )
+        Column (modifier = modifier.fillMaxSize().padding(16.dp) ) {
+            HeaderUI(headerTitle = "Settings", onClickBackButton = { navController.popBackStack() })
 
-            Text(
-                text = "Setting",
-                fontSize = 20.sp,
-                fontWeight = FontWeight.Medium,
+            Column(
+                verticalArrangement = Arrangement.spacedBy(8.dp),
+                horizontalAlignment = Alignment.CenterHorizontally,
                 modifier = Modifier
-                    .padding(top = 15.dp, start = 130.dp)
-
-            )
-        }
-
-        Column(
-            verticalArrangement = Arrangement.spacedBy(8.dp),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            modifier = Modifier
-                .padding(top = 120.dp)
-                .fillMaxSize()
-        ) {
-
-            Row(
-                modifier = Modifier
-                    .fillMaxHeight(0.1f)
-                    .padding(top = 5.dp)
-                    .clickable { navController.navigate(AppRoutes.UPDATE_PASSWORD) }
+                    .padding(top = 64.dp)
+                    .fillMaxSize()
             ) {
-                ProfileScreen(
-                    text1 = "Change password",
-                    text2 = "Change password",
-                    image = painterResource(
-                        id = R.drawable.changepassword
-                    ),
-                    imageText = "Lock",
-                    onItemClick = {}
 
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(top = 5.dp)
+                        .clickable { navController.navigate(AppRoutes.UPDATE_PASSWORD) }
+                ) {
+                    ProfileScreen(
+                        text1 = "Change password",
+                        text2 = "Change password",
+                        image = painterResource(
+                            id = R.drawable.changepassword
+                        ),
+                        imageText = "Lock",
+                        onItemClick = {}
+
+                    )
+                }
+
+
+
+                Row(
+                    modifier = Modifier
+                        .padding(top = 5.dp)
+                ) {
+                    ProfileScreen(
+                        text1 = "Edit Profile",
+                        text2 = "Change your information",
+                        image = painterResource(
+                            id = R.drawable.editprofile
+                        ),
+                        imageText = "Edit Profile Details",
+                        onItemClick = {}
+
+                    )
+                }
+
+
+                Divider(
+                    modifier = Modifier
+                        .padding(vertical = 0.dp)
+                        .padding(start = 15.dp)
+                        .width(370.dp)
+                        .alpha(0.2f),
+                    color = Color.Gray,
+                    thickness = 2.dp
                 )
+
+
             }
 
-
-
-            Row(
-                modifier = Modifier
-                    .fillMaxHeight(0.13f)
-                    .padding(top = 5.dp)
-            ) {
-                ProfileScreen(
-                    text1 = "Edit Profile", text2 = "Change your information", image = painterResource(
-                        id = R.drawable.editprofile
-                    ), imageText = "Edit Profile Details",
-                    onItemClick = {}
-
-                )
-            }
-
-
-            Divider(
-                modifier = Modifier
-                    .padding(vertical = 0.dp)
-                    .padding(start = 15.dp)
-                    .width(370.dp)
-                    .alpha(0.2f),
-                color = Color.Gray,
-                thickness = 2.dp
-            )
-
-
-
-        }
-
-    }
-
-}
-
-@Preview
-@Composable
-private fun SettingsPreview() {
-
-    //Settings()
+        }    }
 
 }
