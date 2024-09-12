@@ -5,12 +5,14 @@ import com.auth0.jwt.JWT
 import com.example.speedotransfer.data.models.AccountByIdResponse
 import com.example.speedotransfer.data.models.AccountCreationRequest
 import com.example.speedotransfer.data.models.AccountCreationResponse
+import com.example.speedotransfer.data.models.Passwords
 import com.example.speedotransfer.data.models.FavouriteAddition
 import com.example.speedotransfer.data.models.TransactionHistoryRequest
 import com.example.speedotransfer.data.models.TransactionHistoryResponse
 import com.example.speedotransfer.data.models.TransactionRequest
 import com.example.speedotransfer.data.models.TransactionResponse
 import com.example.speedotransfer.data.models.UserAccountsResponseItem
+import com.example.speedotransfer.data.models.UserInfoResponse
 import com.example.speedotransfer.data.source.BankingAPICallable
 import com.example.speedotransfer.data.source.local.SecureStorageDataSource
 import com.example.speedotransfer.domain.repository.DashboardRepository
@@ -189,4 +191,47 @@ class DashboardRepositoryImpl(val apiService: BankingAPICallable,
             throw e
         }
     }
+
+    override suspend fun getInfo(): Response <UserInfoResponse> {
+        // val accessToken = encryptedSharedPreferences.getAccessToken()
+        //  return apiService.getInfo(accessToken!!)
+        return try {
+            val accessToken = encryptedSharedPreferences.getAccessToken()
+            val response = apiService.getInfo("Bearer $accessToken")
+            if (response.isSuccessful) {
+                Log.e("trace", "user info fetched: ${response.body()?.toString()}")
+            } else {
+                Log.e(
+                    "trace",
+                    "Error fetching user data : ${response}"
+                )
+            }
+            response
+        } catch (e: Exception) {
+            Log.e("trace", "Error occurred while fetching user data: ${e.message}")
+            throw e
+
+        }
+    }
+
+    override suspend fun updatePassword(passwords: Passwords): Response<String> {
+        return try {
+            val accessToken = encryptedSharedPreferences.getAccessToken()
+                ?: throw Exception("Access Token is null")
+            val response = apiService.updatePassword("Bearer $accessToken",passwords)
+            if (response.isSuccessful) {
+                Log.e("trace", "password being updated: ${response.body()!!}")
+            } else {
+                Log.e(
+                    "trace",
+                    "Error updating user pass : ${response.code()}"
+                )
+            }
+            response
+        } catch (e: Exception) {
+            Log.e("trace", "Error updating password: ${e.message}")
+            throw e
+        }
+    }
+
 }

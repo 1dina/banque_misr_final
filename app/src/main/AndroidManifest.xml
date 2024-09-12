@@ -3,6 +3,11 @@
     xmlns:tools="http://schemas.android.com/tools" >
     <uses-permission android:name="android.permission.INTERNET" />
 
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+
+    <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM" />
+    <uses-permission android:name="android.permission.USE_EXACT_ALARM" />
+
     <application
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
@@ -13,6 +18,10 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.SpeedoTransfer"
         tools:targetApi="31" >
+        <receiver
+            android:name=".ui.screens.NotificationReceiver"
+            android:enabled="false"
+            android:exported="false"></receiver>
         <activity
             android:name=".DashboardActivity"
             android:exported="false"

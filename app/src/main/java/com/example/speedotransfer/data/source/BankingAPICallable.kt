@@ -4,6 +4,7 @@ import com.example.speedotransfer.Constants
 import com.example.speedotransfer.data.models.AccountByIdResponse
 import com.example.speedotransfer.data.models.AccountCreationRequest
 import com.example.speedotransfer.data.models.AccountCreationResponse
+import com.example.speedotransfer.data.models.Passwords
 import com.example.speedotransfer.data.models.FavouriteAddition
 import com.example.speedotransfer.data.models.TransactionHistoryRequest
 import com.example.speedotransfer.data.models.TransactionHistoryResponse
@@ -12,6 +13,7 @@ import com.example.speedotransfer.data.models.TransactionResponse
 import com.example.speedotransfer.data.models.UserAccountsResponseItem
 import com.example.speedotransfer.data.models.UserAuthRegisterRequest
 import com.example.speedotransfer.data.models.UserAuthRegisterResponse
+import com.example.speedotransfer.data.models.UserInfoResponse
 import com.example.speedotransfer.data.models.UserLoginRequest
 import com.example.speedotransfer.data.models.UserLoginResponse
 import retrofit2.Response
@@ -20,6 +22,7 @@ import retrofit2.http.DELETE
 import retrofit2.http.GET
 import retrofit2.http.Header
 import retrofit2.http.POST
+import retrofit2.http.PUT
 import retrofit2.http.Path
 
 interface BankingAPICallable {
@@ -61,8 +64,15 @@ interface BankingAPICallable {
     suspend fun getTransactionHistory(
         @Header("Authorization") accessToken: String,
         @Body transactionHistoryRequest: TransactionHistoryRequest
-    ): Response<TransactionHistoryResponse>
+    ) : Response<TransactionHistoryResponse>
+    @GET(Constants.INFO_ENDPOINT)
+    suspend fun getInfo(@Header("Authorization") accessToken: String): Response<UserInfoResponse>
 
+    @PUT(Constants.UPDATE_PASSWORD)
+    suspend fun updatePassword(
+        @Header("Authorization") accessToken: String,
+        @Body passwords: Passwords
+    ): Response<String>
     @POST(Constants.FAVOURITE_ADDITION_ENDPOINT)
     suspend fun addToFav(
         @Header("Authorization") accessToken: String,
@@ -81,5 +91,4 @@ interface BankingAPICallable {
         @Header("Authorization")accessToken: String,
         @Path("accountId") accountId: Int
     ) : Response<String>
-
 }

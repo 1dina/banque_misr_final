@@ -1,5 +1,9 @@
 package com.example.speedotransfer.ui.screens.dashboard.components.transfer
 
+import android.app.Notification
+import android.app.NotificationChannel
+import android.app.NotificationManager
+import android.content.Context
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -25,6 +29,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.core.app.NotificationManagerCompat
 import com.example.speedotransfer.R
 import com.example.speedotransfer.data.models.dummy.FavoriteListItem
 import com.example.speedotransfer.ui.screens.dashboard.commonUI.CommonCard
@@ -94,7 +99,8 @@ fun ConfirmationStepScreen(
             )
         }
         Button(
-            onClick = { currentStep(3) },
+            onClick = { currentStep(3)
+            },
             modifier = modifier
                 .fillMaxWidth()
                 .padding(top = 24.dp),
@@ -121,6 +127,10 @@ fun ConfirmationStepScreen(
 
     }
 }
+
+
+
+
 
 @Preview(showSystemUi = true)
 @Composable
