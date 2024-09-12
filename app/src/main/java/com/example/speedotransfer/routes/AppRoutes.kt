@@ -14,6 +14,7 @@ import com.example.speedotransfer.routes.AppRoutes.SIGN_IN
 import com.example.speedotransfer.routes.AppRoutes.SPLASH
 import com.example.speedotransfer.routes.AppRoutes.START_DESTINATION
 import com.example.speedotransfer.routes.AppRoutes.isFirstTime
+import com.example.speedotransfer.ui.screens.ChangePassword
 import com.example.speedotransfer.ui.screens.Profile
 import com.example.speedotransfer.ui.screens.ProfileInfo
 import com.example.speedotransfer.ui.screens.SignIn
@@ -52,6 +53,8 @@ object AppRoutes {
     var START_DESTINATION = SPLASH
     const val PROFILE = "profile"
     const val PROFILE_INFO = "profileInfo"
+    const val UPDATE_PASSWORD = "updatepassword"
+    const val SETTINGS = "settings"
 
 
 }
@@ -138,6 +141,7 @@ fun DashboardNavGraph(navController: NavController, innerPadding: PaddingValues
         composable(AppRoutes.TRANS_DETAILS) { TransactionsDetails(navController = navController,innerPaddingValues = innerPadding)  }
         composable(AppRoutes.PROFILE) { Profile(navController = navController) }
         composable(AppRoutes.PROFILE_INFO) { ProfileInfo(navController = navController,viewModel = viewModel) }
+        composable(AppRoutes.UPDATE_PASSWORD) { ChangePassword(navController)  }
 
 
 

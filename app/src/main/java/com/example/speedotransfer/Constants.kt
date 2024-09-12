@@ -11,5 +11,6 @@ object Constants {
     const val TRANSFER_PROCESS_ENDPOINT = "/api/v1/accounts/transaction"
     const val TRANSACTION_HISTORY_ENDPOINT = "/api/v1/accounts/transaction/all"
     const val INFO_ENDPOINT = "/api/v1/user/info"
+    const val UPDATE_PASSWORD = "/api/v1/user/update-password"
 
 }

@@ -4,6 +4,7 @@ import com.example.speedotransfer.Constants
 import com.example.speedotransfer.data.models.AccountByIdResponse
 import com.example.speedotransfer.data.models.AccountCreationRequest
 import com.example.speedotransfer.data.models.AccountCreationResponse
+import com.example.speedotransfer.data.models.Passwords
 import com.example.speedotransfer.data.models.TransactionHistoryRequest
 import com.example.speedotransfer.data.models.TransactionHistoryResponse
 import com.example.speedotransfer.data.models.TransactionRequest
@@ -19,6 +20,7 @@ import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.Header
 import retrofit2.http.POST
+import retrofit2.http.PUT
 import retrofit2.http.Path
 
 interface BankingAPICallable {
@@ -64,4 +66,7 @@ interface BankingAPICallable {
 
     @GET(Constants.INFO_ENDPOINT)
     suspend fun getInfo(@Header("Authorization") accessToken: String): Response<UserInfoResponse>
+
+    @PUT(Constants.UPDATE_PASSWORD)
+    suspend fun updatePassword(@Header("Authorization") accessToken: String, @Body passwords: Passwords): Response<String>
 }

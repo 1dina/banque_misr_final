@@ -26,13 +26,15 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import com.example.speedotransfer.R
+import com.example.speedotransfer.routes.AppRoutes
 import com.example.speedotransfer.ui.theme.LightRed
 import com.example.speedotransfer.ui.theme.LightYellow
 
 
 @Composable
-fun Settings(modifier : Modifier = Modifier) {
+fun Settings(navController: NavController, modifier : Modifier = Modifier) {
 
     Box(
         modifier = Modifier
@@ -82,6 +84,7 @@ fun Settings(modifier : Modifier = Modifier) {
                 modifier = Modifier
                     .fillMaxHeight(0.1f)
                     .padding(top = 5.dp)
+                    .clickable { navController.navigate(AppRoutes.UPDATE_PASSWORD) }
             ) {
                 ProfileScreen(
                     text1 = "Change password",
@@ -134,6 +137,6 @@ fun Settings(modifier : Modifier = Modifier) {
 @Composable
 private fun SettingsPreview() {
 
-    Settings()
+    //Settings()
 
 }

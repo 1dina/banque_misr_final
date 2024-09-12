@@ -4,6 +4,7 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.speedotransfer.data.models.Content
+import com.example.speedotransfer.data.models.Passwords
 import com.example.speedotransfer.data.models.TransactionHistoryRequest
 import com.example.speedotransfer.data.models.TransactionRequest
 import com.example.speedotransfer.data.models.UserInfoResponse
@@ -13,6 +14,7 @@ import com.example.speedotransfer.domain.usecases.GetAccountByIdUseCase
 import com.example.speedotransfer.domain.usecases.GetInfoUseCase
 import com.example.speedotransfer.domain.usecases.GetTransactionsUseCase
 import com.example.speedotransfer.domain.usecases.GetUserAccountsUseCase
+import com.example.speedotransfer.domain.usecases.UpdatePasswordUseCase
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
@@ -24,7 +26,8 @@ class HomeViewModel(
     val getAccountByIdUseCase: GetAccountByIdUseCase,
     val doTransferUseCase: DoTransferUseCase,
     val getTransactionsUseCase: GetTransactionsUseCase,
-    val getInfoUseCase: GetInfoUseCase
+    val getInfoUseCase: GetInfoUseCase,
+    val passwordUseCase: UpdatePasswordUseCase
 ) : ViewModel() {
     private val _userAccountData = MutableStateFlow("Add your Account first")
     val userAccountData = _userAccountData.asStateFlow()
@@ -41,6 +44,8 @@ class HomeViewModel(
     val toastMessage = _toastMessage.asStateFlow()
     private val _userInfoData = MutableStateFlow<UserInfoResponse?>(null)
     val userInfoData = _userInfoData.asStateFlow()
+    private val _password = MutableStateFlow<Passwords?>(null)
+    val password = _password.asStateFlow()
 
     init {
         // createAccount(AccountCreationRequest("miza",10230))
@@ -130,6 +135,21 @@ class HomeViewModel(
             } catch (e: Exception) {
                  handleError(e)
              }
+        }
+    }
+
+    fun updatePassword(passwords: Passwords) {
+        viewModelScope.launch {
+            try {
+                val result = passwordUseCase.execute(passwords)
+                if (result.isSuccess){
+                    _toastMessage.value= "Password is updated"
+                }
+
+
+            } catch (e: Exception) {
+                handleError(e)
+            }
         }
     }
 

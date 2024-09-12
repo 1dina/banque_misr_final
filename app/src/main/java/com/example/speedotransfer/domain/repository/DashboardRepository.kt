@@ -3,6 +3,7 @@ package com.example.speedotransfer.domain.repository
 import com.example.speedotransfer.data.models.AccountByIdResponse
 import com.example.speedotransfer.data.models.AccountCreationRequest
 import com.example.speedotransfer.data.models.AccountCreationResponse
+import com.example.speedotransfer.data.models.Passwords
 import com.example.speedotransfer.data.models.TransactionHistoryRequest
 import com.example.speedotransfer.data.models.TransactionHistoryResponse
 import com.example.speedotransfer.data.models.TransactionRequest
@@ -19,6 +20,7 @@ interface DashboardRepository {
     suspend fun getTransactionHistory (transactionHistoryRequest: TransactionHistoryRequest)
     : Response<TransactionHistoryResponse>
     suspend fun getInfo(): Response<UserInfoResponse>
+    suspend fun updatePassword(passwords: Passwords): Response<String>
 
 
 }

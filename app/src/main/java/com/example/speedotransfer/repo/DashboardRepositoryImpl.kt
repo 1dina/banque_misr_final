@@ -4,6 +4,7 @@ import android.util.Log
 import com.example.speedotransfer.data.models.AccountByIdResponse
 import com.example.speedotransfer.data.models.AccountCreationRequest
 import com.example.speedotransfer.data.models.AccountCreationResponse
+import com.example.speedotransfer.data.models.Passwords
 import com.example.speedotransfer.data.models.TransactionHistoryRequest
 import com.example.speedotransfer.data.models.TransactionHistoryResponse
 import com.example.speedotransfer.data.models.TransactionRequest
@@ -128,6 +129,17 @@ class DashboardRepositoryImpl(val apiService: BankingAPICallable,
             Log.e("trace", "Error occurred while fetching user data: ${e.message}")
             throw e
 
+        }
+    }
+
+    override suspend fun updatePassword(passwords: Passwords): Response<String> {
+        return try {
+            val accessToken = encryptedSharedPreferences.getAccessToken()
+                ?: throw Exception("Access Token is null")
+            apiService.updatePassword("Bearer $accessToken", passwords)
+        } catch (e: Exception) {
+            Log.e("trace", "Error updating password: ${e.message}")
+            throw e
         }
     }
 

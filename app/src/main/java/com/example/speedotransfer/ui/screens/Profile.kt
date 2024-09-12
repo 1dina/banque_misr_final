@@ -126,6 +126,7 @@ fun Profile(navController: NavController, modifier: Modifier = Modifier) {
                     modifier = Modifier
                         .fillMaxHeight(0.13f)
                         .padding(top = 5.dp)
+                        .clickable { navController.navigate(AppRoutes.SETTINGS) }
                 ) {
                     ProfileScreen(
                         text1 = "Setting", text2 = "Change your settings", image = painterResource(
@@ -160,7 +161,7 @@ fun Profile(navController: NavController, modifier: Modifier = Modifier) {
                         image = painterResource(
                             id = R.drawable.paymenthistory
                         ),
-                        imageText = "Settings",
+                        imageText = "payment",
                         onItemClick = {}
 
                     )
@@ -190,7 +191,7 @@ fun Profile(navController: NavController, modifier: Modifier = Modifier) {
                         image = painterResource(
                             id = R.drawable.favourites
                         ),
-                        imageText = "Settings",
+                        imageText = "favourite",
                         onItemClick = {}
 
                     )
