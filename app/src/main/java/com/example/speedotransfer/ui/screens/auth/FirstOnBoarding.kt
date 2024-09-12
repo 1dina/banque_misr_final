@@ -50,7 +50,7 @@ fun OnBoarding1(navController: NavController, modifier: Modifier = Modifier) {
                 )
             )
     ) {
-        Row (
+        Row(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.End
         ) {
@@ -60,9 +60,11 @@ fun OnBoarding1(navController: NavController, modifier: Modifier = Modifier) {
                 modifier = Modifier
                     .padding(top = 20.dp, end = 20.dp)
                     .clickable {
-                        navController.navigate(AppRoutes.FIRST_PAGE_SIGN_UP).apply {
+                        navController
+                            .navigate(AppRoutes.FIRST_PAGE_SIGN_UP)
+                            .apply {
 
-                        }
+                            }
 
                     })
         }
@@ -101,8 +103,9 @@ fun OnBoarding1(navController: NavController, modifier: Modifier = Modifier) {
 
             Button(
                 onClick = {
-
-                    //navController.navigate(Route.ONBOARD2)
+                    navController.navigate(AppRoutes.SECOND_ONBOARD) {
+                        popUpTo(AppRoutes.FIRST_ONBOARD) { inclusive = true }
+                    }
                 },
                 modifier = Modifier
                     .padding(top = 40.dp)

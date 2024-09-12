@@ -30,6 +30,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.example.speedotransfer.R
+import com.example.speedotransfer.routes.AppRoutes
 import com.example.speedotransfer.ui.theme.LightRed
 
 
@@ -48,7 +49,7 @@ fun OnBoarding2(navController: NavController, modifier: Modifier = Modifier) {
                 )
             )
     ) {
-        Row (
+        Row(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.End
         ) {
@@ -58,8 +59,8 @@ fun OnBoarding2(navController: NavController, modifier: Modifier = Modifier) {
                 modifier = Modifier
                     .padding(top = 20.dp, end = 20.dp)
                     .clickable {
+                        navController.navigate(AppRoutes.FIRST_PAGE_SIGN_UP)
 
-                        //Navigate to Sign Up as its the first time for the user
                     })
         }
 
@@ -97,7 +98,9 @@ fun OnBoarding2(navController: NavController, modifier: Modifier = Modifier) {
 
             Button(
                 onClick = {
-                    //navController.navigate(Route.ONBOARD3)
+                    navController.navigate(AppRoutes.THIRD_ONBOARD) {
+                        popUpTo(AppRoutes.SECOND_ONBOARD) { inclusive = true }
+                    }
                 },
                 modifier = Modifier
                     .padding(top = 40.dp)

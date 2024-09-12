@@ -23,6 +23,7 @@ import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.State
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -38,6 +39,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.speedotransfer.R
 import com.example.speedotransfer.data.models.Content
+import com.example.speedotransfer.data.models.UserInfoResponse
 import com.example.speedotransfer.routes.AppRoutes
 import com.example.speedotransfer.ui.screens.dashboard.commonUI.HeaderUI
 import com.example.speedotransfer.ui.theme.Green
@@ -57,7 +59,8 @@ fun TransactionScreen(
     modifier: Modifier = Modifier
 ) {
     val transactionList = viewModel.transactionHistoryList.collectAsState()
-    Log.e("trace list ",transactionList.value.toString())
+    val userData = viewModel.userInfoData.collectAsState()
+    Log.e("trace list ", transactionList.value.toString())
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -85,11 +88,17 @@ fun TransactionScreen(
                 textAlign = TextAlign.Center
             )
 
-            CardTransactionList(transactionList = transactionList.value, onClickItem = { it ->
-                navController.navigate(
-                    "${AppRoutes.TRANS_DETAILS}/${it.receiverName}/${it.amount}/${it.createdTimeStamp}" +
-                            "/${it.reciverAccountId}")
-            }, modifier)
+            CardTransactionList(
+                transactionList = transactionList.value,
+                onClickItem = { content, state ->
+                    navController.navigate(
+                        "${AppRoutes.TRANS_DETAILS}/${content.receiverName}/${content.amount}/${content.createdTimeStamp}" +
+                                "/${content.reciverAccountId}/${content.senderName}/${state}/${content.senderAccountId}"
+                    )
+                },
+                userData = userData,
+                modifier
+            )
         }
     }
 
@@ -98,7 +107,8 @@ fun TransactionScreen(
 @Composable
 fun CardTransactionList(
     transactionList: List<Content>,
-    onClickItem: (Content) -> Unit,
+    onClickItem: (Content, String) -> Unit,
+    userData: State<UserInfoResponse>,
     modifier: Modifier
 ) {
     LazyColumn(
@@ -107,17 +117,27 @@ fun CardTransactionList(
             .padding(top = 24.dp)
     ) {
         items(transactionList) {
-            CardTransactionItemUI(transactionCard = it) {
-                onClickItem(it)
-            }
+            CardTransactionItemUI(
+                transactionCard = it,
+                userData = userData,
+                onClickItem = { content, state ->
+                    onClickItem(content, state)
+                })
         }
     }
 }
 
 @Composable
 fun CardTransactionItemUI(
-    transactionCard: Content, onClickItem: (Content) -> Unit
+    transactionCard: Content, onClickItem: (Content, String) -> Unit,
+    userData: State<UserInfoResponse>
 ) {
+    val state = if (transactionCard.senderName == userData.value.name) "Sent"
+    else "Received"
+
+    val cardHolderName =
+        if (transactionCard.senderName == userData.value.name) transactionCard.receiverName
+        else transactionCard.senderName
     Card(
         modifier = Modifier
             .padding(top = 16.dp)
@@ -151,7 +171,7 @@ fun CardTransactionItemUI(
                     .fillMaxHeight()
             ) {
                 Text(
-                    text = transactionCard.receiverName,
+                    text = cardHolderName,
                     fontSize = 14.sp,
                     fontWeight = FontWeight.Medium
                 )
@@ -162,13 +182,13 @@ fun CardTransactionItemUI(
                 )
                 val formattedDate = formatDate(transactionCard.createdTimeStamp)
                 Text(
-                    text = "${formattedDate} - Received",
+                    text = "${formattedDate} - $state",
                     fontSize = 12.sp,
                     modifier = Modifier.alpha(0.6f)
                 )
 
                 Text(
-                    text = "$${transactionCard.amount}",
+                    text = "${transactionCard.amount} EGP",
                     fontSize = 18.sp,
                     fontWeight = FontWeight.Medium,
                     modifier = Modifier
@@ -188,7 +208,7 @@ fun CardTransactionItemUI(
                         .padding(top = 16.dp)
                         .alpha(0.5f)
                         .clickable {
-                            onClickItem(transactionCard)
+                            onClickItem(transactionCard, state)
                         }
                 )
 

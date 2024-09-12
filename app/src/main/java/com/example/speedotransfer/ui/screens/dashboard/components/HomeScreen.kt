@@ -18,6 +18,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
@@ -38,6 +39,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
@@ -48,15 +50,18 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.speedotransfer.R
 import com.example.speedotransfer.data.models.Content
+import com.example.speedotransfer.data.models.UserInfoResponse
 import com.example.speedotransfer.routes.AppRoutes
 import com.example.speedotransfer.ui.theme.Grey
 import com.example.speedotransfer.ui.theme.LightRed
+import com.example.speedotransfer.ui.theme.LightWhite
 import com.example.speedotransfer.ui.theme.LightYellow
 import com.example.speedotransfer.ui.theme.Maroon
 import com.example.speedotransfer.ui.viewmodels.HomeViewModel
@@ -114,15 +119,27 @@ fun HomeScreen(
                     .padding(bottom = 8.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                Icon(
-                    painter = painterResource(id = R.drawable.ic_launcher_foreground),
-                    contentDescription = "user picture",
-                    modifier = modifier
-                        .size(48.dp)
-                        .clip(CircleShape)                       // clip to the circle shape
-                        .border(1.dp, Color.Gray, CircleShape)
+                Box(
+                modifier = Modifier
+                    .size(48.dp)
+                    .background(LightWhite, shape = CircleShape),
+            ) {
+                val nameParts = userData.name.split(" ")
+                val initials = if (nameParts.size >= 2) {
+                    (nameParts[0].take(1) + nameParts[1].take(1)).uppercase()
+                } else {
+                    userData.name.take(2).uppercase()
+                }
+                Text(
+                    text = initials,
+                    fontSize = 20.sp,
+                    fontWeight = FontWeight.Bold,
+                    modifier = Modifier
+                        .align(Alignment.Center)
+                        .alpha(0.7f),
+                    style = TextStyle(color = Color.Gray)
                 )
-
+            }
                 Column(
                     verticalArrangement = Arrangement.SpaceEvenly,
                     modifier = modifier
@@ -171,7 +188,7 @@ fun HomeScreen(
                 }
             }
 
-            TransactionList(transactionList = historyTransactions, userData.name, onAllViewClick = {
+            TransactionList(transactionList = historyTransactions,userData, onAllViewClick = {
                 navController.navigate(AppRoutes.TRANSACTION)
             })
         }
@@ -182,7 +199,7 @@ fun HomeScreen(
 @Composable
 fun TransactionList(
     transactionList: List<Content>,
-    userName: String,
+    userData: UserInfoResponse,
     onAllViewClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -193,22 +210,23 @@ fun TransactionList(
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
         Text(text = "Recent transactions", fontSize = 14.sp, fontWeight = FontWeight.Normal)
-        TextButton(onClick = { onAllViewClick() }) {
             Text(
                 text = "View all",
                 fontSize = 14.sp,
                 color = Grey,
-                fontWeight = FontWeight.Normal
+                fontWeight = FontWeight.Normal,
+                modifier= modifier.clickable {
+                    onAllViewClick()
+                }
             )
         }
-    }
     Surface(
         shape = RoundedCornerShape(4.dp), modifier = modifier.padding(top = 8.dp),
         shadowElevation = 2.dp
     ) {
         LazyColumn {
             items(transactionList) {
-                RecentTransactionUI(transactionItem = it, userName)
+                RecentTransactionUI(transactionItem = it, userData = userData )
                 HorizontalDivider(
                     modifier = Modifier
                         .fillMaxWidth(),
@@ -221,14 +239,16 @@ fun TransactionList(
 }
 
 @Composable
-fun RecentTransactionUI(transactionItem: Content, userName: String, modifier: Modifier = Modifier) {
+fun RecentTransactionUI(transactionItem: Content,userData : UserInfoResponse, modifier: Modifier = Modifier) {
+
+    val state = if (transactionItem.senderName == userData.name) "Sent"
+    else "Received"
+
+    val cardHolderName =
+        if (transactionItem.senderName == userData.name) transactionItem.receiverName
+        else transactionItem.senderName
     Card(colors = CardDefaults.cardColors(containerColor = White), shape = RectangleShape) {
-        var status by remember {
-            mutableStateOf("Received")
-        }
-        var cardName by remember {
-            mutableStateOf("")
-        }
+
         Row(
             modifier = modifier
                 .fillMaxWidth()
@@ -245,15 +265,8 @@ fun RecentTransactionUI(transactionItem: Content, userName: String, modifier: Mo
                     .padding(start = 8.dp)
                     .height(64.dp)
             ) {
-                if (userName == transactionItem.senderName) {
-                    cardName = transactionItem.receiverName ?: "card"
-                    status = "Sent"
-                } else {
-                    cardName = transactionItem.senderName ?: "card"
-                    status = "Received"
-                }
                 Text(
-                    text = cardName,
+                    text = cardHolderName,
                     fontWeight = FontWeight.Medium,
                     fontSize = 14.sp, modifier = modifier.weight(1f)
                 )
@@ -264,7 +277,7 @@ fun RecentTransactionUI(transactionItem: Content, userName: String, modifier: Mo
                 )
                 val formattedDate = formatDate(transactionItem.createdTimeStamp)
                 Text(
-                    text = formattedDate,
+                    text = "$formattedDate - $state",
                     fontWeight = FontWeight.Normal,
                     fontSize = 12.sp,
                     color = Grey, modifier = modifier.weight(1f)
@@ -277,9 +290,3 @@ fun RecentTransactionUI(transactionItem: Content, userName: String, modifier: Mo
 
 
 }
-//
-//@Preview(showSystemUi = true)
-//@Composable
-//private fun HomeScreenPreview() {
-//    HomeScreen(rememberNavController(), innerPadding = PaddingValues(16.dp))
-//}

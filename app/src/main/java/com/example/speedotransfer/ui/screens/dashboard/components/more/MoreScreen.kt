@@ -48,10 +48,10 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.compose.rememberNavController
-import com.example.speedotransfer.ui.screens.auth.AuthActivity
 import com.example.speedotransfer.R
 import com.example.speedotransfer.data.source.remote.BankingAPIService
 import com.example.speedotransfer.routes.AppRoutes
+import com.example.speedotransfer.ui.screens.auth.AuthActivity
 import com.example.speedotransfer.ui.screens.auth.IndeterminateCircularIndicator
 import com.example.speedotransfer.ui.screens.dashboard.commonUI.HeaderUI
 import com.example.speedotransfer.ui.screens.dashboard.commonUI.MoreItem
@@ -91,7 +91,7 @@ fun MoreScreen(
             val intent = Intent(context, AuthActivity::class.java).apply {
                 flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
             }
-            AppRoutes.isFirstTime=false
+            AppRoutes.isFirstTime = false
             context.startActivity(intent)
         } else {
             isLoading = false
@@ -128,7 +128,7 @@ fun MoreScreen(
             MoreItem(leadingIcon = R.drawable.ic_favorite, itemText = "Favourites") {
                 navController.navigate(AppRoutes.FAVOURITES)
             }
-            MoreItem(leadingIcon = R.drawable.ic_user, itemText = "Profile" ) {
+            MoreItem(leadingIcon = R.drawable.ic_user, itemText = "Profile") {
                 navController.navigate(AppRoutes.PROFILE)
             }
             MoreItem(leadingIcon = R.drawable.ic_help, itemText = "Help") {

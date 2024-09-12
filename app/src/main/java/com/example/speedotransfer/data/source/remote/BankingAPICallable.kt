@@ -1,6 +1,6 @@
 package com.example.speedotransfer.data.source.remote
 
-import com.example.speedotransfer.Constants
+import com.example.speedotransfer.utils.Constants
 import com.example.speedotransfer.data.models.AccountByIdResponse
 import com.example.speedotransfer.data.models.AccountCreationRequest
 import com.example.speedotransfer.data.models.AccountCreationResponse

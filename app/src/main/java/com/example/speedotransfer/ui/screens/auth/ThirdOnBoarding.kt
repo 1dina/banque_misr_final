@@ -20,6 +20,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
@@ -30,12 +31,16 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.example.speedotransfer.R
+import com.example.speedotransfer.routes.AppRoutes
 import com.example.speedotransfer.ui.theme.LightRed
+import com.example.speedotransfer.utils.PreferenceManager
 
 
 @Composable
 fun OnBoarding3(navController: NavController, modifier: Modifier = Modifier) {
-
+    val context = LocalContext.current
+    val preferenceManager = PreferenceManager(context)
+    preferenceManager.setFirstTimeLaunch(false)
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -48,7 +53,7 @@ fun OnBoarding3(navController: NavController, modifier: Modifier = Modifier) {
                 )
             )
     ) {
-        Row (
+        Row(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.End
         ) {
@@ -58,8 +63,10 @@ fun OnBoarding3(navController: NavController, modifier: Modifier = Modifier) {
                 modifier = Modifier
                     .padding(top = 20.dp, end = 20.dp)
                     .clickable {
+                        navController.navigate(AppRoutes.FIRST_PAGE_SIGN_UP) {
+                            popUpTo(AppRoutes.THIRD_ONBOARD) { inclusive = true }
+                        }
 
-                        //Navigate to Sign Up as its the first time for the user
                     })
         }
 
@@ -97,7 +104,9 @@ fun OnBoarding3(navController: NavController, modifier: Modifier = Modifier) {
 
             Button(
                 onClick = {
-                    // navigate to SignUp
+                    navController.navigate(AppRoutes.FIRST_PAGE_SIGN_UP) {
+                        popUpTo(AppRoutes.THIRD_ONBOARD) { inclusive = true }
+                    }
                 },
                 modifier = Modifier
                     .padding(top = 40.dp)

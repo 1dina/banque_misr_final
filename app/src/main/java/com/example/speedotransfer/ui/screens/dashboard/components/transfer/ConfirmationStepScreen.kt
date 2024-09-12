@@ -32,10 +32,13 @@ import com.example.speedotransfer.ui.theme.Marron
 
 @Composable
 fun ConfirmationStepScreen(
-    modifier: Modifier = Modifier,
+    senderUser:String,
+    senderAccId : Int,
     amountOfMoney: Int,
     recipientUser: FavouriteAddition,
-    currentStep: (Int) -> Unit
+    modifier: Modifier = Modifier,
+    increaseStep: (Boolean) -> Unit
+
 ) {
     Column(
         modifier = modifier
@@ -72,13 +75,13 @@ fun ConfirmationStepScreen(
             Column {
                 CommonCard(
                     destination = "From",
-                    cardUser = "User Name",
-                    cardAccount = "xxxx7890",
+                    cardUser = senderUser,
+                    cardAccount = "xxxx"+senderAccId.toString().takeLast(4),
                 )
                 CommonCard(
                     destination = "To",
                     cardUser = recipientUser.name,
-                    cardAccount = recipientUser.accountId.toString(),
+                    cardAccount = "xxxx"+recipientUser.accountId.toString().takeLast(4),
 
                     )
             }
@@ -93,7 +96,7 @@ fun ConfirmationStepScreen(
             )
         }
         Button(
-            onClick = { currentStep(3)
+            onClick = { increaseStep(true)
             },
             modifier = modifier
                 .fillMaxWidth()
@@ -104,7 +107,7 @@ fun ConfirmationStepScreen(
             Text(text = "Confirm", fontSize = 16.sp, modifier = modifier.padding(8.dp))
         }
         OutlinedButton(
-            onClick = { currentStep(1) },
+            onClick = { increaseStep(false) },
             modifier = modifier
                 .fillMaxWidth()
                 .padding(top = 16.dp),

@@ -79,8 +79,10 @@ fun AmountStepScreen(
         !(recipientName.isBlank() || recipientAccount.isBlank()
                 || amountOfMoney.isBlank())
 
-    if (showBottomSheet) BottomSheetFav(onDismiss = { showBottomSheet = it },
-        viewModel = viewModel) {
+    if (showBottomSheet) BottomSheetFav(
+        onDismiss = { showBottomSheet = it },
+        viewModel = viewModel
+    ) {
 
         recipientName = it.name
         recipientAccount = it.accountId.toString()
@@ -184,14 +186,14 @@ fun AmountStepScreen(
                 Text(
                     text = "Enter Recipient Account", fontSize = 14.sp, color = Grey
                 )
-            }, // Placeholder text size
+            },
             textStyle = TextStyle(fontSize = 14.sp, color = Grey),
             colors = TextFieldDefaults.colors(
                 focusedContainerColor = White,
                 unfocusedContainerColor = White,
                 focusedIndicatorColor = Marron,
                 unfocusedIndicatorColor = Grey
-            ),// Input text size
+            ),
             modifier = modifier
                 .fillMaxWidth()
                 .padding(bottom = 32.dp)

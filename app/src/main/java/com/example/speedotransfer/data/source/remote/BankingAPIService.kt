@@ -1,6 +1,6 @@
 package com.example.speedotransfer.data.source.remote
 
-import com.example.speedotransfer.Constants
+import com.example.speedotransfer.utils.Constants
 import com.google.gson.GsonBuilder
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -9,15 +9,17 @@ import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.converter.scalars.ScalarsConverterFactory
 
 object BankingAPIService {
+
     private val gson = GsonBuilder()
         .setLenient()
         .create()
     private val logging = HttpLoggingInterceptor().apply {
         level = HttpLoggingInterceptor.Level.BODY
     }
-    val client = OkHttpClient.Builder()
+    private val client = OkHttpClient.Builder()
         .addInterceptor(logging)
         .build()
+
 
     private val retrofit = Retrofit
         .Builder()

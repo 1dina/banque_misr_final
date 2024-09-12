@@ -11,20 +11,24 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import androidx.navigation.compose.rememberNavController
-import com.example.speedotransfer.ui.screens.dashboard.DashboardActivity
 import com.example.speedotransfer.R
 import com.example.speedotransfer.data.source.local.SecureStorageDataSource
 import com.example.speedotransfer.routes.AppRoutes
+import com.example.speedotransfer.ui.screens.dashboard.DashboardActivity
 import com.example.speedotransfer.ui.theme.DarkRed
+import com.example.speedotransfer.utils.PreferenceManager
 import kotlinx.coroutines.delay
 
 @Composable
-fun SplashScreen(navController: NavController,modifier : Modifier = Modifier, onTimeout: () -> Unit) {
+fun SplashScreen(
+    navController: NavController,
+    modifier: Modifier = Modifier,
+    onTimeout: () -> Unit
+) {
     val context = LocalContext.current
+    val preferenceManager = PreferenceManager(context)
     val encryptedSharedPreference = SecureStorageDataSource(context)
     Box(
         modifier = Modifier
@@ -32,36 +36,25 @@ fun SplashScreen(navController: NavController,modifier : Modifier = Modifier, on
             .background(DarkRed),
         contentAlignment = Alignment.Center
     ) {
-        Text(text = "Speedo Transfer",
+        Text(
+            text = "Speedo Transfer",
             fontSize = 32.sp,
             color = colorResource(id = R.color.white)
         )
     }
 
-    // Adding a delay before navigating to the main screen
     LaunchedEffect(Unit) {
-        delay(3000) // 2000 milliseconds = 2 seconds
+        delay(3000)
         onTimeout()
-     if(encryptedSharedPreference.getAccessToken().isNullOrEmpty()) {
-         navController.navigate(AppRoutes.FIRST_PAGE_SIGN_UP) {
-             popUpTo(AppRoutes.SPLASH) { inclusive = true }
-         }
-     }else {
-         val intent = Intent(context, DashboardActivity::class.java).apply {
-             flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-         }
-         context.startActivity(intent)
-     }
+            if (!(preferenceManager.isFirstTimeLaunch()))
+                navController.navigate(AppRoutes.FIRST_PAGE_SIGN_UP) {
+                    popUpTo(AppRoutes.SPLASH) { inclusive = true }
+                }
+            else navController.navigate(AppRoutes.FIRST_ONBOARD) {
+                popUpTo(AppRoutes.SPLASH) { inclusive = true }
+            }
+
 
     }
 }
 
-@Preview
-@Composable
-private fun SplashScreenPreview() {
-
-    SplashScreen(rememberNavController()) {
-
-    }
-
-}
