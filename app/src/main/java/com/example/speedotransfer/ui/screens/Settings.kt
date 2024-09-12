@@ -63,7 +63,7 @@ fun Settings(navController: NavController, modifier : Modifier = Modifier) {
 
                 Row(
                     modifier = Modifier
-                        .fillMaxHeight(0.1f)
+                        .fillMaxWidth()
                         .padding(top = 5.dp)
                         .clickable { navController.navigate(AppRoutes.UPDATE_PASSWORD) }
                 ) {
@@ -83,7 +83,6 @@ fun Settings(navController: NavController, modifier : Modifier = Modifier) {
 
                 Row(
                     modifier = Modifier
-                        .fillMaxHeight(0.13f)
                         .padding(top = 5.dp)
                 ) {
                     ProfileScreen(
@@ -113,13 +112,5 @@ fun Settings(navController: NavController, modifier : Modifier = Modifier) {
             }
 
         }    }
-
-}
-
-@Preview
-@Composable
-private fun SettingsPreview() {
-
-    //Settings()
 
 }

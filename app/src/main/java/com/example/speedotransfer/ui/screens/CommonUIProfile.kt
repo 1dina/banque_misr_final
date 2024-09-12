@@ -6,6 +6,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Card
@@ -45,7 +46,6 @@ fun ProfileScreen( text1 : String , text2: String , image : Painter , imageText:
     Column(
         modifier = Modifier
             .padding(top = 10.dp, start = 10.dp)
-            .fillMaxHeight()
     ) {
         Text(
             text = text1,
@@ -63,7 +63,7 @@ fun ProfileScreen( text1 : String , text2: String , image : Painter , imageText:
     }
     Column(
         horizontalAlignment = Alignment.End,
-        modifier = Modifier.fillMaxSize()
+        modifier = Modifier.fillMaxWidth()
     ) {
         Icon(
             painter = painterResource(id = R.drawable.ic_arrow_forward),
