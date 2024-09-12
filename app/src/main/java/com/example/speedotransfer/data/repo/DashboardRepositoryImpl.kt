@@ -46,7 +46,7 @@ class DashboardRepositoryImpl(
             if (response.isSuccessful) {
                 response.body()?.let { accountsList ->
                     if (accountsList.isNotEmpty()) {
-                        accountId = accountsList[0].id
+                      //  accountId = accountsList[0].id
                         Log.d("trace", "Account ID assigned: $accountId")
                     } else {
                         Log.e("trace", "No accounts found")
@@ -103,6 +103,8 @@ class DashboardRepositoryImpl(
         return try {
             val accessToken = encryptedSharedPreferences.getAccessToken()
             transactionHistoryRequest.accountId = accountId
+            Log.e("trace", "id in Transaction history fetched: ${accountId}")
+
             val response =
                 apiService.getTransactionHistory("Bearer $accessToken", transactionHistoryRequest)
             if (response.isSuccessful) {
@@ -189,12 +191,12 @@ class DashboardRepositoryImpl(
     }
 
     override suspend fun getInfo(): Response <UserInfoResponse> {
-        // val accessToken = encryptedSharedPreferences.getAccessToken()
-        //  return apiService.getInfo(accessToken!!)
+
         return try {
             val accessToken = encryptedSharedPreferences.getAccessToken()
             val response = apiService.getInfo("Bearer $accessToken")
             if (response.isSuccessful) {
+                accountId = response.body()!!.accounts.get(0).id
                 Log.e("trace", "user info fetched: ${response.body()?.toString()}")
             } else {
                 Log.e(

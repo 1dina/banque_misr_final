@@ -126,7 +126,8 @@ fun DashboardNavGraph(
         composable(AppRoutes.MY_CARD) {
             MyCardScreen(
                 navController = navController,
-                innerPadding = innerPadding
+                innerPadding = innerPadding,
+                viewModel
             )
         }
         composable(AppRoutes.MORE) {
@@ -144,31 +145,41 @@ fun DashboardNavGraph(
         composable(AppRoutes.NOTIFICATIONS) {
             NotificationScreen(
                 navController = navController,
-                innerPadding = innerPadding
+                innerPadding = innerPadding,
+                viewModel = viewModel
             )
         }
-        composable(route = "$TRANS_DETAILS/{name}/{amount}/{date}/{accountNum}",
-            arguments = listOf(navArgument("name") { type = NavType.StringType },
+        composable(route = "$TRANS_DETAILS/{clientName}/{amount}/{date}/{accountNum}/{currentUserName}/{state}/{currentUserAccNum}",
+            arguments = listOf(navArgument("clientName") { type = NavType.StringType },
                 navArgument("amount") { type = NavType.IntType },
                 navArgument("date") { type = NavType.StringType },
-                navArgument("accountNum") { type = NavType.IntType }
+                navArgument("accountNum") { type = NavType.IntType },
+                navArgument("currentUserName") { type = NavType.StringType},
+                navArgument("state") {type = NavType.StringType},
+                navArgument("currentUserAccNum"){type = NavType.IntType}
             )) {
-            val name = it.arguments?.getString("name")!!
+            val name = it.arguments?.getString("clientName")!!
             val amount = it.arguments?.getInt("amount")!!
             val date = it.arguments?.getString("date")!!
             val accountNum = it.arguments?.getInt("accountNum")!!
+            val currentUserName = it.arguments?.getString("currentUserName")!!
+            val state  = it.arguments?.getString("state")!!
+            val currentAcc = it.arguments?.getInt("currentUserAccNum")!!
             TransactionsDetails(
                 navController = navController,
                 innerPaddingValues = innerPadding,
-                name = name,
+                strangeName = name,
                 amount = amount,
                 date = date,
-                accountNum = accountNum,
-                viewModel = viewModel
+                strangeAccNum = accountNum,
+                currentUserName = currentUserName,
+                state = state,
+                currentUserAccountNum = currentAcc
+
             )
 
         }
-        composable(AppRoutes.PROFILE) { Profile(navController = navController) }
+        composable(AppRoutes.PROFILE) { Profile(navController = navController,viewModel = viewModel) }
         composable(AppRoutes.PROFILE_INFO) { ProfileInfo(navController = navController,viewModel = viewModel) }
         composable(AppRoutes.UPDATE_PASSWORD) { ChangePassword(navController)  }
         composable(AppRoutes.SETTINGS) { Settings(navController = navController) }

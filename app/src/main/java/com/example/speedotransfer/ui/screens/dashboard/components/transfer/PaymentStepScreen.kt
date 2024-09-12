@@ -36,6 +36,8 @@ import com.example.speedotransfer.ui.theme.Marron
 @Composable
 fun PaymentStepScreen(
     modifier: Modifier = Modifier,
+    senderUser : String,
+    senderAccountId : Int,
     recipientUser: FavouriteAddition,
     amountOfMoney: Int,
     onBackToHomeClick: () -> Unit,
@@ -69,13 +71,13 @@ fun PaymentStepScreen(
             Column {
                 CommonCard(
                     destination = "From",
-                    cardUser = "User Name",
-                    cardAccount = "xxxx7890",
+                    cardUser = senderUser,
+                    cardAccount = "xxxx"+senderAccountId.toString().takeLast(4),
                 )
                 CommonCard(
                     destination = "To",
                     cardUser = recipientUser.name,
-                    cardAccount = recipientUser.accountId.toString(),
+                    cardAccount = "xxxx" +recipientUser.accountId.toString().takeLast(4),
 
                     )
             }

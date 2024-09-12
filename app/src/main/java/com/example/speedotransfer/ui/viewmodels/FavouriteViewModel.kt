@@ -53,6 +53,7 @@ class FavouriteViewModel(
                 if (result.isSuccess) {
                     _toastMessage.value = result.getOrNull()!!
                     _responseStatus.value = true
+                    _favListItems.value = _favListItems.value.filter { it.accountId != accountId }
                     Log.e("trace delete", result.getOrNull().toString())
                 } else {
                     result.exceptionOrNull()?.let { handleError(it) }
@@ -60,7 +61,6 @@ class FavouriteViewModel(
             } catch (e: Exception) {
                 handleError(e)
             }
-            getAllFav()
         }
 
     }

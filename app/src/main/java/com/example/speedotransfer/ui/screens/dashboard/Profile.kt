@@ -15,6 +15,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Divider
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
@@ -35,10 +36,13 @@ import com.example.speedotransfer.ui.screens.dashboard.commonUI.ProfileScreen
 import com.example.speedotransfer.ui.theme.LightRed
 import com.example.speedotransfer.ui.theme.LightWhite
 import com.example.speedotransfer.ui.theme.LightYellow
+import com.example.speedotransfer.ui.viewmodels.HomeViewModel
 
 
 @Composable
-fun Profile(navController: NavController, modifier: Modifier = Modifier) {
+fun Profile(navController: NavController, modifier: Modifier = Modifier,
+            viewModel:HomeViewModel) {
+    val userData = viewModel.userInfoData.collectAsState()
 
     Box(
         modifier = Modifier
@@ -53,8 +57,9 @@ fun Profile(navController: NavController, modifier: Modifier = Modifier) {
             )
     ) {
         Column(
-            modifier = Modifier.fillMaxSize()
-                .padding( 16.dp)
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(16.dp)
         ) {
             HeaderUI(headerTitle = "Profile", onClickBackButton = {
                 navController.popBackStack()
@@ -68,8 +73,14 @@ fun Profile(navController: NavController, modifier: Modifier = Modifier) {
                         .size(60.dp)
                         .background(LightWhite, shape = CircleShape),
                 ) {
+                    val nameParts = userData.value.name.split(" ")
+                    val initials = if (nameParts.size >= 2) {
+                        (nameParts[0].take(1) + nameParts[1].take(1)).uppercase()
+                    } else {
+                        userData.value.name.take(2).uppercase()
+                    }
                     Text(
-                        text = "AD",
+                        text = initials,
                         fontSize = 20.sp,
                         fontWeight = FontWeight.Bold,
                         modifier = Modifier
@@ -79,7 +90,7 @@ fun Profile(navController: NavController, modifier: Modifier = Modifier) {
                     )
                 }
                 Text(
-                    text = "Asmaa Dosuky",
+                    text = userData.value.name,
                     fontWeight = FontWeight.Bold,
                     fontSize = 23.sp,
                     modifier = Modifier.padding(top = 42.dp, start = 15.dp)
@@ -90,7 +101,9 @@ fun Profile(navController: NavController, modifier: Modifier = Modifier) {
 
 
 
-            Column(modifier = modifier.padding(top = 24.dp).fillMaxSize()) {
+            Column(modifier = modifier
+                .padding(top = 24.dp)
+                .fillMaxSize()) {
 
                 Row(
                     modifier = Modifier
@@ -204,8 +217,3 @@ fun Profile(navController: NavController, modifier: Modifier = Modifier) {
 }
 
 
-@Preview
-@Composable
-private fun ProfilePreview() {
-    Profile(rememberNavController())
-}

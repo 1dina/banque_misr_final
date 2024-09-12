@@ -40,9 +40,12 @@ import com.example.speedotransfer.ui.viewmodels.HomeViewModel
 @Composable
 fun TransactionsDetails(
     navController: NavController, innerPaddingValues: PaddingValues,
-    name: String, amount: Int, date: String,
-    accountNum : Int,
-    viewModel: HomeViewModel, modifier: Modifier = Modifier
+    strangeName: String, amount: Int, date: String,
+    strangeAccNum : Int,
+    currentUserName : String,
+    currentUserAccountNum : Int,
+    state :String,
+    modifier: Modifier = Modifier
 ) {
 
     Box(
@@ -125,15 +128,31 @@ fun TransactionsDetails(
                         .padding(top = 8.dp)
                 ) {
                     Column {
+                        var senderName = ""
+                        var receivedName = ""
+                        var senderAccountNum = 0
+                        var receivedAccountNum = 0
+                        if(state == "Received") {
+                            senderName = strangeName
+                            senderAccountNum = strangeAccNum
+                            receivedName = currentUserName
+                            receivedAccountNum = currentUserAccountNum
+                        }else {
+                            senderName = currentUserName
+                            senderAccountNum = currentUserAccountNum
+                            receivedName = strangeName
+                            receivedAccountNum = strangeAccNum
+                        }
+
                         TransferProcessCard(
                             destination = "From",
-                            cardUser = "Asmaa Dosuky",
-                            cardAccount = "xxxx7890",
+                            cardUser = senderName,
+                            cardAccount = "xxxx" + senderAccountNum.toString().takeLast(4),
                         )
                         TransferProcessCard(
                             destination = "To",
-                            cardUser = name,
-                            cardAccount = accountNum.toString(),
+                            cardUser = receivedName,
+                            cardAccount =  "xxxx" + receivedAccountNum.toString().takeLast(4),
 
                             )
                     }

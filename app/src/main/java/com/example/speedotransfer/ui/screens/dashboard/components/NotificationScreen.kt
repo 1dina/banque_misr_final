@@ -19,33 +19,37 @@ import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import androidx.navigation.compose.rememberNavController
 import com.example.speedotransfer.R
-import com.example.speedotransfer.data.DummyDataSource
-import com.example.speedotransfer.data.models.dummy.NotificationItemData
+import com.example.speedotransfer.data.models.Content
+import com.example.speedotransfer.data.models.UserInfoResponse
 import com.example.speedotransfer.ui.screens.dashboard.commonUI.HeaderUI
 import com.example.speedotransfer.ui.theme.Grey
 import com.example.speedotransfer.ui.theme.LightPink
 import com.example.speedotransfer.ui.theme.LightYellow
+import com.example.speedotransfer.ui.viewmodels.HomeViewModel
+import com.example.speedotransfer.utils.formatDate
 
 @Composable
 fun NotificationScreen(
     navController: NavController,
     modifier: Modifier = Modifier,
-    innerPadding: PaddingValues
+    innerPadding: PaddingValues,
+    viewModel: HomeViewModel
 ) {
-    val dummyData = DummyDataSource.getNotificationData()
+    val transactionList = viewModel.transactionHistoryList.collectAsState()
+    val userData = viewModel.userInfoData.collectAsState()
     Box(
         modifier = modifier
             .fillMaxSize()
@@ -66,7 +70,10 @@ fun NotificationScreen(
             HeaderUI(headerTitle = "Notifications", onClickBackButton = {
                 navController.popBackStack()
             })
-            NotificationListMaker(notificationItems = dummyData)
+            NotificationListMaker(
+                notificationItems = transactionList.value,
+                userData = userData.value
+            )
 
         }
     }
@@ -74,12 +81,13 @@ fun NotificationScreen(
 
 @Composable
 fun NotificationListMaker(
-    notificationItems: List<NotificationItemData>,
-    modifier: Modifier = Modifier
+    notificationItems: List<Content>,
+    modifier: Modifier = Modifier,
+    userData: UserInfoResponse
 ) {
     LazyColumn(modifier = modifier.padding(vertical = 16.dp)) {
         items(notificationItems) {
-            NotificationListItem(notificationItemData = it)
+            NotificationListItem(notificationItemData = it, userData)
         }
     }
 
@@ -87,9 +95,22 @@ fun NotificationListMaker(
 
 @Composable
 fun NotificationListItem(
-    notificationItemData: NotificationItemData,
+    notificationItemData: Content,
+    userData: UserInfoResponse,
     modifier: Modifier = Modifier
 ) {
+    val state = if (notificationItemData.senderName == userData.name) "Sent"
+    else "Received"
+    val title = if (notificationItemData.senderName == userData.name) "Send"
+    else "Receive"
+    val cardHolderName =
+        if (notificationItemData.senderName == userData.name) notificationItemData.receiverName
+        else notificationItemData.senderName
+    val cardHolderAccount =
+        if (notificationItemData.senderName == userData.name) notificationItemData.reciverAccountId
+        else notificationItemData.senderAccountId
+    val decideDestination = if (state == "Sent") "to"
+    else "from"
     Card(
         shape = RoundedCornerShape(8.dp),
         modifier = modifier
@@ -106,24 +127,28 @@ fun NotificationListItem(
 
             Box(
                 modifier = Modifier
-                    .size(64.dp) // Size for the box and icon
+                    .size(64.dp)
                     .shadow(
                         1.dp,
                         RoundedCornerShape(10.dp),
                         clip = false
-                    ) // Apply shadow to the box
+                    )
                     .background(
                         LightPink,
                         RoundedCornerShape(10.dp)
-                    ) // Set the background with the same shape
+                    )
             ) {
+                val rotateDegree = if (state == "Sent") 180.0f
+                else 0.0f
                 Icon(
                     painter = painterResource(id = R.drawable.ic_receive),
                     contentDescription = "Receive Icon",
-                    tint = Color.Unspecified, // Keeping the icon color as original
+                    tint = Color.Unspecified,
                     modifier = Modifier
                         .size(40.dp)
-                        .align(Alignment.Center)// Ensure icon fills the box
+                        .align(Alignment.Center)
+                        .rotate(rotateDegree)
+
                 )
             }
 
@@ -133,17 +158,20 @@ fun NotificationListItem(
                     .padding(horizontal = 8.dp), verticalArrangement = Arrangement.Center
             ) {
                 Text(
-                    text = notificationItemData.title,
+                    text = "$title Transaction",
                     fontSize = 14.sp,
                     fontWeight = FontWeight.Medium
                 )
                 Text(
-                    text = notificationItemData.body,
+                    text = "You have $state ${notificationItemData.amount} EGP $decideDestination $cardHolderName " +
+                            "xxxx" + cardHolderAccount.toString().takeLast(4),
                     fontSize = 12.sp,
                     fontWeight = FontWeight.Normal
                 )
+                val formattedDate = formatDate(notificationItemData.createdTimeStamp)
+
                 Text(
-                    text = notificationItemData.date,
+                    text = formattedDate,
                     fontSize = 12.sp,
                     fontWeight = FontWeight.Normal,
                     color = Grey
@@ -157,8 +185,3 @@ fun NotificationListItem(
 
 }
 
-@Preview(showSystemUi = true)
-@Composable
-private fun NotificationScreenPreview() {
-    NotificationScreen(navController = rememberNavController(), innerPadding = PaddingValues(16.dp))
-}

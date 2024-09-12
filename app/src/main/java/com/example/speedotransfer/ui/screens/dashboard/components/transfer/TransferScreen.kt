@@ -1,9 +1,11 @@
 package com.example.speedotransfer.ui.screens.dashboard.components.transfer
 
+import android.Manifest
 import android.app.Notification
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.content.Context
+import android.content.pm.PackageManager
 import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -40,6 +42,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationManagerCompat
 import androidx.navigation.NavController
 import androidx.navigation.NavGraph.Companion.findStartDestination
@@ -62,6 +65,8 @@ fun TransferScreen(
     viewModel: HomeViewModel,
     modifier: Modifier = Modifier
 ) {
+
+    viewModel.resetResponseStatus()
     var chosenUser by remember {
         mutableStateOf(FavouriteAddition(0, ""))
     }
@@ -75,14 +80,23 @@ fun TransferScreen(
     }
     val context = LocalContext.current
     val transferUserFound by viewModel.userFound.collectAsState()
+    val userData by viewModel.userInfoData.collectAsState()
+    val userAccountId by viewModel.accountId.collectAsState()
     LaunchedEffect(transferUserFound) {
         isLoading = false
         if (transferUserFound == true) {
-            if (currentStep == 1) {
+            isLoading = false
+            if (currentStep == 2) {
                 currentStep += 1
+                sendNotification("Speedo Transfer", "Your transaction is successful", context)
+                viewModel.succtrans = false
+
             }
             viewModel.resetResponseStatus()
+            viewModel.resetUserFound()
+
         } else {
+            isLoading = false
             if (viewModel.toastMessage.value != null)
                 Toast.makeText(
                     context,
@@ -91,6 +105,8 @@ fun TransferScreen(
                 ).show()
             viewModel.resetToastMessage()
             viewModel.resetResponseStatus()
+            viewModel.resetUserFound()
+
         }
     }
     Box(
@@ -125,31 +141,34 @@ fun TransferScreen(
                 1 -> AmountStepScreen { user, amount ->
                     chosenUser = user
                     amountOfMoney = amount
-                    isLoading = true
-                    viewModel.transferProcess(
-                        TransactionRequest(
-                            reciverAccountNum = user.accountId,
-                            amount = amount,
-                            senderName = "userName", receiverName = user.name
-                        )
-                    )
+                    currentStep += 1
+
                 }
 
                 2 -> ConfirmationStepScreen(
+                    senderUser = userData.name,
+                    senderAccId = userAccountId,
                     amountOfMoney = amountOfMoney,
-                    recipientUser = chosenUser!!
+                    recipientUser = chosenUser,
                 ) {
-                    currentStep = it
-                    if (currentStep == 3 && viewModel.succtrans == true) {
-                        sendNotification("Notification", "Your transaction is successful", context)
-                        viewModel.succtrans = false
-                    }
+                    if (it) {
+                        isLoading = true
+                        viewModel.transferProcess(
+                            TransactionRequest(
+                                reciverAccountNum = chosenUser.accountId,
+                                amount = amountOfMoney,
+                                senderName = userData.name, receiverName = chosenUser.name
+                            )
+                        )
 
-
+                    } else
+                        currentStep -= 1
                 }
 
                 else -> PaymentStepScreen(
-                    recipientUser = chosenUser!!,
+                    senderUser = userData.name,
+                    senderAccountId = userAccountId,
+                    recipientUser = chosenUser,
                     amountOfMoney = amountOfMoney,
                     onBackToHomeClick = {
                         navController.navigate(AppRoutes.HOME) {
@@ -272,6 +291,14 @@ fun sendNotification(title: String, text: String, context: Context) {
         .setAutoCancel(true)
         .setSmallIcon(R.drawable.ic_succtrans)
 
+    if (ActivityCompat.checkSelfPermission(
+            context,
+            Manifest.permission.POST_NOTIFICATIONS
+        ) != PackageManager.PERMISSION_GRANTED
+    ) {
+
+        return
+    }
     NotificationManagerCompat.from(context).notify(99, builder.build())
 }
 
