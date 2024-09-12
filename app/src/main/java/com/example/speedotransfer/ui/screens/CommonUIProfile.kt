@@ -23,7 +23,7 @@ import androidx.compose.ui.unit.sp
 import com.example.speedotransfer.R
 
 @Composable
-fun ProfileScreen( text1 : String , text2: String , image : Painter , imageText: String) {
+fun ProfileScreen( text1 : String , text2: String , image : Painter , imageText: String , onItemClick:()->Unit) {
 
     Column(
         modifier = Modifier
@@ -31,7 +31,8 @@ fun ProfileScreen( text1 : String , text2: String , image : Painter , imageText:
     ) {
         Card(
             modifier = Modifier
-                .size(48.dp, 50.dp),
+                .size(48.dp, 50.dp)
+                .clickable { onItemClick() },
         ) {
             Image(
                 painter = image,
@@ -68,7 +69,7 @@ fun ProfileScreen( text1 : String , text2: String , image : Painter , imageText:
             painter = painterResource(id = R.drawable.ic_arrow_forward),
             contentDescription = "See Details",
             Modifier
-                .size(40.dp)
+                .size(32.dp)
                 .padding(top = 16.dp)
                 .alpha(0.5f)
                 .clickable {  }

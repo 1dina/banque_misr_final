@@ -89,7 +89,9 @@ fun Settings(modifier : Modifier = Modifier) {
                     image = painterResource(
                         id = R.drawable.changepassword
                     ),
-                    imageText = "Lock"
+                    imageText = "Lock",
+                    onItemClick = {}
+
                 )
             }
 
@@ -103,7 +105,9 @@ fun Settings(modifier : Modifier = Modifier) {
                 ProfileScreen(
                     text1 = "Edit Profile", text2 = "Change your information", image = painterResource(
                         id = R.drawable.editprofile
-                    ), imageText = "Edit Profile Details"
+                    ), imageText = "Edit Profile Details",
+                    onItemClick = {}
+
                 )
             }
 

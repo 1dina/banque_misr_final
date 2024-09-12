@@ -109,10 +109,26 @@ class DashboardRepositoryImpl(val apiService: BankingAPICallable,
     }
     }
 
-    override suspend fun getInfo(): Response <UserInfoResponse>{
-        val accessToken = encryptedSharedPreferences.getAccessToken()
-        return apiService.getInfo(accessToken!!)
-    }
+    override suspend fun getInfo(): Response <UserInfoResponse> {
+        // val accessToken = encryptedSharedPreferences.getAccessToken()
+        //  return apiService.getInfo(accessToken!!)
+        return try {
+            val accessToken = encryptedSharedPreferences.getAccessToken()
+            val response = apiService.getInfo("Bearer $accessToken")
+            if (response.isSuccessful) {
+                Log.e("trace", "user info fetched: ${response.body()?.toString()}")
+            } else {
+                Log.e(
+                    "trace",
+                    "Error fetching user data : ${response}"
+                )
+            }
+            response
+        } catch (e: Exception) {
+            Log.e("trace", "Error occurred while fetching user data: ${e.message}")
+            throw e
 
+        }
+    }
 
 }
