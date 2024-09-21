@@ -1,4 +1,4 @@
-package com.example.speedotransfer.data.models.userInfoResponse
+package com.example.speedotransfer.data.models.user.info
 
 data class Account(
     val balance: Int,

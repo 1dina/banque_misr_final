@@ -1,6 +1,6 @@
 package com.example.speedotransfer.domain.usecases
 
-import com.example.speedotransfer.data.models.historyResponse.Passwords
+import com.example.speedotransfer.data.models.transaction.history.Passwords
 import com.example.speedotransfer.domain.repository.DashboardRepository
 
 interface UpdatePasswordUseCase{

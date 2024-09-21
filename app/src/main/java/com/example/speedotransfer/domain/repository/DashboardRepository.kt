@@ -1,16 +1,16 @@
 package com.example.speedotransfer.domain.repository
 
-import com.example.speedotransfer.data.models.AccountByIdResponse
-import com.example.speedotransfer.data.models.AccountCreationRequest
-import com.example.speedotransfer.data.models.AccountCreationResponse
-import com.example.speedotransfer.data.models.historyResponse.Passwords
-import com.example.speedotransfer.data.models.FavouriteAdditionResponse
-import com.example.speedotransfer.data.models.historyResponse.TransactionHistoryRequest
-import com.example.speedotransfer.data.models.historyResponse.TransactionHistoryResponse
-import com.example.speedotransfer.data.models.TransactionRequest
-import com.example.speedotransfer.data.models.TransactionResponse
-import com.example.speedotransfer.data.models.UserAccountsResponseItem
-import com.example.speedotransfer.data.models.userInfoResponse.UserInfoResponse
+import com.example.speedotransfer.data.models.account.AccountByIdResponse
+import com.example.speedotransfer.data.models.account.AccountCreationRequest
+import com.example.speedotransfer.data.models.account.AccountCreationResponse
+import com.example.speedotransfer.data.models.transaction.history.Passwords
+import com.example.speedotransfer.data.models.favourite.FavouriteAdditionResponse
+import com.example.speedotransfer.data.models.transaction.history.TransactionHistoryRequest
+import com.example.speedotransfer.data.models.transaction.history.TransactionHistoryResponse
+import com.example.speedotransfer.data.models.transaction.TransactionRequest
+import com.example.speedotransfer.data.models.transaction.TransactionResponse
+import com.example.speedotransfer.data.models.account.UserAccountsResponseItem
+import com.example.speedotransfer.data.models.user.info.UserInfoResponse
 import retrofit2.Response
 
 interface DashboardRepository {

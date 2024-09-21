@@ -48,7 +48,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.example.speedotransfer.R
-import com.example.speedotransfer.data.models.UserLoginRequest
+import com.example.speedotransfer.data.models.user.UserLoginRequest
 import com.example.speedotransfer.data.source.remote.BankingAPIService
 import com.example.speedotransfer.routes.AppRoutes
 import com.example.speedotransfer.ui.screens.dashboard.DashboardActivity

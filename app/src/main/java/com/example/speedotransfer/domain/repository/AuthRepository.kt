@@ -1,12 +1,9 @@
 package com.example.speedotransfer.domain.repository
 
-import com.example.speedotransfer.data.models.AccountCreationRequest
-import com.example.speedotransfer.data.models.AccountCreationResponse
 import com.example.speedotransfer.data.models.AuthData
-import com.example.speedotransfer.data.models.UserAuthRegisterRequest
-import com.example.speedotransfer.data.models.UserAuthRegisterResponse
-import com.example.speedotransfer.data.models.UserLoginRequest
-import com.example.speedotransfer.data.models.UserLoginResponse
+import com.example.speedotransfer.data.models.user.UserAuthRegisterRequest
+import com.example.speedotransfer.data.models.user.UserAuthRegisterResponse
+import com.example.speedotransfer.data.models.user.UserLoginRequest
 import retrofit2.Response
 
 

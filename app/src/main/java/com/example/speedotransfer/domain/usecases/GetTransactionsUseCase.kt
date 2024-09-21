@@ -1,8 +1,8 @@
 package com.example.speedotransfer.domain.usecases
 
 import android.util.Log
-import com.example.speedotransfer.data.models.historyResponse.TransactionHistoryRequest
-import com.example.speedotransfer.data.models.historyResponse.TransactionHistoryResponse
+import com.example.speedotransfer.data.models.transaction.history.TransactionHistoryRequest
+import com.example.speedotransfer.data.models.transaction.history.TransactionHistoryResponse
 import com.example.speedotransfer.domain.repository.DashboardRepository
 
 interface GetTransactionsUseCase {

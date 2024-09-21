@@ -3,7 +3,7 @@ package com.example.speedotransfer.ui.viewmodels
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.speedotransfer.data.models.FavouriteAdditionResponse
+import com.example.speedotransfer.data.models.favourite.FavouriteAdditionResponse
 import com.example.speedotransfer.domain.usecases.DeleteFavUseCase
 import com.example.speedotransfer.domain.usecases.GetAllFavUseCase
 import kotlinx.coroutines.flow.MutableStateFlow

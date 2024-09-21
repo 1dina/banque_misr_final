@@ -1,12 +1,11 @@
 package com.example.speedotransfer.domain.usecases
 
-import android.util.Log
-import com.example.speedotransfer.data.models.UserAuthRegisterRequest
-import com.example.speedotransfer.data.models.UserAuthRegisterResponse
+import com.example.speedotransfer.data.models.user.UserAuthRegisterRequest
+import com.example.speedotransfer.data.models.user.UserAuthRegisterResponse
 import com.example.speedotransfer.domain.repository.AuthRepository
 
 interface RegisterUserUseCase {
-    suspend fun execute(user:UserAuthRegisterRequest) :Result<UserAuthRegisterResponse>
+    suspend fun execute(user: UserAuthRegisterRequest) :Result<UserAuthRegisterResponse>
 }
 
 class RegisterUserUseCaseImpl(private val authRepository : AuthRepository) : RegisterUserUseCase{

@@ -1,6 +1,6 @@
 package com.example.speedotransfer.domain.usecases
 
-import com.example.speedotransfer.data.models.FavouriteAdditionResponse
+import com.example.speedotransfer.data.models.favourite.FavouriteAdditionResponse
 import com.example.speedotransfer.domain.repository.DashboardRepository
 
 interface AddToFavUseCase {

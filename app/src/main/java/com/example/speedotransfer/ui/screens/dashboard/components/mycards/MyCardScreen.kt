@@ -28,8 +28,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
-import com.example.speedotransfer.data.models.UserAccountsResponseItem
-import com.example.speedotransfer.data.models.userInfoResponse.UserInfoResponse
+import com.example.speedotransfer.data.models.account.UserAccountsResponseItem
+import com.example.speedotransfer.data.models.user.info.UserInfoResponse
 import com.example.speedotransfer.data.source.remote.BankingAPIService
 import com.example.speedotransfer.ui.screens.dashboard.commonUI.CommonCard
 import com.example.speedotransfer.ui.screens.dashboard.commonUI.HeaderUI

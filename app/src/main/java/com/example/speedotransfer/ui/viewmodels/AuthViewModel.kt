@@ -4,8 +4,8 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.speedotransfer.data.models.AuthData
-import com.example.speedotransfer.data.models.UserAuthRegisterRequest
-import com.example.speedotransfer.data.models.UserLoginRequest
+import com.example.speedotransfer.data.models.user.UserAuthRegisterRequest
+import com.example.speedotransfer.data.models.user.UserLoginRequest
 import com.example.speedotransfer.domain.usecases.LoginUserUseCase
 import com.example.speedotransfer.domain.usecases.RegisterUserUseCase
 import com.example.speedotransfer.domain.usecases.SignOutUseCase

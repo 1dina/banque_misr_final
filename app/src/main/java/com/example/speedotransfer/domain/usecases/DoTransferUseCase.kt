@@ -1,7 +1,7 @@
 package com.example.speedotransfer.domain.usecases
 
-import com.example.speedotransfer.data.models.TransactionRequest
-import com.example.speedotransfer.data.models.TransactionResponse
+import com.example.speedotransfer.data.models.transaction.TransactionRequest
+import com.example.speedotransfer.data.models.transaction.TransactionResponse
 import com.example.speedotransfer.domain.repository.DashboardRepository
 
 interface DoTransferUseCase {

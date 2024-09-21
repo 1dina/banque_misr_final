@@ -1,4 +1,4 @@
-package com.example.speedotransfer.data.models
+package com.example.speedotransfer.data.models.user
 
 data class UserAuthRegisterRequest(
     val name: String = "",

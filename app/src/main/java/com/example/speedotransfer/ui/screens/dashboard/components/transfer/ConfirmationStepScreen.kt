@@ -25,7 +25,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.speedotransfer.R
-import com.example.speedotransfer.data.models.FavouriteAdditionResponse
+import com.example.speedotransfer.data.models.favourite.FavouriteAdditionResponse
 import com.example.speedotransfer.ui.screens.dashboard.commonUI.CommonCard
 import com.example.speedotransfer.ui.theme.Grey
 import com.example.speedotransfer.ui.theme.Marron
