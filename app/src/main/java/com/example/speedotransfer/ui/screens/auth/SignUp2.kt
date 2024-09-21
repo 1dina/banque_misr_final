@@ -23,9 +23,9 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
-import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.material3.rememberDatePickerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -40,6 +40,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.Color.Companion.Red
 import androidx.compose.ui.graphics.Color.Companion.White
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
@@ -67,7 +68,6 @@ import java.text.SimpleDateFormat
 import java.util.Locale
 
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SignUp2(
     navController: NavController,
@@ -81,7 +81,8 @@ fun SignUp2(
     }
     val context = LocalContext.current
     val apiService = BankingAPIService.callable
-    val viewModel: AuthViewModel = viewModel(factory = AuthViewModelFactory(apiService, context = context))
+    val viewModel: AuthViewModel =
+        viewModel(factory = AuthViewModelFactory(apiService, context = context))
     var country by rememberSaveable {
         mutableStateOf("")
     }
@@ -100,25 +101,20 @@ fun SignUp2(
     if (expandMenu) {
         CountryBottomSheetMaker(onDismiss = { expandMenu = false })
     }
-    isButtonEnabled = if (!(country.isBlank() || dob.isBlank())) {
-        true
-    }
-    else {
-        false
-    }
+    isButtonEnabled = !(country.isBlank() || dob.isBlank())
 
-        if (isDatePickerShown) {
-            DatePickerChooser(
-                onConfirm = { displayDate, internalDate ->
-                    dob = displayDate
-                    dobInternal = internalDate
-                    isDatePickerShown = false
-                },
-                onDismiss = {
-                    isDatePickerShown = false
-                }
-            )
-        }
+    if (isDatePickerShown) {
+        DatePickerChooser(
+            onConfirm = { displayDate, internalDate ->
+                dob = displayDate
+                dobInternal = internalDate
+                isDatePickerShown = false
+            },
+            onDismiss = {
+                isDatePickerShown = false
+            }
+        )
+    }
 
     val toLogin by viewModel.responseStatus.collectAsState()
 
@@ -210,7 +206,7 @@ fun SignUp2(
 
             OutlinedTextField(
                 value = country,
-                onValueChange = { newText -> country = newText },maxLines = 1,
+                onValueChange = { newText -> country = newText }, maxLines = 1,
                 placeholder = {
                     Text(
                         text = "Select your country",
@@ -219,8 +215,12 @@ fun SignUp2(
                     )
                 },
                 shape = RoundedCornerShape(10.dp),
-                colors = TextFieldDefaults.outlinedTextFieldColors(
-                    containerColor = Color.White, focusedBorderColor = Maroon
+                colors = OutlinedTextFieldDefaults.colors(
+                    focusedContainerColor = White,
+                    unfocusedContainerColor = White, focusedBorderColor = Maroon,
+                    focusedTrailingIconColor = Maroon,
+                    errorBorderColor = Red,
+                    errorContainerColor = White
                 ),
                 modifier = Modifier
                     .fillMaxWidth()
@@ -260,8 +260,12 @@ fun SignUp2(
                     )
                 },
                 shape = RoundedCornerShape(10.dp),
-                colors = TextFieldDefaults.outlinedTextFieldColors(
-                    containerColor = White, focusedBorderColor = Maroon
+                colors = OutlinedTextFieldDefaults.colors(
+                    focusedContainerColor = White,
+                    unfocusedContainerColor = White, focusedBorderColor = Maroon,
+                    focusedTrailingIconColor = Maroon,
+                    errorBorderColor = Red,
+                    errorContainerColor = White
                 ),
                 modifier = Modifier
                     .fillMaxWidth()

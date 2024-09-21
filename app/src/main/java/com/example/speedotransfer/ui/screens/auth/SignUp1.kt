@@ -15,11 +15,10 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -30,7 +29,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Brush
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Color.Companion.Red
 import androidx.compose.ui.graphics.Color.Companion.White
 import androidx.compose.ui.res.colorResource
@@ -51,7 +49,6 @@ import com.example.speedotransfer.routes.AppRoutes
 import com.example.speedotransfer.ui.theme.LightRed
 import com.example.speedotransfer.ui.theme.Maroon
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SignUp1(navController: NavController, modifier: Modifier = Modifier) {
 
@@ -71,9 +68,7 @@ fun SignUp1(navController: NavController, modifier: Modifier = Modifier) {
 
 
     isButtonEnabled =
-        if (!(name.isBlank() || email.isBlank() || password.isBlank() || confirmpassword.isBlank())) {
-            true
-        } else false
+        !(name.isBlank() || email.isBlank() || password.isBlank() || confirmpassword.isBlank())
 
 
     fun validateAndShowErrors() {
@@ -101,7 +96,7 @@ fun SignUp1(navController: NavController, modifier: Modifier = Modifier) {
             .background(
                 brush = Brush.verticalGradient(
                     colors = listOf(
-                        Color.White, LightRed
+                        White, LightRed
                     )
                 )
             )
@@ -133,7 +128,7 @@ fun SignUp1(navController: NavController, modifier: Modifier = Modifier) {
                     onValueChange = { newText ->
                         name = newText
                         nameError = null
-                    },maxLines = 1,
+                    }, maxLines = 1,
                     placeholder = {
                         Text(
                             text = stringResource(id = R.string.name),
@@ -143,13 +138,14 @@ fun SignUp1(navController: NavController, modifier: Modifier = Modifier) {
                     },
                     isError = nameError != null,
                     shape = RoundedCornerShape(6.dp),
-                    colors = TextFieldDefaults.outlinedTextFieldColors(
-                        containerColor = White,
-                        focusedBorderColor = Maroon,
+                    colors = OutlinedTextFieldDefaults.colors(
+                        focusedContainerColor = White,
+                        unfocusedContainerColor = White, focusedBorderColor = Maroon,
                         focusedTrailingIconColor = Maroon,
                         errorBorderColor = Red,
                         errorContainerColor = White
                     ),
+
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(top = 40.dp),
@@ -169,7 +165,7 @@ fun SignUp1(navController: NavController, modifier: Modifier = Modifier) {
                 if (nameError != null) {
                     Text(
                         text = nameError ?: "",
-                        color = Color.Red,
+                        color = Red,
                         fontSize = 12.sp,
                         modifier = Modifier
                             .align(Alignment.Start)
@@ -183,7 +179,7 @@ fun SignUp1(navController: NavController, modifier: Modifier = Modifier) {
                     onValueChange = { newText ->
                         email = newText
                         emailError = null
-                    },maxLines = 1,
+                    }, maxLines = 1,
                     placeholder = {
                         Text(
                             text = stringResource(id = R.string.email),
@@ -193,13 +189,12 @@ fun SignUp1(navController: NavController, modifier: Modifier = Modifier) {
                     },
                     shape = RoundedCornerShape(10.dp),
                     isError = emailError != null,
-                    colors = TextFieldDefaults.outlinedTextFieldColors(
-                        containerColor = White,
-                        focusedBorderColor = Maroon,
+                    colors = OutlinedTextFieldDefaults.colors(
+                        focusedContainerColor = White,
+                        unfocusedContainerColor = White, focusedBorderColor = Maroon,
                         focusedTrailingIconColor = Maroon,
                         errorBorderColor = Red,
                         errorContainerColor = White
-
                     ),
                     modifier = Modifier
                         .fillMaxWidth()
@@ -216,7 +211,7 @@ fun SignUp1(navController: NavController, modifier: Modifier = Modifier) {
                 if (emailError != null) {
                     Text(
                         text = emailError ?: "",
-                        color = Color.Red,
+                        color = Red,
                         fontSize = 12.sp,
                         modifier = Modifier
                             .align(Alignment.Start)
@@ -230,7 +225,7 @@ fun SignUp1(navController: NavController, modifier: Modifier = Modifier) {
                     onValueChange = { newText ->
                         password = newText
                         passwordError = null
-                    },maxLines = 1,
+                    }, maxLines = 1,
                     placeholder = {
                         Text(
                             text = stringResource(id = R.string.password),
@@ -241,13 +236,12 @@ fun SignUp1(navController: NavController, modifier: Modifier = Modifier) {
                     },
                     isError = passwordError != null,
                     shape = RoundedCornerShape(10.dp),
-                    colors = TextFieldDefaults.outlinedTextFieldColors(
-                        containerColor = White,
-                        focusedBorderColor = Maroon,
+                    colors = OutlinedTextFieldDefaults.colors(
+                        focusedContainerColor = White,
+                        unfocusedContainerColor = White, focusedBorderColor = Maroon,
                         focusedTrailingIconColor = Maroon,
                         errorBorderColor = Red,
                         errorContainerColor = White
-
                     ),
                     modifier = Modifier
                         .fillMaxWidth()
@@ -270,7 +264,7 @@ fun SignUp1(navController: NavController, modifier: Modifier = Modifier) {
                 if (passwordError != null) {
                     Text(
                         text = passwordError ?: "",
-                        color = Color.Red,
+                        color = Red,
                         fontSize = 12.sp,
                         modifier = Modifier
                             .align(Alignment.Start)
@@ -284,7 +278,7 @@ fun SignUp1(navController: NavController, modifier: Modifier = Modifier) {
                     onValueChange = { newText ->
                         confirmpassword = newText
                         confirmPasswordError = null
-                    },maxLines = 1,
+                    }, maxLines = 1,
                     placeholder = {
                         Text(
                             text = stringResource(id = R.string.password),
@@ -295,12 +289,12 @@ fun SignUp1(navController: NavController, modifier: Modifier = Modifier) {
                     },
                     shape = RoundedCornerShape(10.dp),
                     isError = confirmPasswordError != null,
-                    colors = TextFieldDefaults.outlinedTextFieldColors(
-                        containerColor = Color.White,
-                        focusedBorderColor = Maroon,
+                    colors = OutlinedTextFieldDefaults.colors(
+                        focusedContainerColor = White,
+                        unfocusedContainerColor = White, focusedBorderColor = Maroon,
+                        focusedTrailingIconColor = Maroon,
                         errorBorderColor = Red,
                         errorContainerColor = White
-
                     ),
                     modifier = Modifier
                         .fillMaxWidth()
@@ -324,7 +318,7 @@ fun SignUp1(navController: NavController, modifier: Modifier = Modifier) {
                 if (confirmPasswordError != null) {
                     Text(
                         text = confirmPasswordError ?: "",
-                        color = Color.Red,
+                        color = Red,
                         fontSize = 12.sp,
                         modifier = Modifier
                             .align(Alignment.Start)

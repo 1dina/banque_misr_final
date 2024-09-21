@@ -15,11 +15,10 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -29,7 +28,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Brush
-import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.Color.Companion.Red
+import androidx.compose.ui.graphics.Color.Companion.White
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
@@ -40,11 +40,11 @@ import com.example.speedotransfer.R
 import com.example.speedotransfer.ui.screens.auth.Texts
 import com.example.speedotransfer.ui.theme.LightRed
 import com.example.speedotransfer.ui.theme.LightYellow
+import com.example.speedotransfer.ui.theme.Maroon
 
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun EditProfile(modifier : Modifier =Modifier) {
+fun EditProfile() {
     var name by remember { mutableStateOf("") }
     var email by remember { mutableStateOf("") }
     var dob by remember { mutableStateOf("") }
@@ -92,7 +92,7 @@ fun EditProfile(modifier : Modifier =Modifier) {
             }
 
             Column(
-                verticalArrangement = Arrangement.spacedBy(-35.dp),
+                verticalArrangement = Arrangement.spacedBy((-35).dp),
                 modifier = Modifier.fillMaxHeight()
             ) {
 
@@ -108,8 +108,12 @@ fun EditProfile(modifier : Modifier =Modifier) {
                         )
                     },
                     shape = RoundedCornerShape(10.dp),
-                    colors = TextFieldDefaults.outlinedTextFieldColors(
-                        containerColor = Color.White
+                    colors = OutlinedTextFieldDefaults.colors(
+                        focusedContainerColor = White,
+                        unfocusedContainerColor = White, focusedBorderColor = Maroon,
+                        focusedTrailingIconColor = Maroon,
+                        errorBorderColor = Red,
+                        errorContainerColor = White
                     ),
                     modifier = Modifier
                         .size(360.dp, 110.dp)
@@ -132,8 +136,12 @@ fun EditProfile(modifier : Modifier =Modifier) {
                         )
                     },
                     shape = RoundedCornerShape(10.dp),
-                    colors = TextFieldDefaults.outlinedTextFieldColors(
-                        containerColor = Color.White
+                    colors = OutlinedTextFieldDefaults.colors(
+                        focusedContainerColor = White,
+                        unfocusedContainerColor = White, focusedBorderColor = Maroon,
+                        focusedTrailingIconColor = Maroon,
+                        errorBorderColor = Red,
+                        errorContainerColor = White
                     ),
                     modifier = Modifier
                         .size(360.dp, 110.dp)
@@ -162,8 +170,12 @@ fun EditProfile(modifier : Modifier =Modifier) {
                     },
                     readOnly = true,
                     shape = RoundedCornerShape(10.dp),
-                    colors = TextFieldDefaults.outlinedTextFieldColors(
-                        containerColor = Color.White
+                    colors = OutlinedTextFieldDefaults.colors(
+                        focusedContainerColor = White,
+                        unfocusedContainerColor = White, focusedBorderColor = Maroon,
+                        focusedTrailingIconColor = Maroon,
+                        errorBorderColor = Red,
+                        errorContainerColor = White
                     ),
                     modifier = Modifier
                         .size(360.dp, 80.dp)
@@ -176,7 +188,7 @@ fun EditProfile(modifier : Modifier =Modifier) {
                             Modifier
                                 .alpha(0.5f)
                                 .size(30.dp)
-                                .clickable {  }
+                                .clickable { }
                         )
                     }
 
@@ -203,8 +215,12 @@ fun EditProfile(modifier : Modifier =Modifier) {
                         )
                     },
                     shape = RoundedCornerShape(10.dp),
-                    colors = TextFieldDefaults.outlinedTextFieldColors(
-                        containerColor = Color.White
+                    colors = OutlinedTextFieldDefaults.colors(
+                        focusedContainerColor = White,
+                        unfocusedContainerColor = White, focusedBorderColor = Maroon,
+                        focusedTrailingIconColor = Maroon,
+                        errorBorderColor = Red,
+                        errorContainerColor = White
                     ),
                     modifier = Modifier
                         .size(360.dp, 80.dp)
@@ -238,16 +254,11 @@ fun EditProfile(modifier : Modifier =Modifier) {
                 }
 
 
-
-
             }
         }
     }
 
 }
-
-
-
 
 
 @Preview

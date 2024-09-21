@@ -16,11 +16,10 @@ import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -48,18 +47,17 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
-import com.example.speedotransfer.ui.screens.dashboard.DashboardActivity
 import com.example.speedotransfer.R
 import com.example.speedotransfer.data.models.UserLoginRequest
 import com.example.speedotransfer.data.source.remote.BankingAPIService
 import com.example.speedotransfer.routes.AppRoutes
+import com.example.speedotransfer.ui.screens.dashboard.DashboardActivity
 import com.example.speedotransfer.ui.theme.LightRed
 import com.example.speedotransfer.ui.theme.Maroon
 import com.example.speedotransfer.ui.viewmodels.AuthViewModel
 import com.example.speedotransfer.ui.viewmodels.AuthViewModelFactory
 
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SignIn(navController: NavController, modifier: Modifier = Modifier) {
     val apiService = BankingAPIService.callable
@@ -77,8 +75,7 @@ fun SignIn(navController: NavController, modifier: Modifier = Modifier) {
     var isLoading by remember {
         mutableStateOf(false)
     }
-    isButtonEnabled = if (!(email.isBlank() || password.isBlank())) true
-    else false
+    isButtonEnabled = !(email.isBlank() || password.isBlank())
     LaunchedEffect(toLogin) {
         if (toLogin == true) {
             isLoading = false
@@ -138,7 +135,7 @@ fun SignIn(navController: NavController, modifier: Modifier = Modifier) {
             )
 
             Column(
-                verticalArrangement = Arrangement.spacedBy(-35.dp)
+                verticalArrangement = Arrangement.spacedBy((-35).dp)
             ) {
 
                 Text(
@@ -159,8 +156,9 @@ fun SignIn(navController: NavController, modifier: Modifier = Modifier) {
                         )
                     },
                     shape = RoundedCornerShape(10.dp),
-                    colors = TextFieldDefaults.outlinedTextFieldColors(
-                        containerColor = Color.White
+                    colors = OutlinedTextFieldDefaults.colors(
+                        focusedContainerColor = Color.White,
+                        unfocusedContainerColor = Color.White
                     ), maxLines = 1,
                     modifier = Modifier
                         .fillMaxWidth()
@@ -196,8 +194,9 @@ fun SignIn(navController: NavController, modifier: Modifier = Modifier) {
                         )
                     },maxLines = 1,
                     shape = RoundedCornerShape(10.dp),
-                    colors = TextFieldDefaults.outlinedTextFieldColors(
-                        containerColor = Color.White
+                    colors = OutlinedTextFieldDefaults.colors(
+                        focusedContainerColor = Color.White,
+                        unfocusedContainerColor = Color.White
                     ),
                     modifier = Modifier
                         .fillMaxWidth()
