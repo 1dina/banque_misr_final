@@ -22,7 +22,6 @@ class FavouriteViewModel(
     private val _toastMessage = MutableStateFlow<String?>(null)
     val toastMessage = _toastMessage.asStateFlow()
     private val _responseStatus = MutableStateFlow<Boolean?>(null)
-    val responseStatus = _responseStatus.asStateFlow()
 
     init {
         getAllFav()

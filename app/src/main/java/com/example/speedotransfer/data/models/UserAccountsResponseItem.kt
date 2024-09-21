@@ -1,4 +1,4 @@
-package com.example.speedotransfer.data.models.userAccResponse
+package com.example.speedotransfer.data.models
 
 
 data class UserAccountsResponseItem(

@@ -1,7 +1,5 @@
 [versions]
 agp = "8.6.1"
-appcompatV7 = "28.0.0"
-composeStepper = "1.0.0-beta01"
 converterGson = "2.11.0"
 converterScalars = "2.5.0"
 javaJwt = "4.0.0"
@@ -11,16 +9,15 @@ junit = "4.13.2"
 junitVersion = "1.2.1"
 espressoCore = "3.6.1"
 kotlinxCoroutinesAndroid = "1.8.1"
-lifecycleRuntimeKtx = "2.8.4"
-activityCompose = "1.9.1"
-composeBom = "2024.04.01"
-lifecycleViewmodelCompose = "2.8.5"
+lifecycleRuntimeKtx = "2.8.6"
+activityCompose = "1.9.2"
+composeBom = "2024.09.02"
+lifecycleViewmodelCompose = "2.8.6"
 loggingInterceptor = "4.11.0"
-material = "1.6.8"
-navigationCompose = "2.7.7"
-navigationRuntimeKtx = "2.8.0"
+material = "1.7.2"
+navigationCompose = "2.8.1"
+navigationRuntimeKtx = "2.8.1"
 securityCrypto = "1.1.0-alpha06"
-composeMaterial3 = "1.0.0-alpha24"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -28,8 +25,6 @@ androidx-lifecycle-viewmodel-compose = { module = "androidx.lifecycle:lifecycle-
 androidx-material = { module = "androidx.compose.material:material", version.ref = "material" }
 androidx-navigation-compose = { module = "androidx.navigation:navigation-compose", version.ref = "navigationCompose" }
 androidx-security-crypto = { module = "androidx.security:security-crypto", version.ref = "securityCrypto" }
-appcompat-v7 = { module = "com.android.support:appcompat-v7", version.ref = "appcompatV7" }
-compose-stepper = { module = "com.github.maryamrzdh:compose-stepper", version.ref = "composeStepper" }
 converter-gson = { module = "com.squareup.retrofit2:converter-gson", version.ref = "converterGson" }
 converter-scalars = { module = "com.squareup.retrofit2:converter-scalars", version.ref = "converterScalars" }
 java-jwt = { module = "com.auth0:java-jwt", version.ref = "javaJwt" }

@@ -261,8 +261,8 @@ fun FavBottomSheetMaker(
                 },
                 textStyle = TextStyle(fontSize = 14.sp),
                 colors = TextFieldDefaults.colors(
-                    focusedContainerColor = Color.White,
-                    unfocusedContainerColor = Color.White,
+                    focusedContainerColor = White,
+                    unfocusedContainerColor = White,
                     focusedIndicatorColor = Maroon,
                     unfocusedIndicatorColor = Grey
                 ),
@@ -282,11 +282,11 @@ fun FavBottomSheetMaker(
                     Text(
                         text = "Enter Cardholder Name", fontSize = 14.sp, color = Grey
                     )
-                }, // Placeholder text size
+                },
                 textStyle = TextStyle(fontSize = 14.sp, color = Grey),
                 colors = TextFieldDefaults.colors(
-                    focusedContainerColor = Color.White,
-                    unfocusedContainerColor = Color.White,
+                    focusedContainerColor = White,
+                    unfocusedContainerColor = White,
                     focusedIndicatorColor = Maroon,
                     unfocusedIndicatorColor = Grey
                 ),// Input text size
@@ -304,7 +304,7 @@ fun FavBottomSheetMaker(
                     .fillMaxWidth(),
                 colors = ButtonDefaults.buttonColors(
                     containerColor = Maroon,
-                    contentColor = Color.White
+                    contentColor = White
                 ),
                 shape = RoundedCornerShape(6.dp),
             ) {

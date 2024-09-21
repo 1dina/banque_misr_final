@@ -12,9 +12,9 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.Divider
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
@@ -36,8 +36,8 @@ import com.example.speedotransfer.ui.theme.Marron
 @Composable
 fun PaymentStepScreen(
     modifier: Modifier = Modifier,
-    senderUser : String,
-    senderAccountId : Int,
+    senderUser: String,
+    senderAccountId: Int,
     recipientUser: FavouriteAdditionResponse,
     amountOfMoney: Int,
     onBackToHomeClick: () -> Unit,
@@ -72,12 +72,12 @@ fun PaymentStepScreen(
                 CommonCard(
                     destination = "From",
                     cardUser = senderUser,
-                    cardAccount = "xxxx"+senderAccountId.toString().takeLast(4),
+                    cardAccount = "xxxx" + senderAccountId.toString().takeLast(4),
                 )
                 CommonCard(
                     destination = "To",
                     cardUser = recipientUser.name,
-                    cardAccount = "xxxx" +recipientUser.accountId.toString().takeLast(4),
+                    cardAccount = "xxxx" + recipientUser.accountId.toString().takeLast(4),
 
                     )
             }
@@ -99,7 +99,7 @@ fun PaymentStepScreen(
             Text(text = "Transfer amount", fontSize = 16.sp, color = Grey)
             Text(text = "$amountOfMoney EGP", color = Grey, fontSize = 16.sp)
         }
-        Divider(
+        HorizontalDivider(
             modifier = Modifier
                 .fillMaxWidth()
                 .height(1.dp)

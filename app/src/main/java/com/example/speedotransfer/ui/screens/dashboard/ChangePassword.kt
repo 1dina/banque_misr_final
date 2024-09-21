@@ -14,11 +14,10 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -53,7 +52,6 @@ import com.example.speedotransfer.ui.viewmodels.HomeViewModel
 import com.example.speedotransfer.ui.viewmodels.HomeViewModelFactory
 
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ChangePassword(navController: NavController, modifier: Modifier = Modifier) {
 
@@ -72,8 +70,7 @@ fun ChangePassword(navController: NavController, modifier: Modifier = Modifier) 
         mutableStateOf(false)
     }
 
-    isButtonEnabled = if (!(currentPassword.isBlank() || newPassword.isBlank())) true
-    else false
+    isButtonEnabled = !(currentPassword.isBlank() || newPassword.isBlank())
 
 
 
@@ -93,14 +90,15 @@ fun ChangePassword(navController: NavController, modifier: Modifier = Modifier) 
     ) {
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
-            modifier = Modifier.fillMaxSize()
+            modifier = Modifier
+                .fillMaxSize()
                 .padding(16.dp)
         ) {
             HeaderUI(
                 headerTitle = "Change Password",
                 onClickBackButton = { navController.popBackStack() })
             Column(
-                verticalArrangement = Arrangement.spacedBy(-25.dp),
+                verticalArrangement = Arrangement.spacedBy((-25).dp),
                 modifier = Modifier.fillMaxHeight()
             ) {
 
@@ -119,8 +117,9 @@ fun ChangePassword(navController: NavController, modifier: Modifier = Modifier) 
                         )
                     },
                     shape = RoundedCornerShape(10.dp),
-                    colors = TextFieldDefaults.outlinedTextFieldColors(
-                        containerColor = Color.White
+                    colors = OutlinedTextFieldDefaults.colors(
+                        focusedContainerColor = Color.White,
+                        unfocusedContainerColor = Color.White
                     ),
                     modifier = Modifier
                         .fillMaxWidth()
@@ -157,8 +156,9 @@ fun ChangePassword(navController: NavController, modifier: Modifier = Modifier) 
                         )
                     },
                     shape = RoundedCornerShape(10.dp),
-                    colors = TextFieldDefaults.outlinedTextFieldColors(
-                        containerColor = Color.White
+                    colors = OutlinedTextFieldDefaults.colors(
+                        focusedContainerColor = Color.White,
+                        unfocusedContainerColor = Color.White
                     ),
                     modifier = Modifier
                         .fillMaxWidth()

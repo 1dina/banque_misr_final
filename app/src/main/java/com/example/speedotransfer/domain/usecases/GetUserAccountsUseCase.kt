@@ -1,6 +1,6 @@
 package com.example.speedotransfer.domain.usecases
 
-import com.example.speedotransfer.data.models.userAccResponse.UserAccountsResponseItem
+import com.example.speedotransfer.data.models.UserAccountsResponseItem
 import com.example.speedotransfer.domain.repository.DashboardRepository
 
 interface GetUserAccountsUseCase {

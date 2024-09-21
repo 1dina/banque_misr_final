@@ -10,7 +10,7 @@ import com.example.speedotransfer.data.models.historyResponse.TransactionHistory
 import com.example.speedotransfer.data.models.historyResponse.TransactionHistoryResponse
 import com.example.speedotransfer.data.models.TransactionRequest
 import com.example.speedotransfer.data.models.TransactionResponse
-import com.example.speedotransfer.data.models.userAccResponse.UserAccountsResponseItem
+import com.example.speedotransfer.data.models.UserAccountsResponseItem
 import com.example.speedotransfer.data.models.UserAuthRegisterRequest
 import com.example.speedotransfer.data.models.UserAuthRegisterResponse
 import com.example.speedotransfer.data.models.userInfoResponse.UserInfoResponse
