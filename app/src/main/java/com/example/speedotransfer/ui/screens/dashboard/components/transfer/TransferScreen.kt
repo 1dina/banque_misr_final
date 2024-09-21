@@ -47,7 +47,7 @@ import androidx.core.app.NotificationManagerCompat
 import androidx.navigation.NavController
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import com.example.speedotransfer.R
-import com.example.speedotransfer.data.models.FavouriteAddition
+import com.example.speedotransfer.data.models.FavouriteAdditionResponse
 import com.example.speedotransfer.data.models.TransactionRequest
 import com.example.speedotransfer.routes.AppRoutes
 import com.example.speedotransfer.ui.screens.auth.IndeterminateCircularIndicator
@@ -68,7 +68,7 @@ fun TransferScreen(
 
     viewModel.resetResponseStatus()
     var chosenUser by remember {
-        mutableStateOf(FavouriteAddition(0, ""))
+        mutableStateOf(FavouriteAdditionResponse(0, ""))
     }
 
     var isLoading by remember {

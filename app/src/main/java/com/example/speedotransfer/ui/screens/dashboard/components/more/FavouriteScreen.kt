@@ -50,7 +50,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.example.speedotransfer.R
-import com.example.speedotransfer.data.models.FavouriteAddition
+import com.example.speedotransfer.data.models.FavouriteAdditionResponse
 import com.example.speedotransfer.data.source.remote.BankingAPIService
 import com.example.speedotransfer.ui.screens.dashboard.commonUI.HeaderUI
 import com.example.speedotransfer.ui.theme.Grey
@@ -76,7 +76,7 @@ fun FavouriteScreen(
     }
 
     var chosenItem by remember {
-        mutableStateOf(FavouriteAddition(0, ""))
+        mutableStateOf(FavouriteAdditionResponse(0, ""))
     }
     if (showBottomDialog) {
         FavBottomSheetMaker(onDismiss = {
@@ -126,9 +126,9 @@ fun FavouriteScreen(
 
 @Composable
 fun FavoriteScreenListMaker(
-    favoriteListItems: List<FavouriteAddition>,
-    onEditClick: (FavouriteAddition) -> Unit,
-    onDeleteClick: (FavouriteAddition) -> Unit,
+    favoriteListItems: List<FavouriteAdditionResponse>,
+    onEditClick: (FavouriteAdditionResponse) -> Unit,
+    onDeleteClick: (FavouriteAdditionResponse) -> Unit,
     modifier: Modifier = Modifier
 ) {
     LazyColumn(modifier = modifier.fillMaxHeight()) {
@@ -145,7 +145,7 @@ fun FavoriteScreenListMaker(
 
 @Composable
 fun FavoriteScreenListItem(
-    favoriteListItem: FavouriteAddition,
+    favoriteListItem: FavouriteAdditionResponse,
     modifier: Modifier = Modifier,
     onEditClick: () -> Unit,
     onDeleteClick: () -> Unit
@@ -218,7 +218,7 @@ fun FavoriteScreenListItem(
 @Composable
 fun FavBottomSheetMaker(
     onDismiss: () -> Unit,
-    favoriteListItem: FavouriteAddition,
+    favoriteListItem: FavouriteAdditionResponse,
     modifier: Modifier = Modifier
 ) {
     val chosenItem by remember {

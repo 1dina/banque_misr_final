@@ -3,14 +3,14 @@ package com.example.speedotransfer.domain.repository
 import com.example.speedotransfer.data.models.AccountByIdResponse
 import com.example.speedotransfer.data.models.AccountCreationRequest
 import com.example.speedotransfer.data.models.AccountCreationResponse
-import com.example.speedotransfer.data.models.Passwords
-import com.example.speedotransfer.data.models.FavouriteAddition
-import com.example.speedotransfer.data.models.TransactionHistoryRequest
-import com.example.speedotransfer.data.models.TransactionHistoryResponse
+import com.example.speedotransfer.data.models.historyResponse.Passwords
+import com.example.speedotransfer.data.models.FavouriteAdditionResponse
+import com.example.speedotransfer.data.models.historyResponse.TransactionHistoryRequest
+import com.example.speedotransfer.data.models.historyResponse.TransactionHistoryResponse
 import com.example.speedotransfer.data.models.TransactionRequest
 import com.example.speedotransfer.data.models.TransactionResponse
-import com.example.speedotransfer.data.models.UserAccountsResponseItem
-import com.example.speedotransfer.data.models.UserInfoResponse
+import com.example.speedotransfer.data.models.userAccResponse.UserAccountsResponseItem
+import com.example.speedotransfer.data.models.userInfoResponse.UserInfoResponse
 import retrofit2.Response
 
 interface DashboardRepository {
@@ -23,8 +23,8 @@ interface DashboardRepository {
     suspend fun getInfo(): Response<UserInfoResponse>
     suspend fun updatePassword(passwords: Passwords): Response<String>
 
-    suspend fun addToFav(favouriteAddition: FavouriteAddition) : Response<FavouriteAddition>
-    suspend fun getAllFav() : Response<List<FavouriteAddition>>
+    suspend fun addToFav(favouriteAdditionResponse: FavouriteAdditionResponse) : Response<FavouriteAdditionResponse>
+    suspend fun getAllFav() : Response<List<FavouriteAdditionResponse>>
     suspend fun deleteFromFav(accountId: Int) : Response<String>
 
 }

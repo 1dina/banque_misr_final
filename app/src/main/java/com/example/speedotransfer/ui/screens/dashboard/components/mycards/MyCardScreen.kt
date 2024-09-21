@@ -1,6 +1,5 @@
 package com.example.speedotransfer.ui.screens.dashboard.components.mycards
 
-import android.service.autofill.UserData
 import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -25,14 +24,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
-import androidx.navigation.compose.rememberNavController
-import com.example.speedotransfer.data.models.UserAccountsResponseItem
-import com.example.speedotransfer.data.models.UserInfoResponse
+import com.example.speedotransfer.data.models.userAccResponse.UserAccountsResponseItem
+import com.example.speedotransfer.data.models.userInfoResponse.UserInfoResponse
 import com.example.speedotransfer.data.source.remote.BankingAPIService
 import com.example.speedotransfer.ui.screens.dashboard.commonUI.CommonCard
 import com.example.speedotransfer.ui.screens.dashboard.commonUI.HeaderUI
@@ -116,7 +113,7 @@ fun MyCardScreen(
 }
 
 @Composable
-fun MyCardsListMaker(myCardsList: List<UserAccountsResponseItem>,userData: UserInfoResponse, modifier: Modifier) {
+fun MyCardsListMaker(myCardsList: List<UserAccountsResponseItem>, userData: UserInfoResponse, modifier: Modifier) {
     LazyColumn(
         modifier = modifier
             .fillMaxWidth()

@@ -1,6 +1,6 @@
-package com.example.speedotransfer.data.models
+package com.example.speedotransfer.data.models.userInfoResponse
 
-data class UserInfo(
+data class UserInfoResponse(
     val accounts: List<Account>,
     val country: String,
     val dateofbirth: String,

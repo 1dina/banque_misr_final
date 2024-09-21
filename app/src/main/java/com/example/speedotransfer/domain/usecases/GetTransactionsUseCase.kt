@@ -1,10 +1,9 @@
 package com.example.speedotransfer.domain.usecases
 
 import android.util.Log
-import com.example.speedotransfer.data.models.TransactionHistoryRequest
-import com.example.speedotransfer.data.models.TransactionHistoryResponse
+import com.example.speedotransfer.data.models.historyResponse.TransactionHistoryRequest
+import com.example.speedotransfer.data.models.historyResponse.TransactionHistoryResponse
 import com.example.speedotransfer.domain.repository.DashboardRepository
-import retrofit2.Response
 
 interface GetTransactionsUseCase {
     suspend fun execute(transactionHistoryRequest: TransactionHistoryRequest) : Result<TransactionHistoryResponse>

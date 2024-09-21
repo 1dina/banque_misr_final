@@ -28,7 +28,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.speedotransfer.R
-import com.example.speedotransfer.data.models.FavouriteAddition
+import com.example.speedotransfer.data.models.FavouriteAdditionResponse
 import com.example.speedotransfer.ui.screens.dashboard.commonUI.CommonCard
 import com.example.speedotransfer.ui.theme.Grey
 import com.example.speedotransfer.ui.theme.Marron
@@ -38,7 +38,7 @@ fun PaymentStepScreen(
     modifier: Modifier = Modifier,
     senderUser : String,
     senderAccountId : Int,
-    recipientUser: FavouriteAddition,
+    recipientUser: FavouriteAdditionResponse,
     amountOfMoney: Int,
     onBackToHomeClick: () -> Unit,
     onAddToFavoriteClick: () -> Unit

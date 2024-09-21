@@ -4,16 +4,16 @@ import com.example.speedotransfer.utils.Constants
 import com.example.speedotransfer.data.models.AccountByIdResponse
 import com.example.speedotransfer.data.models.AccountCreationRequest
 import com.example.speedotransfer.data.models.AccountCreationResponse
-import com.example.speedotransfer.data.models.Passwords
-import com.example.speedotransfer.data.models.FavouriteAddition
-import com.example.speedotransfer.data.models.TransactionHistoryRequest
-import com.example.speedotransfer.data.models.TransactionHistoryResponse
+import com.example.speedotransfer.data.models.historyResponse.Passwords
+import com.example.speedotransfer.data.models.FavouriteAdditionResponse
+import com.example.speedotransfer.data.models.historyResponse.TransactionHistoryRequest
+import com.example.speedotransfer.data.models.historyResponse.TransactionHistoryResponse
 import com.example.speedotransfer.data.models.TransactionRequest
 import com.example.speedotransfer.data.models.TransactionResponse
-import com.example.speedotransfer.data.models.UserAccountsResponseItem
+import com.example.speedotransfer.data.models.userAccResponse.UserAccountsResponseItem
 import com.example.speedotransfer.data.models.UserAuthRegisterRequest
 import com.example.speedotransfer.data.models.UserAuthRegisterResponse
-import com.example.speedotransfer.data.models.UserInfoResponse
+import com.example.speedotransfer.data.models.userInfoResponse.UserInfoResponse
 import com.example.speedotransfer.data.models.UserLoginRequest
 import com.example.speedotransfer.data.models.UserLoginResponse
 import retrofit2.Response
@@ -76,14 +76,14 @@ interface BankingAPICallable {
     @POST(Constants.FAVOURITE_ADDITION_ENDPOINT)
     suspend fun addToFav(
         @Header("Authorization") accessToken: String,
-        @Body favouriteAddition: FavouriteAddition
-    ): Response<FavouriteAddition>
+        @Body favouriteAdditionResponse: FavouriteAdditionResponse
+    ): Response<FavouriteAdditionResponse>
 
     @GET (Constants.ALL_FAVOURITES_ENDPOINT)
     suspend fun  getAllFav(
         @Header("Authorization")accessToken: String,
         @Path("userId") userId: Int
-    ) : Response<List<FavouriteAddition>>
+    ) : Response<List<FavouriteAdditionResponse>>
 
     @DELETE (Constants.DELETE_FAVOURITE_ENDPOINT)
     suspend fun deleteFromFav(

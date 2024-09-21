@@ -1,4 +1,4 @@
-package com.example.speedotransfer.data.models
+package com.example.speedotransfer.data.models.historyResponse
 
 data class Pageable(
     val offset: Int,

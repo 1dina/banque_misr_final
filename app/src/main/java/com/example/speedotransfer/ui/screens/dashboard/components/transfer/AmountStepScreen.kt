@@ -42,7 +42,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.speedotransfer.R
-import com.example.speedotransfer.data.models.FavouriteAddition
+import com.example.speedotransfer.data.models.FavouriteAdditionResponse
 import com.example.speedotransfer.data.source.remote.BankingAPIService
 import com.example.speedotransfer.ui.theme.Grey
 import com.example.speedotransfer.ui.theme.LightPink
@@ -53,7 +53,7 @@ import com.example.speedotransfer.ui.viewmodels.FavouriteViewModelFactory
 @Composable
 fun AmountStepScreen(
     modifier: Modifier = Modifier,
-    recipientUserChosen: (FavouriteAddition, Int) -> Unit
+    recipientUserChosen: (FavouriteAdditionResponse, Int) -> Unit
 ) {
     val context = LocalContext.current
     val apiService = BankingAPIService.callable
@@ -201,7 +201,7 @@ fun AmountStepScreen(
         )
         Button(
             onClick = {
-                val userChosen = FavouriteAddition(recipientAccount.toInt(), recipientName)
+                val userChosen = FavouriteAdditionResponse(recipientAccount.toInt(), recipientName)
                 recipientUserChosen(userChosen, amountOfMoney.toInt())
             },
             modifier = modifier
@@ -222,7 +222,7 @@ fun BottomSheetFav(
     modifier: Modifier = Modifier,
     viewModel: FavouriteViewModel,
     onDismiss: (Boolean) -> Unit,
-    onItemClicked: (FavouriteAddition) -> Unit
+    onItemClicked: (FavouriteAdditionResponse) -> Unit
 ) {
     val favoriteList by viewModel.favListItems.collectAsState()
     ModalBottomSheet(onDismissRequest = { onDismiss(false) }) {
@@ -258,9 +258,9 @@ fun BottomSheetFav(
 
 @Composable
 fun FavoriteListMaker(
-    favItems: List<FavouriteAddition>,
+    favItems: List<FavouriteAdditionResponse>,
     modifier: Modifier,
-    selectedItem: (FavouriteAddition) -> Unit
+    selectedItem: (FavouriteAdditionResponse) -> Unit
 ) {
     LazyColumn(modifier = modifier.padding(top = 24.dp)) {
         items(favItems) { item ->
@@ -273,9 +273,9 @@ fun FavoriteListMaker(
 
 @Composable
 fun FavoriteListItemUI(
-    favoriteListItem: FavouriteAddition,
+    favoriteListItem: FavouriteAdditionResponse,
     modifier: Modifier = Modifier,
-    onItemClicked: (FavouriteAddition) -> Unit
+    onItemClicked: (FavouriteAdditionResponse) -> Unit
 ) {
     Card(
         onClick = { onItemClicked(favoriteListItem) },

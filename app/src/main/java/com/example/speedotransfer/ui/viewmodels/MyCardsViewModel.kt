@@ -1,10 +1,9 @@
 package com.example.speedotransfer.ui.viewmodels
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.speedotransfer.data.models.AccountCreationRequest
-import com.example.speedotransfer.data.models.UserAccountsResponseItem
+import com.example.speedotransfer.data.models.userAccResponse.UserAccountsResponseItem
 import com.example.speedotransfer.domain.usecases.CreateAccountUseCase
 import com.example.speedotransfer.domain.usecases.GetUserAccountsUseCase
 import kotlinx.coroutines.flow.MutableStateFlow

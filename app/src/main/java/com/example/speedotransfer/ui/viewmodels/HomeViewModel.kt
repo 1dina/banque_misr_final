@@ -3,12 +3,12 @@ package com.example.speedotransfer.ui.viewmodels
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.speedotransfer.data.models.Content
-import com.example.speedotransfer.data.models.FavouriteAddition
-import com.example.speedotransfer.data.models.Passwords
-import com.example.speedotransfer.data.models.TransactionHistoryRequest
+import com.example.speedotransfer.data.models.historyResponse.Content
+import com.example.speedotransfer.data.models.FavouriteAdditionResponse
+import com.example.speedotransfer.data.models.historyResponse.Passwords
+import com.example.speedotransfer.data.models.historyResponse.TransactionHistoryRequest
 import com.example.speedotransfer.data.models.TransactionRequest
-import com.example.speedotransfer.data.models.UserInfoResponse
+import com.example.speedotransfer.data.models.userInfoResponse.UserInfoResponse
 import com.example.speedotransfer.domain.usecases.AddToFavUseCase
 import com.example.speedotransfer.domain.usecases.DoTransferUseCase
 import com.example.speedotransfer.domain.usecases.GetInfoUseCase
@@ -160,10 +160,10 @@ class HomeViewModel(
     }
 
 
-    fun addToFav(favouriteAddition: FavouriteAddition) {
+    fun addToFav(favouriteAdditionResponse: FavouriteAdditionResponse) {
         viewModelScope.launch {
             try {
-                val result = addToFavUseCase.execute(favouriteAddition)
+                val result = addToFavUseCase.execute(favouriteAdditionResponse)
                 if (result.isSuccess) {
                     _responseStatus.value = true
                     _toastMessage.value = result.getOrNull()!!

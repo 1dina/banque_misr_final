@@ -1,6 +1,6 @@
 package com.example.speedotransfer.domain.usecases
 
-import com.example.speedotransfer.data.models.UserInfoResponse
+import com.example.speedotransfer.data.models.userInfoResponse.UserInfoResponse
 import com.example.speedotransfer.domain.repository.DashboardRepository
 
 interface GetInfoUseCase{

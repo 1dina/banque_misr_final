@@ -5,14 +5,14 @@ import com.auth0.jwt.JWT
 import com.example.speedotransfer.data.models.AccountByIdResponse
 import com.example.speedotransfer.data.models.AccountCreationRequest
 import com.example.speedotransfer.data.models.AccountCreationResponse
-import com.example.speedotransfer.data.models.Passwords
-import com.example.speedotransfer.data.models.FavouriteAddition
-import com.example.speedotransfer.data.models.TransactionHistoryRequest
-import com.example.speedotransfer.data.models.TransactionHistoryResponse
+import com.example.speedotransfer.data.models.historyResponse.Passwords
+import com.example.speedotransfer.data.models.FavouriteAdditionResponse
+import com.example.speedotransfer.data.models.historyResponse.TransactionHistoryRequest
+import com.example.speedotransfer.data.models.historyResponse.TransactionHistoryResponse
 import com.example.speedotransfer.data.models.TransactionRequest
 import com.example.speedotransfer.data.models.TransactionResponse
-import com.example.speedotransfer.data.models.UserAccountsResponseItem
-import com.example.speedotransfer.data.models.UserInfoResponse
+import com.example.speedotransfer.data.models.userAccResponse.UserAccountsResponseItem
+import com.example.speedotransfer.data.models.userInfoResponse.UserInfoResponse
 import com.example.speedotransfer.data.source.remote.BankingAPICallable
 import com.example.speedotransfer.data.source.local.SecureStorageDataSource
 import com.example.speedotransfer.domain.repository.DashboardRepository
@@ -122,14 +122,14 @@ class DashboardRepositoryImpl(
         }
     }
 
-    override suspend fun addToFav(favouriteAddition: FavouriteAddition): Response<FavouriteAddition> {
+    override suspend fun addToFav(favouriteAdditionResponse: FavouriteAdditionResponse): Response<FavouriteAdditionResponse> {
         return try {
             val accessToken = encryptedSharedPreferences.getAccessToken()
             val decodedJWT = JWT.decode(accessToken)
             val userId = decodedJWT.getClaim("id").asInt()
-            favouriteAddition.userId = userId
+            favouriteAdditionResponse.userId = userId
             val response =
-                apiService.addToFav("Bearer $accessToken", favouriteAddition)
+                apiService.addToFav("Bearer $accessToken", favouriteAdditionResponse)
             if (response.isSuccessful) {
                 Log.e("trace", "Faved Addition fetched: ${response.body()?.name}")
             } else {
@@ -145,7 +145,7 @@ class DashboardRepositoryImpl(
         }
     }
 
-    override suspend fun getAllFav(): Response<List<FavouriteAddition>> {
+    override suspend fun getAllFav(): Response<List<FavouriteAdditionResponse>> {
         return try {
             val accessToken = encryptedSharedPreferences.getAccessToken()
             Log.e("trace", "Access Token: $accessToken")

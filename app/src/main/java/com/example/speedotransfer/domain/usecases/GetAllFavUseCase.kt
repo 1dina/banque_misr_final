@@ -1,15 +1,15 @@
 package com.example.speedotransfer.domain.usecases
 
 import android.util.Log
-import com.example.speedotransfer.data.models.FavouriteAddition
+import com.example.speedotransfer.data.models.FavouriteAdditionResponse
 import com.example.speedotransfer.domain.repository.DashboardRepository
 
 interface GetAllFavUseCase {
-    suspend fun execute () : Result<List<FavouriteAddition>>
+    suspend fun execute () : Result<List<FavouriteAdditionResponse>>
 }
 
 class GetAllFavUseCaseImpl (val repo : DashboardRepository) : GetAllFavUseCase {
-    override suspend fun execute(): Result<List<FavouriteAddition>> {
+    override suspend fun execute(): Result<List<FavouriteAdditionResponse>> {
         return try {
             val response = repo.getAllFav()
             if(response.isSuccessful){

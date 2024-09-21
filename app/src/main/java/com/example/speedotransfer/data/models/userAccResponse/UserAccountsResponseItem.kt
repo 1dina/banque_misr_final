@@ -1,6 +1,7 @@
-package com.example.speedotransfer.data.models
+package com.example.speedotransfer.data.models.userAccResponse
 
-data class Account(
+
+data class UserAccountsResponseItem(
     val balance: Int,
     val created_at: String,
     val id: Int,
