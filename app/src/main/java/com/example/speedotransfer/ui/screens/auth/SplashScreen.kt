@@ -1,6 +1,5 @@
 package com.example.speedotransfer.ui.screens.auth
 
-import android.content.Intent
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
@@ -16,9 +15,8 @@ import androidx.navigation.NavController
 import com.example.speedotransfer.R
 import com.example.speedotransfer.data.source.local.SecureStorageDataSource
 import com.example.speedotransfer.routes.AppRoutes
-import com.example.speedotransfer.ui.screens.dashboard.DashboardActivity
 import com.example.speedotransfer.ui.theme.DarkRed
-import com.example.speedotransfer.utils.PreferenceManager
+import com.example.speedotransfer.data.source.local.PreferenceManager
 import kotlinx.coroutines.delay
 
 @Composable

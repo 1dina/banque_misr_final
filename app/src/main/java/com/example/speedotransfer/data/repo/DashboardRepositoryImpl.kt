@@ -13,7 +13,7 @@ import com.example.speedotransfer.data.models.transaction.TransactionRequest
 import com.example.speedotransfer.data.models.transaction.TransactionResponse
 import com.example.speedotransfer.data.models.account.UserAccountsResponseItem
 import com.example.speedotransfer.data.models.user.info.UserInfoResponse
-import com.example.speedotransfer.data.source.remote.BankingAPICallable
+import com.example.speedotransfer.data.source.remote.retrofit.BankingAPICallable
 import com.example.speedotransfer.data.source.local.SecureStorageDataSource
 import com.example.speedotransfer.domain.repository.DashboardRepository
 import retrofit2.Response

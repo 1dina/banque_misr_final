@@ -29,7 +29,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import com.example.speedotransfer.data.source.remote.BankingAPIService
+import com.example.speedotransfer.data.source.remote.retrofit.RetrofitInstance
 import com.example.speedotransfer.routes.AppRoutes
 import com.example.speedotransfer.routes.DashboardNavGraph
 import com.example.speedotransfer.ui.screens.dashboard.components.BottomNavBarScreens
@@ -44,7 +44,7 @@ class DashboardActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
-            val apiService = BankingAPIService.callable
+            val apiService = RetrofitInstance.callable
             val viewModel: HomeViewModel =
                 viewModel(factory = HomeViewModelFactory(apiService, context = this))
             val screensWithoutBottomBar = setOf(

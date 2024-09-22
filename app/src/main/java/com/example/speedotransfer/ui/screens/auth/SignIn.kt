@@ -49,7 +49,7 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.example.speedotransfer.R
 import com.example.speedotransfer.data.models.user.UserLoginRequest
-import com.example.speedotransfer.data.source.remote.BankingAPIService
+import com.example.speedotransfer.data.source.remote.retrofit.RetrofitInstance
 import com.example.speedotransfer.routes.AppRoutes
 import com.example.speedotransfer.ui.screens.dashboard.DashboardActivity
 import com.example.speedotransfer.ui.theme.LightRed
@@ -60,7 +60,7 @@ import com.example.speedotransfer.ui.viewmodels.AuthViewModelFactory
 
 @Composable
 fun SignIn(navController: NavController, modifier: Modifier = Modifier) {
-    val apiService = BankingAPIService.callable
+    val apiService = RetrofitInstance.callable
     val context = LocalContext.current
 
     val authViewModel: AuthViewModel = viewModel(factory = AuthViewModelFactory(apiService,context))

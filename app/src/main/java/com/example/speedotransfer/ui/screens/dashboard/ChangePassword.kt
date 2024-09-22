@@ -42,7 +42,7 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.example.speedotransfer.R
 import com.example.speedotransfer.data.models.transaction.history.Passwords
-import com.example.speedotransfer.data.source.remote.BankingAPIService
+import com.example.speedotransfer.data.source.remote.retrofit.RetrofitInstance
 import com.example.speedotransfer.ui.screens.auth.Texts
 import com.example.speedotransfer.ui.screens.dashboard.commonUI.HeaderUI
 import com.example.speedotransfer.ui.theme.LightRed
@@ -55,7 +55,7 @@ import com.example.speedotransfer.ui.viewmodels.HomeViewModelFactory
 @Composable
 fun ChangePassword(navController: NavController, modifier: Modifier = Modifier) {
 
-    val apiService = BankingAPIService.callable
+    val apiService = RetrofitInstance.callable
     val context = LocalContext.current
 
     val homeViewModel: HomeViewModel =

@@ -1,4 +1,4 @@
-package com.example.speedotransfer.utils
+package com.example.speedotransfer.data.source.local
 
 import android.content.Context
 import android.content.SharedPreferences

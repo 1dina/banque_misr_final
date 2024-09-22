@@ -1,4 +1,4 @@
-package com.example.speedotransfer.data.source.remote
+package com.example.speedotransfer.data.source.remote.retrofit
 
 import com.example.speedotransfer.utils.Constants
 import com.example.speedotransfer.data.models.account.AccountByIdResponse

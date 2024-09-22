@@ -33,7 +33,7 @@ import androidx.navigation.compose.rememberNavController
 import com.example.speedotransfer.R
 import com.example.speedotransfer.routes.AppRoutes
 import com.example.speedotransfer.ui.theme.LightRed
-import com.example.speedotransfer.utils.PreferenceManager
+import com.example.speedotransfer.data.source.local.PreferenceManager
 
 
 @Composable

@@ -3,7 +3,7 @@ package com.example.speedotransfer.ui.viewmodels
 import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.example.speedotransfer.data.source.remote.BankingAPICallable
+import com.example.speedotransfer.data.source.remote.retrofit.BankingAPICallable
 import com.example.speedotransfer.data.source.local.SecureStorageDataSource
 import com.example.speedotransfer.domain.usecases.CreateAccountUseCaseImp
 import com.example.speedotransfer.domain.usecases.GetUserAccountsUseCaseImpl

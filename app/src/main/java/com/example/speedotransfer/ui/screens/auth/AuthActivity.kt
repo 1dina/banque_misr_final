@@ -9,7 +9,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.rememberNavController
-import com.example.speedotransfer.data.source.remote.BankingAPIService
+import com.example.speedotransfer.data.source.remote.retrofit.RetrofitInstance
 import com.example.speedotransfer.routes.AuthNavGraph
 import com.example.speedotransfer.ui.theme.SpeedoTransferTheme
 import com.example.speedotransfer.ui.viewmodels.AuthViewModel
@@ -22,7 +22,7 @@ class AuthActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             val navController = rememberNavController()
-            val apiService = BankingAPIService.callable
+            val apiService = RetrofitInstance.callable
             val authViewModel: AuthViewModel =
                 viewModel(factory = AuthViewModelFactory(apiService, this))
             SpeedoTransferTheme {

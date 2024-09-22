@@ -43,7 +43,7 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.speedotransfer.R
 import com.example.speedotransfer.data.models.favourite.FavouriteAdditionResponse
-import com.example.speedotransfer.data.source.remote.BankingAPIService
+import com.example.speedotransfer.data.source.remote.retrofit.RetrofitInstance
 import com.example.speedotransfer.ui.theme.Grey
 import com.example.speedotransfer.ui.theme.LightPink
 import com.example.speedotransfer.ui.theme.Marron
@@ -56,7 +56,7 @@ fun AmountStepScreen(
     recipientUserChosen: (FavouriteAdditionResponse, Int) -> Unit
 ) {
     val context = LocalContext.current
-    val apiService = BankingAPIService.callable
+    val apiService = RetrofitInstance.callable
     val viewModel: FavouriteViewModel =
         viewModel(factory = FavouriteViewModelFactory(apiService, context))
     var amountOfMoney by remember {

@@ -30,7 +30,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.example.speedotransfer.data.models.account.UserAccountsResponseItem
 import com.example.speedotransfer.data.models.user.info.UserInfoResponse
-import com.example.speedotransfer.data.source.remote.BankingAPIService
+import com.example.speedotransfer.data.source.remote.retrofit.RetrofitInstance
 import com.example.speedotransfer.ui.screens.dashboard.commonUI.CommonCard
 import com.example.speedotransfer.ui.screens.dashboard.commonUI.HeaderUI
 import com.example.speedotransfer.ui.theme.LightPink
@@ -49,7 +49,7 @@ fun MyCardScreen(
     modifier: Modifier = Modifier
 ) {
     val context = LocalContext.current
-    val apiService = BankingAPIService.callable
+    val apiService = RetrofitInstance.callable
     val viewModel: MyCardsViewModel =
         viewModel(factory = MyCardsViewModelFactory(apiService, context))
     val cardList by viewModel.myCardsList.collectAsState()

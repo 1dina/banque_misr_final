@@ -50,7 +50,7 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.example.speedotransfer.R
 import com.example.speedotransfer.data.models.favourite.FavouriteAdditionResponse
-import com.example.speedotransfer.data.source.remote.BankingAPIService
+import com.example.speedotransfer.data.source.remote.retrofit.RetrofitInstance
 import com.example.speedotransfer.ui.screens.dashboard.commonUI.HeaderUI
 import com.example.speedotransfer.ui.theme.Grey
 import com.example.speedotransfer.ui.theme.LightPink
@@ -66,7 +66,7 @@ fun FavouriteScreen(
     modifier: Modifier = Modifier
 ) {
     val context = LocalContext.current
-    val apiService = BankingAPIService.callable
+    val apiService = RetrofitInstance.callable
     val viewModel: FavouriteViewModel =
         viewModel(factory = FavouriteViewModelFactory(apiService, context))
     val favList  by viewModel.favListItems.collectAsState()
