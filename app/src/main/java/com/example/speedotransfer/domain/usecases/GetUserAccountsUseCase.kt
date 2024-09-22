@@ -9,7 +9,7 @@ interface GetUserAccountsUseCase {
 class GetUserAccountsUseCaseImpl (val repo : DashboardRepository) : GetUserAccountsUseCase{
     override suspend fun execute(): Result<ArrayList<UserAccountsResponseItem>> {
         return try{
-            val response = repo.getUserAccounts()
+            val response = repo.fetchUserAccounts()
             if (response.isSuccessful)
                 Result.success(response.body()!!)
             else

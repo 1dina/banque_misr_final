@@ -11,7 +11,7 @@ interface AuthRepository  {
     suspend fun createUserAuth(user : UserAuthRegisterRequest) : Response<UserAuthRegisterResponse>
     suspend fun loginUserAuth (user : UserLoginRequest) : AuthData
     suspend fun saveToken(accessToken:String,refreshToken :String)
-    suspend fun getAccessToken():String?
-    suspend fun getRefreshToken():String?
+    suspend fun fetchAccessToken():String?
+    suspend fun fetchRefreshToken():String?
     suspend fun signOutUser() :Response<String>
 }

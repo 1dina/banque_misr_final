@@ -12,7 +12,7 @@ interface GetTransactionsUseCase {
 class GetTransactionsUseCaseImpl (val repo : DashboardRepository) :GetTransactionsUseCase {
     override suspend fun execute(transactionHistoryRequest: TransactionHistoryRequest): Result<TransactionHistoryResponse> {
         return try {
-            val response = repo.getTransactionHistory(transactionHistoryRequest)
+            val response = repo.fetchTransactionHistory(transactionHistoryRequest)
             if(response.isSuccessful){
                 Log.e("trace",response.body()!!.totalPages.toString())
                 Result.success(response.body()!!)

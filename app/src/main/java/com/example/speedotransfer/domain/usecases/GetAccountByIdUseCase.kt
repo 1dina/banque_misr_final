@@ -12,7 +12,7 @@ interface GetAccountByIdUseCase {
 class GetAccountByIdUseCaseImpl(val dashboardRepository: DashboardRepository) :GetAccountByIdUseCase{
     override suspend fun execute(accountId: String): Result<AccountByIdResponse> {
         return try {
-            val response = dashboardRepository.getUserAccountById(accountId)
+            val response = dashboardRepository.fetchUserAccountById(accountId)
             if(response.isSuccessful){
                 Log.e("trace",response.body()!!.type)
                 Result.success(response.body()!!)

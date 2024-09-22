@@ -48,11 +48,11 @@ class Repository(
         encryptedSharedPreferences.saveToken(accessToken, refreshToken)
     }
 
-    override suspend fun getAccessToken(): String? {
+    override suspend fun fetchAccessToken(): String? {
         return encryptedSharedPreferences.getAccessToken()
     }
 
-    override suspend fun getRefreshToken(): String? {
+    override suspend fun fetchRefreshToken(): String? {
         return encryptedSharedPreferences.getRefreshToken()
     }
 

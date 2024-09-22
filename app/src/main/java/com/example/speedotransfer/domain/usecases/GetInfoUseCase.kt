@@ -10,7 +10,7 @@ interface GetInfoUseCase{
 class GetInfoUseCaseImpl (val dashboardRepository: DashboardRepository) : GetInfoUseCase{
     override suspend fun execute(): Result<UserInfoResponse> {
         return try {
-            val response = dashboardRepository.getInfo()
+            val response = dashboardRepository.fetchInfo()
             if (response.isSuccessful) {
                 Result.success(response.body()!!)
             } else {

@@ -12,7 +12,7 @@ interface DoTransferUseCase {
 class DoTransferUseCaseImpl(val repo :DashboardRepository):DoTransferUseCase{
     override suspend fun execute(transactionRequest: TransactionRequest): Result<TransactionResponse> {
         return try {
-            val response = repo.doTransferProcess(transactionRequest)
+            val response = repo.createTransferProcess(transactionRequest)
             if(response.isSuccessful)
                 Result.success(response.body()!!)
             else

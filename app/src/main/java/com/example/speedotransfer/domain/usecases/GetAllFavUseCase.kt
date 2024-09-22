@@ -11,7 +11,7 @@ interface GetAllFavUseCase {
 class GetAllFavUseCaseImpl (val repo : DashboardRepository) : GetAllFavUseCase {
     override suspend fun execute(): Result<List<FavouriteAdditionResponse>> {
         return try {
-            val response = repo.getAllFav()
+            val response = repo.fetchAllFav()
             if(response.isSuccessful){
                 Log.e("trace",response.body()!!.toString())
                 Result.success(response.body()!!)

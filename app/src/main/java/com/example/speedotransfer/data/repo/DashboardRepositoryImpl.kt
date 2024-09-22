@@ -36,12 +36,12 @@ class DashboardRepositoryImpl(
         }
     }
 
-    override suspend fun getUserAccounts(): Response<ArrayList<UserAccountsResponseItem>> {
+    override suspend fun fetchUserAccounts(): Response<ArrayList<UserAccountsResponseItem>> {
         return try {
             val accessToken = encryptedSharedPreferences.getAccessToken()
                 ?: throw Exception("Access Token is null")
 
-            val response = apiService.getUserAccounts("Bearer $accessToken")
+            val response = apiService.fetchUserAccounts("Bearer $accessToken")
 
             if (response.isSuccessful) {
                 response.body()?.let { accountsList ->
@@ -63,7 +63,7 @@ class DashboardRepositoryImpl(
         }
     }
 
-    override suspend fun getUserAccountById(accountId: String): Response<AccountByIdResponse> {
+    override suspend fun fetchUserAccountById(accountId: String): Response<AccountByIdResponse> {
         return try {
 
             val accessToken = encryptedSharedPreferences.getAccessToken()
@@ -73,7 +73,7 @@ class DashboardRepositoryImpl(
             }
 
             Log.d("trace", "Access Token for fetching account by ID: $accessToken")
-            val response = apiService.getUserAccountById("Bearer $accessToken", accountId)
+            val response = apiService.fetchUserAccountById("Bearer $accessToken", accountId)
 
             if (response.isSuccessful) {
                 Log.d("trace", "Successfully fetched account by ID: ${response.body()}")
@@ -94,19 +94,19 @@ class DashboardRepositoryImpl(
 
     }
 
-    override suspend fun doTransferProcess(transactionRequest: TransactionRequest): Response<TransactionResponse> {
+    override suspend fun createTransferProcess(transactionRequest: TransactionRequest): Response<TransactionResponse> {
         val accessToken = encryptedSharedPreferences.getAccessToken()
-        return apiService.doTransferProcess("Bearer $accessToken", transactionRequest)
+        return apiService.createTransferProcess("Bearer $accessToken", transactionRequest)
     }
 
-    override suspend fun getTransactionHistory(transactionHistoryRequest: TransactionHistoryRequest): Response<TransactionHistoryResponse> {
+    override suspend fun fetchTransactionHistory(transactionHistoryRequest: TransactionHistoryRequest): Response<TransactionHistoryResponse> {
         return try {
             val accessToken = encryptedSharedPreferences.getAccessToken()
             transactionHistoryRequest.accountId = accountId
             Log.e("trace", "id in Transaction history fetched: ${accountId}")
 
             val response =
-                apiService.getTransactionHistory("Bearer $accessToken", transactionHistoryRequest)
+                apiService.fetchTransactionHistory("Bearer $accessToken", transactionHistoryRequest)
             if (response.isSuccessful) {
                 Log.e("trace", "Transaction history fetched: ${response.body()?.size}")
             } else {
@@ -145,7 +145,7 @@ class DashboardRepositoryImpl(
         }
     }
 
-    override suspend fun getAllFav(): Response<List<FavouriteAdditionResponse>> {
+    override suspend fun fetchAllFav(): Response<List<FavouriteAdditionResponse>> {
         return try {
             val accessToken = encryptedSharedPreferences.getAccessToken()
             Log.e("trace", "Access Token: $accessToken")
@@ -153,7 +153,7 @@ class DashboardRepositoryImpl(
             val userId = decodedJWT.getClaim("id").asInt()
             Log.e("trace", "User ID from JWT: $userId")
 
-            val response = apiService.getAllFav("Bearer $accessToken", userId)
+            val response = apiService.fetchAllFav("Bearer $accessToken", userId)
 
             if (response.isSuccessful) {
                 Log.e("trace", "Faved Items fetched: ${response.body()?.toString()}")
@@ -190,11 +190,11 @@ class DashboardRepositoryImpl(
         }
     }
 
-    override suspend fun getInfo(): Response <UserInfoResponse> {
+    override suspend fun fetchInfo(): Response <UserInfoResponse> {
 
         return try {
             val accessToken = encryptedSharedPreferences.getAccessToken()
-            val response = apiService.getInfo("Bearer $accessToken")
+            val response = apiService.fetchInfo("Bearer $accessToken")
             if (response.isSuccessful) {
                 accountId = response.body()!!.accounts.get(0).id
                 Log.e("trace", "user info fetched: ${response.body()?.toString()}")

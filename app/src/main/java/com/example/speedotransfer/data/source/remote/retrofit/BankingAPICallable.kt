@@ -42,31 +42,31 @@ interface BankingAPICallable {
     ): Response<AccountCreationResponse>
 
     @GET(Constants.USER_ACCOUNTS_ENDPOINT)
-    suspend fun getUserAccounts(
+    suspend fun fetchUserAccounts(
         @Header("Authorization")
         accessToken: String
     ): Response<ArrayList<UserAccountsResponseItem>>
 
     @GET(Constants.GET_USER_ACCOUNT_ID_ENDPOINT)
-    suspend fun getUserAccountById(
+    suspend fun fetchUserAccountById(
         @Header("Authorization") accessToken: String,
         @Path("accountID") accountId: String
     )
             : Response<AccountByIdResponse>
 
     @POST(Constants.TRANSFER_PROCESS_ENDPOINT)
-    suspend fun doTransferProcess(
+    suspend fun createTransferProcess(
         @Header("Authorization") accessToken: String,
         @Body transactionRequest: TransactionRequest
     ): Response<TransactionResponse>
 
     @POST(Constants.TRANSACTION_HISTORY_ENDPOINT)
-    suspend fun getTransactionHistory(
+    suspend fun fetchTransactionHistory(
         @Header("Authorization") accessToken: String,
         @Body transactionHistoryRequest: TransactionHistoryRequest
     ) : Response<TransactionHistoryResponse>
     @GET(Constants.INFO_ENDPOINT)
-    suspend fun getInfo(@Header("Authorization") accessToken: String): Response<UserInfoResponse>
+    suspend fun fetchInfo(@Header("Authorization") accessToken: String): Response<UserInfoResponse>
 
     @PUT(Constants.UPDATE_PASSWORD)
     suspend fun updatePassword(
@@ -80,7 +80,7 @@ interface BankingAPICallable {
     ): Response<FavouriteAdditionResponse>
 
     @GET (Constants.ALL_FAVOURITES_ENDPOINT)
-    suspend fun  getAllFav(
+    suspend fun  fetchAllFav(
         @Header("Authorization")accessToken: String,
         @Path("userId") userId: Int
     ) : Response<List<FavouriteAdditionResponse>>
