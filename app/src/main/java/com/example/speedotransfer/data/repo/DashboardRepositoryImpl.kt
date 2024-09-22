@@ -20,7 +20,7 @@ import retrofit2.Response
 
 class DashboardRepositoryImpl(
     val apiService: BankingAPICallable,
-    val encryptedSharedPreferences: SecureStorageDataSource
+    private val encryptedSharedPreferences: SecureStorageDataSource
 ) : DashboardRepository {
     var accountId = 0
     override suspend fun createAccount(
@@ -103,7 +103,7 @@ class DashboardRepositoryImpl(
         return try {
             val accessToken = encryptedSharedPreferences.getAccessToken()
             transactionHistoryRequest.accountId = accountId
-            Log.e("trace", "id in Transaction history fetched: ${accountId}")
+            Log.e("trace", "id in Transaction history fetched: $accountId")
 
             val response =
                 apiService.fetchTransactionHistory("Bearer $accessToken", transactionHistoryRequest)
@@ -196,12 +196,12 @@ class DashboardRepositoryImpl(
             val accessToken = encryptedSharedPreferences.getAccessToken()
             val response = apiService.fetchInfo("Bearer $accessToken")
             if (response.isSuccessful) {
-                accountId = response.body()!!.accounts.get(0).id
+                accountId = response.body()!!.accounts[0].id
                 Log.e("trace", "user info fetched: ${response.body()?.toString()}")
             } else {
                 Log.e(
                     "trace",
-                    "Error fetching user data : ${response}"
+                    "Error fetching user data : $response"
                 )
             }
             response
