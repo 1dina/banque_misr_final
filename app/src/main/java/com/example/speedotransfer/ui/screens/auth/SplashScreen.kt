@@ -22,12 +22,10 @@ import kotlinx.coroutines.delay
 @Composable
 fun SplashScreen(
     navController: NavController,
-    modifier: Modifier = Modifier,
     onTimeout: () -> Unit
 ) {
     val context = LocalContext.current
     val preferenceManager = PreferenceManager(context)
-    val encryptedSharedPreference = SecureStorageDataSource(context)
     Box(
         modifier = Modifier
             .fillMaxSize()

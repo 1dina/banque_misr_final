@@ -1,23 +1,20 @@
 package com.example.speedotransfer.data.source.remote.retrofit
 
+import com.chuckerteam.chucker.api.ChuckerInterceptor
+import com.example.speedotransfer.ui.CustomApplication
 import com.example.speedotransfer.utils.Constants
 import com.google.gson.GsonBuilder
 import okhttp3.OkHttpClient
-import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.converter.scalars.ScalarsConverterFactory
 
 object RetrofitInstance {
-
     private val gson = GsonBuilder()
         .setLenient()
         .create()
-    private val logging = HttpLoggingInterceptor().apply {
-        level = HttpLoggingInterceptor.Level.BODY
-    }
     private val client = OkHttpClient.Builder()
-        .addInterceptor(logging)
+        .addInterceptor(ChuckerInterceptor(CustomApplication.getAppContext()))
         .build()
 
 
@@ -32,4 +29,5 @@ object RetrofitInstance {
     val callable: BankingAPICallable by lazy {
         retrofit.create(BankingAPICallable::class.java)
     }
+
 }

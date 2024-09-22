@@ -78,6 +78,9 @@ dependencies {
     implementation (libs.androidx.security.crypto)
     implementation (libs.converter.scalars)
     implementation (libs.logging.interceptor)
+    debugImplementation (libs.library)
+    releaseImplementation (libs.library.no.op)
+
 
 
 

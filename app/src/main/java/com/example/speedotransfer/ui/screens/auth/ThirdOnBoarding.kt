@@ -37,7 +37,7 @@ import com.example.speedotransfer.data.source.local.PreferenceManager
 
 
 @Composable
-fun OnBoarding3(navController: NavController, modifier: Modifier = Modifier) {
+fun OnBoarding3(navController: NavController) {
     val context = LocalContext.current
     val preferenceManager = PreferenceManager(context)
     preferenceManager.setFirstTimeLaunch(false)

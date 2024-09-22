@@ -34,7 +34,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Color.Companion.Black
 import androidx.compose.ui.graphics.Color.Companion.Unspecified
 import androidx.compose.ui.graphics.Color.Companion.White
@@ -168,7 +167,7 @@ fun MoreScreen(
             Box(
                 modifier = modifier
                     .fillMaxSize()
-                    .background(Color.Black.copy(alpha = 0.5f), RoundedCornerShape(8.dp))
+                    .background(Black.copy(alpha = 0.5f), RoundedCornerShape(8.dp))
                     .wrapContentSize(Alignment.Center)
             ) {
                 IndeterminateCircularIndicator()
