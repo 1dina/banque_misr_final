@@ -1,7 +1,7 @@
 package com.example.speedotransfer.domain.usecases
 
-import com.example.speedotransfer.data.models.account.AccountCreationRequest
-import com.example.speedotransfer.data.models.account.AccountCreationResponse
+import com.example.speedotransfer.data.source.remote.models.account.AccountCreationRequest
+import com.example.speedotransfer.data.source.remote.models.account.AccountCreationResponse
 import com.example.speedotransfer.domain.repository.DashboardRepository
 
 interface CreateAccountUseCase {

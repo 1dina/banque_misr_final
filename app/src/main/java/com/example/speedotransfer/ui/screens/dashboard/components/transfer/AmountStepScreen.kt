@@ -42,7 +42,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.speedotransfer.R
-import com.example.speedotransfer.data.models.favourite.FavouriteAdditionResponse
+import com.example.speedotransfer.data.source.remote.models.favourite.FavouriteAdditionResponse
 import com.example.speedotransfer.data.source.remote.retrofit.RetrofitInstance
 import com.example.speedotransfer.ui.theme.Grey
 import com.example.speedotransfer.ui.theme.LightPink

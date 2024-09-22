@@ -1,4 +1,4 @@
-package com.example.speedotransfer.data.models.favourite
+package com.example.speedotransfer.data.source.remote.models.favourite
 
 
 data class FavouriteAdditionResponse(

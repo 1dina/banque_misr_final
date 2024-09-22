@@ -2,11 +2,11 @@ package com.example.speedotransfer.data.repo
 
 import android.util.Log
 import com.auth0.jwt.JWT
-import com.example.speedotransfer.data.models.AuthData
-import com.example.speedotransfer.data.models.user.UserAuthRegisterRequest
-import com.example.speedotransfer.data.models.user.UserAuthRegisterResponse
-import com.example.speedotransfer.data.models.user.UserLoginRequest
-import com.example.speedotransfer.data.models.user.UserLoginResponse
+import com.example.speedotransfer.data.source.remote.models.AuthData
+import com.example.speedotransfer.data.source.remote.models.user.UserAuthRegisterRequest
+import com.example.speedotransfer.data.source.remote.models.user.UserAuthRegisterResponse
+import com.example.speedotransfer.data.source.remote.models.user.UserLoginRequest
+import com.example.speedotransfer.data.source.remote.models.user.UserLoginResponse
 import com.example.speedotransfer.data.source.remote.retrofit.BankingAPICallable
 import com.example.speedotransfer.data.source.local.SecureStorageDataSource
 import com.example.speedotransfer.domain.repository.AuthRepository

@@ -1,7 +1,7 @@
 package com.example.speedotransfer.domain.usecases
 
-import com.example.speedotransfer.data.models.user.UserAuthRegisterRequest
-import com.example.speedotransfer.data.models.user.UserAuthRegisterResponse
+import com.example.speedotransfer.data.source.remote.models.user.UserAuthRegisterRequest
+import com.example.speedotransfer.data.source.remote.models.user.UserAuthRegisterResponse
 import com.example.speedotransfer.domain.repository.AuthRepository
 
 interface RegisterUserUseCase {

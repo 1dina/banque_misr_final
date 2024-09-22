@@ -32,8 +32,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.speedotransfer.R
-import com.example.speedotransfer.data.models.transaction.history.Content
-import com.example.speedotransfer.data.models.user.info.UserInfoResponse
+import com.example.speedotransfer.data.source.remote.models.transaction.history.Content
+import com.example.speedotransfer.data.source.remote.models.user.info.UserInfoResponse
 import com.example.speedotransfer.ui.screens.dashboard.commonUI.HeaderUI
 import com.example.speedotransfer.ui.theme.Grey
 import com.example.speedotransfer.ui.theme.LightPink

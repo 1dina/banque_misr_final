@@ -1,4 +1,4 @@
-package com.example.speedotransfer.data.models.account
+package com.example.speedotransfer.data.source.remote.models.account
 
 import com.google.gson.annotations.SerializedName
 

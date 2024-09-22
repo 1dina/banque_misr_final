@@ -1,7 +1,7 @@
 package com.example.speedotransfer.domain.usecases
 
-import com.example.speedotransfer.data.models.AuthData
-import com.example.speedotransfer.data.models.user.UserLoginRequest
+import com.example.speedotransfer.data.source.remote.models.AuthData
+import com.example.speedotransfer.data.source.remote.models.user.UserLoginRequest
 import com.example.speedotransfer.domain.repository.AuthRepository
 
 interface LoginUserUseCase{

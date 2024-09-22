@@ -1,7 +1,7 @@
 package com.example.speedotransfer.domain.usecases
 
 import android.util.Log
-import com.example.speedotransfer.data.models.account.AccountByIdResponse
+import com.example.speedotransfer.data.source.remote.models.account.AccountByIdResponse
 import com.example.speedotransfer.domain.repository.DashboardRepository
 
 interface GetAccountByIdUseCase {

@@ -1,4 +1,4 @@
-package com.example.speedotransfer.data.models.transaction.history
+package com.example.speedotransfer.data.source.remote.models.transaction.history
 
 data class Pageable(
     val offset: Int,

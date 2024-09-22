@@ -1,4 +1,4 @@
-package com.example.speedotransfer.data.models.transaction
+package com.example.speedotransfer.data.source.remote.models.transaction
 
 data class TransactionRequest(
     var senderAccountNum: Int = 0,
