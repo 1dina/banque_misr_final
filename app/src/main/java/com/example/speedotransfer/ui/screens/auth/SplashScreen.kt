@@ -14,7 +14,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.speedotransfer.R
 import com.example.speedotransfer.data.source.local.SecureStorageDataSource
-import com.example.speedotransfer.routes.AppRoutes
+import com.example.speedotransfer.ui.routes.AppRoutes
 import com.example.speedotransfer.ui.theme.DarkRed
 import com.example.speedotransfer.data.source.local.PreferenceManager
 import kotlinx.coroutines.delay

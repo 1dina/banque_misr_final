@@ -2,7 +2,7 @@ package com.example.speedotransfer.data.source.remote.retrofit
 
 import com.chuckerteam.chucker.api.ChuckerInterceptor
 import com.example.speedotransfer.ui.CustomApplication
-import com.example.speedotransfer.utils.Constants
+import com.example.speedotransfer.data.constants.Constants
 import com.google.gson.GsonBuilder
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit

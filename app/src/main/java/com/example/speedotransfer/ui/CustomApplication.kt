@@ -10,7 +10,6 @@ class CustomApplication : Application() {
 
     companion object {
         private lateinit var instance: CustomApplication
-
         fun getAppContext(): Context = instance.applicationContext
     }
 }

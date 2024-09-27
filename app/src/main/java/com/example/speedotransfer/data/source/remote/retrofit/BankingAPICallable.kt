@@ -1,6 +1,6 @@
 package com.example.speedotransfer.data.source.remote.retrofit
 
-import com.example.speedotransfer.utils.Constants
+import com.example.speedotransfer.data.constants.Constants
 import com.example.speedotransfer.data.source.remote.models.account.AccountByIdResponse
 import com.example.speedotransfer.data.source.remote.models.account.AccountCreationRequest
 import com.example.speedotransfer.data.source.remote.models.account.AccountCreationResponse

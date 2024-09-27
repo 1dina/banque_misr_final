@@ -50,7 +50,7 @@ import androidx.navigation.compose.rememberNavController
 import com.example.speedotransfer.R
 import com.example.speedotransfer.data.source.remote.models.user.UserLoginRequest
 import com.example.speedotransfer.data.source.remote.retrofit.RetrofitInstance
-import com.example.speedotransfer.routes.AppRoutes
+import com.example.speedotransfer.ui.routes.AppRoutes
 import com.example.speedotransfer.ui.screens.dashboard.DashboardActivity
 import com.example.speedotransfer.ui.theme.LightRed
 import com.example.speedotransfer.ui.theme.Maroon

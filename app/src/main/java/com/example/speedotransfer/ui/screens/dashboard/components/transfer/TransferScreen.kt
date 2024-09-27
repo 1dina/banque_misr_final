@@ -49,7 +49,7 @@ import androidx.navigation.NavGraph.Companion.findStartDestination
 import com.example.speedotransfer.R
 import com.example.speedotransfer.data.source.remote.models.favourite.FavouriteAdditionResponse
 import com.example.speedotransfer.data.source.remote.models.transaction.TransactionRequest
-import com.example.speedotransfer.routes.AppRoutes
+import com.example.speedotransfer.ui.routes.AppRoutes
 import com.example.speedotransfer.ui.screens.auth.IndeterminateCircularIndicator
 import com.example.speedotransfer.ui.screens.dashboard.commonUI.HeaderUI
 import com.example.speedotransfer.ui.theme.LightPink

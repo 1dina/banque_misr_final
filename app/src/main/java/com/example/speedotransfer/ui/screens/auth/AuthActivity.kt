@@ -10,7 +10,7 @@ import androidx.compose.ui.Modifier
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.rememberNavController
 import com.example.speedotransfer.data.source.remote.retrofit.RetrofitInstance
-import com.example.speedotransfer.routes.AuthNavGraph
+import com.example.speedotransfer.ui.routes.AuthNavGraph
 import com.example.speedotransfer.ui.theme.SpeedoTransferTheme
 import com.example.speedotransfer.ui.viewmodels.AuthViewModel
 import com.example.speedotransfer.ui.viewmodels.AuthViewModelFactory

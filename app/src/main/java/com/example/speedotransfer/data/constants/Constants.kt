@@ -1,7 +1,7 @@
-package com.example.speedotransfer.utils
+package com.example.speedotransfer.data.constants
 
 object Constants {
-    const val BASE_URL = "https://moneyapi-abatdad9bbgvc3bs.francecentral-01.azurewebsites.net"
+    const val BASE_URL = "https://moneyapp-fgevfhfwdbbdfdau.francecentral-01.azurewebsites.net/"
     const val SIGNUP_ENDPOINT = "/api/v1/auth/create"
     const val SIGNIN_ENDPOINT = "/api/v1/auth/login"
     const val SIGNOUT_ENDPOINT = "/api/v1/auth/logout"
@@ -15,7 +15,4 @@ object Constants {
     const val FAVOURITE_ADDITION_ENDPOINT = "/api/v1/user/Favourite/AddFavourite"
     const val ALL_FAVOURITES_ENDPOINT = "/api/v1/user/Favourite/GetFavourite/{userId}"
     const val DELETE_FAVOURITE_ENDPOINT = "/api/v1/user/Favourite/{accountId}"
-
-
-    const val REQUEST_CODE_NOTIFICATION_PERMISSION = 100
 }

@@ -1,4 +1,4 @@
-package com.example.speedotransfer.routes
+package com.example.speedotransfer.ui.routes
 
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.runtime.Composable
@@ -8,13 +8,13 @@ import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
-import com.example.speedotransfer.routes.AppRoutes.HOME
-import com.example.speedotransfer.routes.AppRoutes.LAST_PAGE_SIGN_UP
-import com.example.speedotransfer.routes.AppRoutes.SIGN_IN
-import com.example.speedotransfer.routes.AppRoutes.SPLASH
-import com.example.speedotransfer.routes.AppRoutes.START_DESTINATION
-import com.example.speedotransfer.routes.AppRoutes.TRANS_DETAILS
-import com.example.speedotransfer.routes.AppRoutes.isFirstTime
+import com.example.speedotransfer.ui.routes.AppRoutes.HOME
+import com.example.speedotransfer.ui.routes.AppRoutes.LAST_PAGE_SIGN_UP
+import com.example.speedotransfer.ui.routes.AppRoutes.SIGN_IN
+import com.example.speedotransfer.ui.routes.AppRoutes.SPLASH
+import com.example.speedotransfer.ui.routes.AppRoutes.START_DESTINATION
+import com.example.speedotransfer.ui.routes.AppRoutes.TRANS_DETAILS
+import com.example.speedotransfer.ui.routes.AppRoutes.isFirstTime
 import com.example.speedotransfer.ui.screens.auth.OnBoarding1
 import com.example.speedotransfer.ui.screens.auth.OnBoarding2
 import com.example.speedotransfer.ui.screens.auth.OnBoarding3

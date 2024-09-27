@@ -3,7 +3,7 @@ package com.example.speedotransfer.ui.screens.dashboard.components
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 import com.example.speedotransfer.R
-import com.example.speedotransfer.routes.AppRoutes
+import com.example.speedotransfer.ui.routes.AppRoutes
 
 sealed class BottomNavBarScreens(val route: String, @DrawableRes val itemImage: Int, @StringRes val resourceId: Int) {
     object HomeScreens : BottomNavBarScreens(AppRoutes.HOME,R.drawable.ic_home, R.string.home)

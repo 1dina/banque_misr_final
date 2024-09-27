@@ -21,7 +21,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.speedotransfer.R
-import com.example.speedotransfer.routes.AppRoutes
+import com.example.speedotransfer.ui.routes.AppRoutes
 import com.example.speedotransfer.ui.screens.dashboard.commonUI.ProfileScreen
 import com.example.speedotransfer.ui.screens.dashboard.commonUI.HeaderUI
 import com.example.speedotransfer.ui.theme.LightRed
