@@ -1,6 +1,5 @@
 package com.example.speedotransfer.data.repo
 
-import android.util.Log
 import com.auth0.jwt.JWT
 import com.example.speedotransfer.data.source.remote.models.AuthData
 import com.example.speedotransfer.data.source.remote.models.user.UserAuthRegisterRequest
@@ -12,9 +11,9 @@ import com.example.speedotransfer.data.source.local.SecureStorageDataSource
 import com.example.speedotransfer.domain.repository.AuthRepository
 import retrofit2.Response
 
-class Repository(
+class AuthRepositoryImpl(
     val apiService: BankingAPICallable,
-    val encryptedSharedPreferences: SecureStorageDataSource
+    private val encryptedSharedPreferences: SecureStorageDataSource
 ) : AuthRepository {
     override suspend fun createUserAuth(user: UserAuthRegisterRequest): Response<UserAuthRegisterResponse> {
         return apiService.createUser(user)
@@ -28,16 +27,11 @@ class Repository(
                 val refreshToken = response.body()?.refreshToken
                 if (accessToken != null && refreshToken != null)
                     saveToken(accessToken, refreshToken)
-                Log.e("trace","accessToken $accessToken")
-                Log.e("trace","refreshToken $refreshToken")
-
                 val decodedJWT = JWT.decode(accessToken)
                 val userId = decodedJWT.getClaim("id").asInt()
                 AuthData(userId)
             } else {
-                    Log.e("trace API ", "Error Body: ${response.errorBody()?.string()}")
                     throw Exception("Invalid Email or Password")
-
             }
         } catch (e: Exception) {
             throw e
@@ -59,11 +53,8 @@ class Repository(
     override suspend fun signOutUser(): Response<String> {
         val accessToken = encryptedSharedPreferences.getAccessToken()
         val refreshToken  = encryptedSharedPreferences.getRefreshToken()
-        Log.e("trace","accessToken $accessToken")
-        Log.e("trace","refreshToken $refreshToken")
         saveToken("","")
         return apiService.signOutUser(UserLoginResponse(refreshToken!!,accessToken!!))
-
     }
 
 

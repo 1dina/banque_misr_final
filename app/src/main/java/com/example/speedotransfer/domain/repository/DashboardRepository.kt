@@ -22,7 +22,6 @@ interface DashboardRepository {
     : Response<TransactionHistoryResponse>
     suspend fun fetchInfo(): Response<UserInfoResponse>
     suspend fun updatePassword(passwords: Passwords): Response<String>
-
     suspend fun addToFav(favouriteAdditionResponse: FavouriteAdditionResponse) : Response<FavouriteAdditionResponse>
     suspend fun fetchAllFav() : Response<List<FavouriteAdditionResponse>>
     suspend fun deleteFromFav(accountId: Int) : Response<String>
