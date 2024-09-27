@@ -4,19 +4,16 @@ import com.example.speedotransfer.data.source.remote.models.account.UserAccounts
 import com.example.speedotransfer.domain.repository.DashboardRepository
 
 interface GetUserAccountsUseCase {
-    suspend fun execute() : Result<ArrayList<UserAccountsResponseItem>>
+    suspend fun execute(): Result<ArrayList<UserAccountsResponseItem>>
 }
-class GetUserAccountsUseCaseImpl (val repo : DashboardRepository) : GetUserAccountsUseCase{
+
+class GetUserAccountsUseCaseImpl(val repo: DashboardRepository) : GetUserAccountsUseCase {
     override suspend fun execute(): Result<ArrayList<UserAccountsResponseItem>> {
-        return try{
-            val response = repo.fetchUserAccounts()
-            if (response.isSuccessful)
-                Result.success(response.body()!!)
-            else
-                Result.failure(Exception(response.errorBody()?.string()))
-        }catch (e : Exception) {
-            Result.failure(e)
-        }
+        val response = repo.fetchUserAccounts()
+        return if (response.isSuccessful) {
+            Result.success(response.body()!!)
+        } else
+            Result.failure(Exception(response.errorBody()?.string()))
     }
 
 }

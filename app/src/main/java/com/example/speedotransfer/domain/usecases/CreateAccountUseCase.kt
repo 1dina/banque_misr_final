@@ -10,14 +10,9 @@ interface CreateAccountUseCase {
 
 class CreateAccountUseCaseImp (val dashboardRepository: DashboardRepository) : CreateAccountUseCase{
     override suspend fun execute(account: AccountCreationRequest): Result<AccountCreationResponse> {
-        return try{
-            val response = dashboardRepository.createAccount(account)
-            if (response.isSuccessful)
-                Result.success(response.body()!!)
-            else
-                Result.failure(Exception(response.errorBody()?.string()))
-        }catch (e : Exception) {
-            Result.failure(e)
-        }
+        val response = dashboardRepository.createAccount(account)
+        return if (response.isSuccessful) {
+            Result.success(response.body()!!)
+        } else { Result.failure(Exception(response.errorBody()?.string())) }
     }
 }

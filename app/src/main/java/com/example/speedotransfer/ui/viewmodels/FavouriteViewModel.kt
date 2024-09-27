@@ -12,8 +12,8 @@ import kotlinx.coroutines.launch
 import java.net.UnknownHostException
 
 class FavouriteViewModel(
-    val getAllFavUseCase: GetAllFavUseCase,
-    val deleteFavUseCase: DeleteFavUseCase
+    private val getAllFavUseCase: GetAllFavUseCase,
+    private val deleteFavUseCase: DeleteFavUseCase
 ) : ViewModel() {
     private val _favListItems = MutableStateFlow<List<FavouriteAdditionResponse>>(
         emptyList()

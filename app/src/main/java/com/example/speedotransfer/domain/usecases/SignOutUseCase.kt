@@ -8,15 +8,11 @@ interface SignOutUseCase {
 
 class SignOutUseCaseImp(private val authRepository: AuthRepository) : SignOutUseCase {
     override suspend fun execute(): Result<String> {
-        return try {
-            val response = authRepository.signOutUser()
-            if (response.isSuccessful) {
-                Result.success(response.body()!!)
-            } else {
-                Result.failure(Exception("Unknown Error"))
-            }
-        } catch (e: Exception) {
-            Result.failure(e)
+        val response = authRepository.signOutUser()
+        return if (response.isSuccessful) {
+            Result.success(response.body()!!)
+        } else {
+            Result.failure(Exception("Unknown Error"))
         }
     }
 

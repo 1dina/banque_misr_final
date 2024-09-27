@@ -9,14 +9,11 @@ interface AddToFavUseCase {
 
 class AddToFavUseCaseImpl (val repo : DashboardRepository) : AddToFavUseCase {
     override suspend fun execute(favouriteAdditionResponse: FavouriteAdditionResponse): Result<String> {
-       return try{
-            val response = repo.addToFav(favouriteAdditionResponse)
-            if (response.isSuccessful)
-                Result.success("Item has been Added to Favourits")
-           else
-               Result.failure(Exception("There is no account with that Id"))
-        }catch (e:Exception) {
-           Result.failure(e)
-       }
+        val response = repo.addToFav(favouriteAdditionResponse)
+        return if (response.isSuccessful) {
+            Result.success("Item has been Added to Favourites")
+        } else {
+            Result.failure(Exception("There is no account with that Id"))
+        }
     }
 }

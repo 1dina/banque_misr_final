@@ -21,12 +21,12 @@ import kotlinx.coroutines.launch
 import java.net.UnknownHostException
 
 class HomeViewModel(
-    val getUserAccountsUseCase: GetUserAccountsUseCase,
-    val doTransferUseCase: DoTransferUseCase,
-    val getInfoUseCase: GetInfoUseCase,
-    val passwordUseCase: UpdatePasswordUseCase,
-    val getTransactionsUseCase: GetTransactionsUseCase,
-    val addToFavUseCase: AddToFavUseCase
+    private val getUserAccountsUseCase: GetUserAccountsUseCase,
+    private val doTransferUseCase: DoTransferUseCase,
+    private val getInfoUseCase: GetInfoUseCase,
+    private val passwordUseCase: UpdatePasswordUseCase,
+    private val getTransactionsUseCase: GetTransactionsUseCase,
+    private val addToFavUseCase: AddToFavUseCase
 ) : ViewModel() {
     private val _userAccountBalance = MutableStateFlow("Add your Account first")
     val userAccountData = _userAccountBalance.asStateFlow()

@@ -10,8 +10,9 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
-class MyCardsViewModel(val createAccountUseCase: CreateAccountUseCase,
-    val getUserAccountsUseCase: GetUserAccountsUseCase) : ViewModel() {
+class MyCardsViewModel(
+    private val createAccountUseCase: CreateAccountUseCase,
+    private val getUserAccountsUseCase: GetUserAccountsUseCase) : ViewModel() {
     private val _myCardsList = MutableStateFlow<List<UserAccountsResponseItem>>(
         emptyList()
     )
