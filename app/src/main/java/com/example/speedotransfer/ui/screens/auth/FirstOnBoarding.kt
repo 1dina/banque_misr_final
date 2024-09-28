@@ -35,7 +35,7 @@ import com.example.speedotransfer.ui.theme.LightRed
 
 
 @Composable
-fun OnBoarding1(navController: NavController, modifier: Modifier = Modifier) {
+fun OnBoarding1(navController: NavController) {
 
     Box(
         modifier = Modifier

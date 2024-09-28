@@ -1,4 +1,4 @@
-package com.example.speedotransfer.ui.screens.auth
+package com.example.speedotransfer.ui.screens.auth.signUp
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable

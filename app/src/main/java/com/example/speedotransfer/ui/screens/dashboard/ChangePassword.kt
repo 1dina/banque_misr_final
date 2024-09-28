@@ -43,7 +43,7 @@ import androidx.navigation.compose.rememberNavController
 import com.example.speedotransfer.R
 import com.example.speedotransfer.data.source.remote.models.transaction.history.Passwords
 import com.example.speedotransfer.data.source.remote.retrofit.RetrofitInstance
-import com.example.speedotransfer.ui.screens.auth.Texts
+import com.example.speedotransfer.ui.screens.auth.signUp.Texts
 import com.example.speedotransfer.ui.screens.dashboard.commonUI.HeaderUI
 import com.example.speedotransfer.ui.theme.LightRed
 import com.example.speedotransfer.ui.theme.LightYellow
