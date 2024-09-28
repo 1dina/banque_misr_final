@@ -10,19 +10,19 @@ import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import com.example.speedotransfer.ui.routes.AppRoutes.HOME
 import com.example.speedotransfer.ui.routes.AppRoutes.TRANS_DETAILS
-import com.example.speedotransfer.ui.screens.dashboard.ChangePassword
-import com.example.speedotransfer.ui.screens.dashboard.Profile
-import com.example.speedotransfer.ui.screens.dashboard.ProfileInfo
-import com.example.speedotransfer.ui.screens.dashboard.Settings
-import com.example.speedotransfer.ui.screens.dashboard.TransactionScreen
-import com.example.speedotransfer.ui.screens.dashboard.TransactionsDetails
-import com.example.speedotransfer.ui.screens.dashboard.components.HomeScreen
-import com.example.speedotransfer.ui.screens.dashboard.components.NotificationScreen
-import com.example.speedotransfer.ui.screens.dashboard.components.more.FavouriteScreen
-import com.example.speedotransfer.ui.screens.dashboard.components.more.MoreScreen
-import com.example.speedotransfer.ui.screens.dashboard.components.mycards.MyCardScreen
-import com.example.speedotransfer.ui.screens.dashboard.components.transfer.TransferScreen
-import com.example.speedotransfer.ui.viewmodels.HomeViewModel
+import com.example.speedotransfer.ui.screens.dashboard.more.settings.ChangePassword
+import com.example.speedotransfer.ui.screens.dashboard.more.settings.Profile
+import com.example.speedotransfer.ui.screens.dashboard.more.settings.ProfileInfo
+import com.example.speedotransfer.ui.screens.dashboard.more.settings.Settings
+import com.example.speedotransfer.ui.screens.dashboard.transaction.TransactionScreen
+import com.example.speedotransfer.ui.screens.dashboard.transaction.TransactionsDetails
+import com.example.speedotransfer.ui.screens.dashboard.home.HomeScreen
+import com.example.speedotransfer.ui.screens.dashboard.home.NotificationScreen
+import com.example.speedotransfer.ui.screens.dashboard.more.FavouriteScreen
+import com.example.speedotransfer.ui.screens.dashboard.more.MoreScreen
+import com.example.speedotransfer.ui.screens.dashboard.mycards.MyCardScreen
+import com.example.speedotransfer.ui.screens.dashboard.transfer.TransferScreen
+import com.example.speedotransfer.ui.viewmodels.home.HomeViewModel
 
 @Composable
 fun DashboardNavGraph(

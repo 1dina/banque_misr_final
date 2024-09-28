@@ -32,12 +32,11 @@ import androidx.navigation.compose.rememberNavController
 import com.example.speedotransfer.data.source.remote.retrofit.RetrofitInstance
 import com.example.speedotransfer.ui.routes.AppRoutes
 import com.example.speedotransfer.ui.routes.DashboardNavGraph
-import com.example.speedotransfer.ui.screens.dashboard.components.BottomNavBarScreens
 import com.example.speedotransfer.ui.theme.Grey
 import com.example.speedotransfer.ui.theme.Marron
 import com.example.speedotransfer.ui.theme.SpeedoTransferTheme
-import com.example.speedotransfer.ui.viewmodels.HomeViewModel
-import com.example.speedotransfer.ui.viewmodels.HomeViewModelFactory
+import com.example.speedotransfer.ui.viewmodels.home.HomeViewModel
+import com.example.speedotransfer.ui.viewmodels.home.HomeViewModelFactory
 
 class DashboardActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {

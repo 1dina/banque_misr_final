@@ -62,8 +62,8 @@ import com.example.speedotransfer.ui.routes.AppRoutes
 import com.example.speedotransfer.ui.theme.LightGrey
 import com.example.speedotransfer.ui.theme.LightRed
 import com.example.speedotransfer.ui.theme.Maroon
-import com.example.speedotransfer.ui.viewmodels.AuthViewModel
-import com.example.speedotransfer.ui.viewmodels.AuthViewModelFactory
+import com.example.speedotransfer.ui.viewmodels.auth.AuthViewModel
+import com.example.speedotransfer.ui.viewmodels.auth.AuthViewModelFactory
 import java.text.SimpleDateFormat
 import java.util.Locale
 

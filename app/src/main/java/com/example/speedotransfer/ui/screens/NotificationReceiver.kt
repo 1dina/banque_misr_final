@@ -3,7 +3,7 @@ package com.example.speedotransfer.ui.screens
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
-import com.example.speedotransfer.ui.screens.dashboard.components.transfer.sendNotification
+import com.example.speedotransfer.ui.screens.dashboard.transfer.sendNotification
 
 class NotificationReceiver : BroadcastReceiver() {
 

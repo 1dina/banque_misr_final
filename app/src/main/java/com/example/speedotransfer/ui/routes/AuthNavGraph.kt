@@ -12,13 +12,13 @@ import com.example.speedotransfer.ui.routes.AppRoutes.SIGN_IN
 import com.example.speedotransfer.ui.routes.AppRoutes.SPLASH
 import com.example.speedotransfer.ui.routes.AppRoutes.START_DESTINATION
 import com.example.speedotransfer.ui.routes.AppRoutes.isFirstTime
-import com.example.speedotransfer.ui.screens.auth.OnBoarding1
-import com.example.speedotransfer.ui.screens.auth.OnBoarding2
-import com.example.speedotransfer.ui.screens.auth.OnBoarding3
-import com.example.speedotransfer.ui.screens.auth.SignIn
+import com.example.speedotransfer.ui.screens.auth.onBoarding.OnBoarding1
+import com.example.speedotransfer.ui.screens.auth.onBoarding.OnBoarding2
+import com.example.speedotransfer.ui.screens.auth.onBoarding.OnBoarding3
+import com.example.speedotransfer.ui.screens.auth.signIn.SignIn
 import com.example.speedotransfer.ui.screens.auth.signUp.SignUp1
 import com.example.speedotransfer.ui.screens.auth.signUp.SignUp2
-import com.example.speedotransfer.ui.screens.auth.SplashScreen
+import com.example.speedotransfer.ui.screens.auth.splash.SplashScreen
 
 @Composable
 fun AuthNavGraph(navController: NavController) {
