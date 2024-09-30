@@ -19,36 +19,28 @@ class AuthViewModel(
     private val loginUserUseCase: LoginUserUseCase,
     private val signOutUseCase: SignOutUseCase
 ) : ViewModel() {
-    private val _userRegistrationData = MutableStateFlow(UserAuthRegisterRequest())
-    private val userRegistrationData = _userRegistrationData.asStateFlow()
-    private val _userLoginData = MutableStateFlow(UserLoginRequest())
-    private val userLoginData = _userLoginData.asStateFlow()
-    private val _responseStatus = MutableStateFlow<Boolean?>(null)
-    val responseStatus = _responseStatus.asStateFlow()
-    private val _toastMessage = MutableStateFlow<String?>(null)
-    val toastMessage = _toastMessage.asStateFlow()
+    private val _authUiState = MutableStateFlow<AuthUiState>(AuthUiState.Idle)
+    val authUiState = _authUiState.asStateFlow()
 
     fun submitRegistrationData(user: UserAuthRegisterRequest) {
-        _userRegistrationData.value = user
-        createUser(userRegistrationData.value)
+        createUser(user)
     }
 
     fun submitLoginData(user: UserLoginRequest) {
-        _userLoginData.value = user
-        loginUser(userLoginData.value)
+        loginUser(user)
     }
-
 
     private fun createUser(user: UserAuthRegisterRequest) {
         viewModelScope.launch {
+            _authUiState.value = AuthUiState.Loading
             try {
                 Log.e("trace", "Submitting user data $user")
                 val result = registerUserUseCase.execute(user)
                 if (result.isSuccess) {
-                    _toastMessage.value = "User created successfully"
-                    _responseStatus.value = true
+                    _authUiState.value = AuthUiState.RegistrationSuccess("User created successfully")
                 } else {
-                    handleError(Exception(result.exceptionOrNull()?.message) )
+                    _authUiState.value = AuthUiState.Error("")
+                    handleError(Exception(result.exceptionOrNull()?.message))
                 }
             } catch (e: Exception) {
                 handleError(e)
@@ -58,59 +50,47 @@ class AuthViewModel(
 
     private fun loginUser(user: UserLoginRequest) {
         viewModelScope.launch {
+            _authUiState.value = AuthUiState.Loading
             try {
                 val authDataResult: Result<AuthData> = loginUserUseCase.execute(user)
                 if (authDataResult.isSuccess) {
-                    _responseStatus.value = true
-                    _toastMessage.value = "Login successful"
+                    _authUiState.value = AuthUiState.LoginSuccess(authDataResult.getOrThrow())
                 } else {
-                    handleError(Exception(authDataResult.exceptionOrNull()?.message) )
+                    _authUiState.value = AuthUiState.Error("")
+                    handleError(Exception(authDataResult.exceptionOrNull()?.message))
                 }
             } catch (e: Exception) {
                 handleError(e)
             }
         }
     }
-     fun signOut(){
+
+    fun signOut() {
         viewModelScope.launch {
+            _authUiState.value = AuthUiState.Loading
             try {
                 val signOutResult = signOutUseCase.execute()
                 if (signOutResult.isSuccess) {
-                    _responseStatus.value = true
-                    _toastMessage.value = "Sign out successfully"
-                    Log.e("trace","SignOut")
+                    _authUiState.value = AuthUiState.SignOutSuccess("Sign out successfully")
                 } else {
-                    signOutResult.exceptionOrNull()?.message?.let { Log.e("trace", it) }
-                    handleError(Exception(signOutResult.exceptionOrNull()?.message) )
-
-
+                    _authUiState.value = AuthUiState.Error("")
+                    handleError(Exception(signOutResult.exceptionOrNull()?.message))
                 }
-            }catch (e:Exception){
-                Log.e("trace","Exception")
+            } catch (e: Exception) {
                 handleError(e)
-
             }
         }
     }
 
-    fun resetResponseStatus() {
-        _responseStatus.value = null
-    }
-
-    fun resetToastMessage() {
-        _toastMessage.value = null
-    }
     private fun handleError(exception: Throwable) {
         val errorMessage = when (exception) {
             is UnknownHostException -> "Please check your internet connection."
-
-            else -> { val shownMessage = exception.message
-                "Error: $shownMessage"
-            }
+            else -> exception.message ?: "An unknown error occurred"
         }
-        _responseStatus.value = false
-        _toastMessage.value = errorMessage
+        _authUiState.value = AuthUiState.Error(errorMessage)
     }
 
-
+    fun resetUiState() {
+        _authUiState.value = AuthUiState.Idle
+    }
 }

@@ -58,6 +58,7 @@ import com.example.speedotransfer.ui.theme.Grey
 import com.example.speedotransfer.ui.theme.LightRed
 import com.example.speedotransfer.ui.theme.LightYellow
 import com.example.speedotransfer.ui.theme.Marron
+import com.example.speedotransfer.ui.viewmodels.auth.AuthUiState
 import com.example.speedotransfer.ui.viewmodels.auth.AuthViewModel
 import com.example.speedotransfer.ui.viewmodels.auth.AuthViewModelFactory
 
@@ -81,28 +82,38 @@ fun MoreScreen(
         onDismiss = { showBottomDialog = false },
         onCallClick = { showBottomDialog = false },
         onEmailClick = { showBottomDialog = false })
-    val toSignOut by viewModel.responseStatus.collectAsState()
+    val authUiState by viewModel.authUiState.collectAsState()
 
-    LaunchedEffect(toSignOut) {
-        if (toSignOut == true) {
-            isLoading = false
-            viewModel.resetResponseStatus()
-            val intent = Intent(context, AuthActivity::class.java).apply {
-                flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+    LaunchedEffect(authUiState) {
+        when (authUiState) {
+            is AuthUiState.Loading -> {
+                isLoading = true
             }
-            AppRoutes.isFirstTime = false
-            context.startActivity(intent)
-        } else {
-            isLoading = false
-            if (viewModel.toastMessage.value != null)
+
+            is AuthUiState.SignOutSuccess -> {
+                isLoading = false
+                viewModel.resetUiState()
+                AppRoutes.isFirstTime = false
+                val intent = Intent(context, AuthActivity::class.java).apply {
+                    flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                }
+                context.startActivity(intent)
+            }
+
+            is AuthUiState.Error -> {
+                isLoading = false
                 Toast.makeText(
                     context,
-                    viewModel.toastMessage.value,
+                    (authUiState as AuthUiState.Error).errorMessage,
                     Toast.LENGTH_SHORT
                 ).show()
-            viewModel.resetToastMessage()
-            viewModel.resetResponseStatus()
+                viewModel.resetUiState()
+            }
+
+            else -> {
+            }
         }
+
     }
     Box(
         modifier = Modifier

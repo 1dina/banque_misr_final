@@ -1,5 +1,6 @@
 package com.example.speedotransfer.ui.screens.auth.signUp
 
+import android.content.Intent
 import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -59,9 +60,11 @@ import com.example.speedotransfer.R
 import com.example.speedotransfer.data.source.remote.models.user.UserAuthRegisterRequest
 import com.example.speedotransfer.data.source.remote.retrofit.RetrofitInstance
 import com.example.speedotransfer.ui.routes.AppRoutes
+import com.example.speedotransfer.ui.screens.dashboard.DashboardActivity
 import com.example.speedotransfer.ui.theme.LightGrey
 import com.example.speedotransfer.ui.theme.LightRed
 import com.example.speedotransfer.ui.theme.Maroon
+import com.example.speedotransfer.ui.viewmodels.auth.AuthUiState
 import com.example.speedotransfer.ui.viewmodels.auth.AuthViewModel
 import com.example.speedotransfer.ui.viewmodels.auth.AuthViewModelFactory
 import java.text.SimpleDateFormat
@@ -116,25 +119,34 @@ fun SignUp2(
         )
     }
 
-    val toLogin by viewModel.responseStatus.collectAsState()
+    val authUiState by viewModel.authUiState.collectAsState()
 
-    LaunchedEffect(toLogin) {
-        if (toLogin == true) {
-            isLoading = false
-            viewModel.resetResponseStatus()
-            navController.navigate(AppRoutes.SIGN_IN)
-        } else {
-            isLoading = false
-            if (viewModel.toastMessage.value != null)
-                Toast.makeText(
-                    context,
-                    viewModel.toastMessage.value,
-                    Toast.LENGTH_SHORT
-                ).show()
-            viewModel.resetToastMessage()
-            viewModel.resetResponseStatus()
+        LaunchedEffect(authUiState) {
+            when (authUiState) {
+                is AuthUiState.Loading -> {
+                    isLoading = true
+                }
+
+                is AuthUiState.RegistrationSuccess -> {
+                    isLoading = false
+                    viewModel.resetUiState()
+                    navController.navigate(AppRoutes.SIGN_IN)
+                }
+
+                is AuthUiState.Error -> {
+                    isLoading = false
+                    Toast.makeText(
+                        context,
+                        (authUiState as AuthUiState.Error).errorMessage,
+                        Toast.LENGTH_SHORT
+                    ).show()
+                    viewModel.resetUiState()
+                }
+
+                else -> {
+                }
+            }
         }
-    }
     Box(
         modifier = Modifier
             .fillMaxSize()

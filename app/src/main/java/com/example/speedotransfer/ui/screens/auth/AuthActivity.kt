@@ -22,12 +22,9 @@ class AuthActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             val navController = rememberNavController()
-            val apiService = RetrofitInstance.callable
-            val authViewModel: AuthViewModel =
-                viewModel(factory = AuthViewModelFactory(apiService, this))
             SpeedoTransferTheme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { _ ->
-                    AuthNavGraph(navController, authViewModel)
+                    AuthNavGraph(navController)
                 }
 
             }

@@ -55,6 +55,7 @@ import com.example.speedotransfer.ui.screens.auth.signUp.IndeterminateCircularIn
 import com.example.speedotransfer.ui.screens.dashboard.DashboardActivity
 import com.example.speedotransfer.ui.theme.LightRed
 import com.example.speedotransfer.ui.theme.Maroon
+import com.example.speedotransfer.ui.viewmodels.auth.AuthUiState
 import com.example.speedotransfer.ui.viewmodels.auth.AuthViewModel
 import com.example.speedotransfer.ui.viewmodels.auth.AuthViewModelFactory
 
@@ -64,39 +65,51 @@ fun SignIn(navController: NavController, modifier: Modifier = Modifier) {
     val apiService = RetrofitInstance.callable
     val context = LocalContext.current
 
-    val authViewModel: AuthViewModel = viewModel(factory = AuthViewModelFactory(apiService,context))
+    val authViewModel: AuthViewModel =
+        viewModel(factory = AuthViewModelFactory(apiService, context))
 
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
     var isPasswordVisible by remember { mutableStateOf(false) }
-    val toLogin by authViewModel.responseStatus.collectAsState()
+    val authUiState by authViewModel.authUiState.collectAsState()
     var isButtonEnabled by remember {
         mutableStateOf(false)
     }
     var isLoading by remember {
         mutableStateOf(false)
     }
+
     isButtonEnabled = !(email.isBlank() || password.isBlank())
-    LaunchedEffect(toLogin) {
-        if (toLogin == true) {
-            isLoading = false
-            authViewModel.resetResponseStatus()
-            val intent = Intent(context, DashboardActivity::class.java).apply {
-                flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+    LaunchedEffect(authUiState) {
+        when (authUiState) {
+            is AuthUiState.Loading -> {
+                isLoading = true
             }
-            context.startActivity(intent)
-        } else {
-            isLoading = false
-            if (authViewModel.toastMessage.value != null)
+
+            is AuthUiState.LoginSuccess -> {
+                isLoading = false
+                authViewModel.resetUiState()
+                val intent = Intent(context, DashboardActivity::class.java).apply {
+                    flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                }
+                context.startActivity(intent)
+            }
+
+            is AuthUiState.Error -> {
+                isLoading = false
                 Toast.makeText(
                     context,
-                    authViewModel.toastMessage.value,
+                    (authUiState as AuthUiState.Error).errorMessage,
                     Toast.LENGTH_SHORT
                 ).show()
-            authViewModel.resetToastMessage()
-            authViewModel.resetResponseStatus()
+                authViewModel.resetUiState()
+            }
+
+            else -> {
+            }
         }
     }
+
 
 
     Box(
@@ -193,7 +206,7 @@ fun SignIn(navController: NavController, modifier: Modifier = Modifier) {
                             color = colorResource(id = R.color.black),
                             textAlign = TextAlign.Start
                         )
-                    },maxLines = 1,
+                    }, maxLines = 1,
                     shape = RoundedCornerShape(10.dp),
                     colors = OutlinedTextFieldDefaults.colors(
                         focusedContainerColor = Color.White,
@@ -273,7 +286,7 @@ fun SignIn(navController: NavController, modifier: Modifier = Modifier) {
 
                 )
             }
-            
+
         }
         if (isLoading) {
             Box(
