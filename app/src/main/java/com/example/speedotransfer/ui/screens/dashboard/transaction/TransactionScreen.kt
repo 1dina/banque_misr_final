@@ -57,9 +57,10 @@ import com.example.speedotransfer.utils.formatDate
 
 @Composable
 fun TransactionScreen(
-    navController: NavController,
     innerPadding: PaddingValues,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    onNavigationCallBack : (String, Int , String , Int , String , String, Int) -> Unit,
+    onBackClick : () -> Unit
 ) {
     val context = LocalContext.current
     val apiService = RetrofitInstance.callable
@@ -89,7 +90,8 @@ fun TransactionScreen(
     ) {
         Column(modifier = modifier.padding(horizontal = 16.dp)) {
             HeaderUI("Transactions", onClickBackButton = {
-                navController.popBackStack()
+                //navController.popBackStack()
+                onBackClick()
             })
             Text(
                 text = "Your Last Transactions",
@@ -104,10 +106,8 @@ fun TransactionScreen(
             CardTransactionList(
                 transactionList = transactionList,
                 onClickItem = { content, state ->
-                    navController.navigate(
-                        "${AppRoutes.TRANS_DETAILS}/${content.receiverName}/${content.amount}/${content.createdTimeStamp}" +
-                                "/${content.reciverAccountId}/${content.senderName}/${state}/${content.senderAccountId}"
-                    )
+                    onNavigationCallBack(content.receiverName,content.amount,content.createdTimeStamp,
+                        content.reciverAccountId,content.senderName,state,content.senderAccountId )
                 },
                 userData = userData,
                 modifier

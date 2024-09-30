@@ -32,7 +32,8 @@ import com.example.speedotransfer.ui.viewmodels.home.HomeViewModel
 
 @Composable
 fun ProfileInfo(
-    navController: NavController, modifier: Modifier = Modifier, viewModel: HomeViewModel
+     modifier: Modifier = Modifier, viewModel: HomeViewModel,
+     onBackClick: () -> Unit
 ) {
     val homeUiState by viewModel.uiState.collectAsState()
     val userInfo = when (homeUiState) {
@@ -55,7 +56,7 @@ fun ProfileInfo(
         Column(modifier = modifier.fillMaxSize().padding(16.dp)) {
             HeaderUI(
                 headerTitle = "Profile info",
-                onClickBackButton = { navController.popBackStack() })
+                onClickBackButton = { onBackClick() })
             Column(
                 verticalArrangement = Arrangement.spacedBy(8.dp),
                 horizontalAlignment = Alignment.CenterHorizontally,

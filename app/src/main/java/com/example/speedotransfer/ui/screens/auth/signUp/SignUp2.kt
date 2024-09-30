@@ -53,8 +53,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation.NavController
-import androidx.navigation.compose.rememberNavController
 import com.example.speedotransfer.R
 import com.example.speedotransfer.data.source.remote.models.user.UserAuthRegisterRequest
 import com.example.speedotransfer.data.source.remote.retrofit.RetrofitInstance
@@ -71,11 +69,11 @@ import java.util.Locale
 
 @Composable
 fun SignUp2(
-    navController: NavController,
     name: String,
     email: String,
     password: String,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    onNavigateCallBack : (String) ->Unit
 ) {
     var isButtonEnabled by remember {
         mutableStateOf(false)
@@ -128,7 +126,7 @@ fun SignUp2(
                 is AuthUiState.RegistrationSuccess -> {
                     isLoading = false
                     viewModel.resetUiState()
-                    navController.navigate(AppRoutes.SIGN_IN)
+                    onNavigateCallBack(AppRoutes.SIGN_IN)
                 }
 
                 is AuthUiState.Error -> {
@@ -172,7 +170,7 @@ fun SignUp2(
                     .size(24.dp)
                     .padding(top = 8.dp)
                     .clickable {
-                        navController.navigate(AppRoutes.FIRST_PAGE_SIGN_UP)
+                        onNavigateCallBack(AppRoutes.FIRST_PAGE_SIGN_UP)
                     }
             )
 
@@ -339,7 +337,7 @@ fun SignUp2(
                     modifier = Modifier
                         .padding(start = 4.dp)
                         .clickable {
-                            navController.navigate(AppRoutes.SIGN_IN)
+                            onNavigateCallBack(AppRoutes.SIGN_IN)
                         },
                     color = Maroon,
                     fontSize = 16.sp,
@@ -430,6 +428,6 @@ fun CountryBottomSheetMaker(onDismiss: () -> Unit, modifier: Modifier = Modifier
 @Preview(showSystemUi = true)
 @Composable
 private fun SignUp2Preview() {
-    SignUp2(rememberNavController(), "Dina", "dindfjdjf", "dfjdj")
+    SignUp2( "Dina", "dindfjdjf", "dfjdj"){}
 
 }

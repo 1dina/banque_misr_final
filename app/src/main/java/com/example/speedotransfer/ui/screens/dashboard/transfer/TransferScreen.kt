@@ -45,12 +45,9 @@ import androidx.compose.ui.unit.sp
 import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationManagerCompat
 import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation.NavController
-import androidx.navigation.NavGraph.Companion.findStartDestination
 import com.example.speedotransfer.R
 import com.example.speedotransfer.data.source.remote.models.favourite.FavouriteAdditionResponse
 import com.example.speedotransfer.data.source.remote.models.transaction.TransactionRequest
-import com.example.speedotransfer.data.source.remote.models.user.info.UserInfoResponse
 import com.example.speedotransfer.data.source.remote.retrofit.RetrofitInstance
 import com.example.speedotransfer.ui.routes.AppRoutes
 import com.example.speedotransfer.ui.screens.auth.signUp.IndeterminateCircularIndicator
@@ -65,9 +62,9 @@ import com.example.speedotransfer.ui.viewmodels.home.HomeViewModelFactory
 
 @Composable
 fun TransferScreen(
-    navController: NavController,
     innerPadding: PaddingValues,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    onNavigationCallBack: (String) -> Unit
 ) {
     val totalSteps = 3
     var chosenUser by remember {
@@ -88,7 +85,7 @@ fun TransferScreen(
     val homeUiState by viewModel.uiState.collectAsState()
     val userAccountId by viewModel.accountId.collectAsState()
     val userData by viewModel.userData.collectAsState()
-    LaunchedEffect(homeUiState){
+    LaunchedEffect(homeUiState) {
 
         when (homeUiState) {
             is HomeUiState.Loading -> {
@@ -139,11 +136,7 @@ fun TransferScreen(
 
             HeaderUI(headerTitle = "Transfer", onClickBackButton = {
                 if (currentStep != 2) {
-                    navController.navigate(AppRoutes.HOME) {
-                        popUpTo(navController.graph.findStartDestination().id) {
-                            inclusive = true
-                        }
-                    }
+                    onNavigationCallBack(AppRoutes.HOME)
                 } else currentStep -= 1
             })
             Stepper(
@@ -160,24 +153,24 @@ fun TransferScreen(
                 }
 
                 2 -> ConfirmationStepScreen(
-                        senderUser = userData.name,
-                        senderAccId = userAccountId,
-                        amountOfMoney = amountOfMoney,
-                        recipientUser = chosenUser,
-                    ) {
-                        if (it) {
-                            isLoading = true
-                            viewModel.transferProcess(
-                                TransactionRequest(
-                                    reciverAccountNum = chosenUser.accountId,
-                                    amount = amountOfMoney,
-                                    senderName = userData.name, receiverName = chosenUser.name
-                                )
+                    senderUser = userData.name,
+                    senderAccId = userAccountId,
+                    amountOfMoney = amountOfMoney,
+                    recipientUser = chosenUser,
+                ) {
+                    if (it) {
+                        isLoading = true
+                        viewModel.transferProcess(
+                            TransactionRequest(
+                                reciverAccountNum = chosenUser.accountId,
+                                amount = amountOfMoney,
+                                senderName = userData.name, receiverName = chosenUser.name
                             )
+                        )
 
-                        } else
-                            currentStep -= 1
-                    }
+                    } else
+                        currentStep -= 1
+                }
 
                 else -> PaymentStepScreen(
                     senderUser = userData.name,
@@ -185,11 +178,7 @@ fun TransferScreen(
                     recipientUser = chosenUser,
                     amountOfMoney = amountOfMoney,
                     onBackToHomeClick = {
-                        navController.navigate(AppRoutes.HOME) {
-                            popUpTo(navController.graph.findStartDestination().id) {
-                                inclusive = true
-                            }
-                        }
+                        onNavigationCallBack(AppRoutes.HOME)
                     }) {
                     viewModel.addToFav(chosenUser)
                 }

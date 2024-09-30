@@ -28,16 +28,14 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.navigation.NavController
-import androidx.navigation.compose.rememberNavController
 import com.example.speedotransfer.R
+import com.example.speedotransfer.data.source.local.PreferenceManager
 import com.example.speedotransfer.ui.routes.AppRoutes
 import com.example.speedotransfer.ui.theme.LightRed
-import com.example.speedotransfer.data.source.local.PreferenceManager
 
 
 @Composable
-fun OnBoarding3(navController: NavController) {
+fun OnBoarding3(onNavigateCallBack: (String) -> Unit) {
     val context = LocalContext.current
     val preferenceManager = PreferenceManager(context)
     preferenceManager.setFirstTimeLaunch(false)
@@ -63,9 +61,7 @@ fun OnBoarding3(navController: NavController) {
                 modifier = Modifier
                     .padding(top = 20.dp, end = 20.dp)
                     .clickable {
-                        navController.navigate(AppRoutes.FIRST_PAGE_SIGN_UP) {
-                            popUpTo(AppRoutes.THIRD_ONBOARD) { inclusive = true }
-                        }
+                        onNavigateCallBack(AppRoutes.FIRST_PAGE_SIGN_UP)
 
                     })
         }
@@ -104,9 +100,10 @@ fun OnBoarding3(navController: NavController) {
 
             Button(
                 onClick = {
-                    navController.navigate(AppRoutes.FIRST_PAGE_SIGN_UP) {
-                        popUpTo(AppRoutes.THIRD_ONBOARD) { inclusive = true }
-                    }
+//                    navController.navigate(AppRoutes.FIRST_PAGE_SIGN_UP) {
+//                        popUpTo(AppRoutes.THIRD_ONBOARD) { inclusive = true }
+//                    }
+                    onNavigateCallBack(AppRoutes.FIRST_PAGE_SIGN_UP)
                 },
                 modifier = Modifier
                     .padding(top = 40.dp)
@@ -130,5 +127,5 @@ fun OnBoarding3(navController: NavController) {
 @Preview(showSystemUi = true)
 @Composable
 private fun OnBoarding3Preview() {
-    OnBoarding3(rememberNavController())
+    OnBoarding3 {}
 }

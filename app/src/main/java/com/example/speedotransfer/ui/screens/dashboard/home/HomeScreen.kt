@@ -50,7 +50,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation.NavController
 import com.example.speedotransfer.R
 import com.example.speedotransfer.data.source.remote.models.transaction.history.Content
 import com.example.speedotransfer.data.source.remote.models.user.info.UserInfoResponse
@@ -68,9 +67,9 @@ import com.example.speedotransfer.utils.formatDate
 
 @Composable
 fun HomeScreen(
-    navController: NavController,
     modifier: Modifier = Modifier,
     innerPadding: PaddingValues,
+    onNavigationCallBack : (String) -> Unit
 ) {
 
     val context = LocalContext.current
@@ -182,7 +181,7 @@ fun HomeScreen(
                     modifier = modifier
                         .padding(end = 8.dp)
                         .clickable {
-                            navController.navigate(AppRoutes.NOTIFICATIONS)
+                            onNavigationCallBack(AppRoutes.NOTIFICATIONS)
                         }
                 )
             }
@@ -210,7 +209,7 @@ fun HomeScreen(
             }
 
             TransactionList(transactionList = historyTransactions, userData, onAllViewClick = {
-                navController.navigate(AppRoutes.TRANSACTION)
+                onNavigationCallBack(AppRoutes.TRANSACTION)
             })
         }
 

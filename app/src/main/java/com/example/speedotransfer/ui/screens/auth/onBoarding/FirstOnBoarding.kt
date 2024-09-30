@@ -35,7 +35,7 @@ import com.example.speedotransfer.ui.theme.LightRed
 
 
 @Composable
-fun OnBoarding1(navController: NavController) {
+fun OnBoarding1(onNavigationCallBack : (String) -> Unit) {
 
     Box(
         modifier = Modifier
@@ -60,11 +60,7 @@ fun OnBoarding1(navController: NavController) {
                 modifier = Modifier
                     .padding(top = 20.dp, end = 20.dp)
                     .clickable {
-                        navController
-                            .navigate(AppRoutes.FIRST_PAGE_SIGN_UP)
-                            .apply {
-
-                            }
+                        onNavigationCallBack(AppRoutes.FIRST_PAGE_SIGN_UP)
 
                     })
         }
@@ -103,9 +99,7 @@ fun OnBoarding1(navController: NavController) {
 
             Button(
                 onClick = {
-                    navController.navigate(AppRoutes.SECOND_ONBOARD) {
-                        popUpTo(AppRoutes.FIRST_ONBOARD) { inclusive = true }
-                    }
+                    onNavigationCallBack(AppRoutes.SECOND_ONBOARD)
                 },
                 modifier = Modifier
                     .padding(top = 40.dp)
@@ -129,5 +123,5 @@ fun OnBoarding1(navController: NavController) {
 @Preview(showSystemUi = true)
 @Composable
 private fun OnBoarding1Preview() {
-    OnBoarding1(rememberNavController())
+    OnBoarding1(){}
 }

@@ -44,9 +44,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation.NavController
-import androidx.navigation.NavGraph.Companion.findStartDestination
-import androidx.navigation.compose.rememberNavController
 import com.example.speedotransfer.R
 import com.example.speedotransfer.data.source.remote.retrofit.RetrofitInstance
 import com.example.speedotransfer.ui.routes.AppRoutes
@@ -64,10 +61,11 @@ import com.example.speedotransfer.ui.viewmodels.auth.AuthViewModelFactory
 
 @Composable
 fun MoreScreen(
-    navController: NavController,
     innerPadding: PaddingValues,
-    modifier: Modifier = Modifier
-) {
+    modifier: Modifier = Modifier,
+    onNavigationCallBack: (String) -> Unit,
+
+    ) {
     val context = LocalContext.current
     val apiService = RetrofitInstance.callable
     val viewModel: AuthViewModel =
@@ -129,17 +127,15 @@ fun MoreScreen(
     ) {
         Column(modifier = modifier.padding(horizontal = 16.dp)) {
             HeaderUI(headerTitle = "More", onClickBackButton = {
-                navController.navigate(AppRoutes.HOME) {
-                    popUpTo(navController.graph.findStartDestination().id) { inclusive = true }
-                }
+                onNavigationCallBack(AppRoutes.HOME)
             })
             Spacer(modifier = modifier.height(32.dp))
             MoreItem(leadingIcon = R.drawable.ic_website, itemText = "Transfer From Website") {}
             MoreItem(leadingIcon = R.drawable.ic_favorite, itemText = "Favourites") {
-                navController.navigate(AppRoutes.FAVOURITES)
+                onNavigationCallBack(AppRoutes.FAVOURITES)
             }
             MoreItem(leadingIcon = R.drawable.ic_user, itemText = "Profile") {
-                navController.navigate(AppRoutes.PROFILE)
+                onNavigationCallBack(AppRoutes.PROFILE)
             }
             MoreItem(leadingIcon = R.drawable.ic_help, itemText = "Help") {
                 showBottomDialog = true
@@ -276,5 +272,5 @@ fun HelpBottomSheetMaker(
 @Preview(showSystemUi = true)
 @Composable
 private fun MoreScreenPreview() {
-    MoreScreen(rememberNavController(), innerPadding = PaddingValues(8.dp))
+    MoreScreen(innerPadding = PaddingValues(8.dp)) {}
 }

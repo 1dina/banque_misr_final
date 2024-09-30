@@ -10,7 +10,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
-import androidx.compose.material3.Divider
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -19,17 +19,20 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavController
 import com.example.speedotransfer.R
 import com.example.speedotransfer.ui.routes.AppRoutes
-import com.example.speedotransfer.ui.screens.dashboard.commonUI.ProfileScreen
 import com.example.speedotransfer.ui.screens.dashboard.commonUI.HeaderUI
+import com.example.speedotransfer.ui.screens.dashboard.commonUI.ProfileScreen
 import com.example.speedotransfer.ui.theme.LightRed
 import com.example.speedotransfer.ui.theme.LightYellow
 
 
 @Composable
-fun Settings(navController: NavController, modifier : Modifier = Modifier) {
+fun Settings(
+    modifier: Modifier = Modifier,
+    onBackClick: () -> Unit,
+    onNavigateClick: (String) -> Unit
+) {
 
     Box(
         modifier = Modifier
@@ -43,8 +46,12 @@ fun Settings(navController: NavController, modifier : Modifier = Modifier) {
                 )
             )
     ) {
-        Column (modifier = modifier.fillMaxSize().padding(16.dp) ) {
-            HeaderUI(headerTitle = "Settings", onClickBackButton = { navController.popBackStack() })
+        Column(
+            modifier = modifier
+                .fillMaxSize()
+                .padding(16.dp)
+        ) {
+            HeaderUI(headerTitle = "Settings", onClickBackButton = { onBackClick() })
 
             Column(
                 verticalArrangement = Arrangement.spacedBy(8.dp),
@@ -58,7 +65,7 @@ fun Settings(navController: NavController, modifier : Modifier = Modifier) {
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(top = 5.dp)
-                        .clickable { navController.navigate(AppRoutes.UPDATE_PASSWORD) }
+                        .clickable { onNavigateClick(AppRoutes.UPDATE_PASSWORD) }
                 ) {
                     ProfileScreen(
                         text1 = "Change password",
@@ -91,19 +98,20 @@ fun Settings(navController: NavController, modifier : Modifier = Modifier) {
                 }
 
 
-                Divider(
+                HorizontalDivider(
                     modifier = Modifier
                         .padding(vertical = 0.dp)
                         .padding(start = 15.dp)
                         .width(370.dp)
                         .alpha(0.2f),
-                    color = Color.Gray,
-                    thickness = 2.dp
+                    thickness = 2.dp,
+                    color = Color.Gray
                 )
 
 
             }
 
-        }    }
+        }
+    }
 
 }

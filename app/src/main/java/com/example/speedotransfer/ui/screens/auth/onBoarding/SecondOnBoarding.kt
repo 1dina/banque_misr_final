@@ -27,15 +27,13 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.navigation.NavController
-import androidx.navigation.compose.rememberNavController
 import com.example.speedotransfer.R
 import com.example.speedotransfer.ui.routes.AppRoutes
 import com.example.speedotransfer.ui.theme.LightRed
 
 
 @Composable
-fun OnBoarding2(navController: NavController) {
+fun OnBoarding2(onNavigationCallBack: (String) -> Unit) {
 
     Box(
         modifier = Modifier
@@ -59,7 +57,8 @@ fun OnBoarding2(navController: NavController) {
                 modifier = Modifier
                     .padding(top = 20.dp, end = 20.dp)
                     .clickable {
-                        navController.navigate(AppRoutes.FIRST_PAGE_SIGN_UP)
+                        //navController.navigate(AppRoutes.FIRST_PAGE_SIGN_UP)
+                        onNavigationCallBack(AppRoutes.FIRST_PAGE_SIGN_UP)
 
                     })
         }
@@ -98,9 +97,7 @@ fun OnBoarding2(navController: NavController) {
 
             Button(
                 onClick = {
-                    navController.navigate(AppRoutes.THIRD_ONBOARD) {
-                        popUpTo(AppRoutes.SECOND_ONBOARD) { inclusive = true }
-                    }
+                    onNavigationCallBack(AppRoutes.THIRD_ONBOARD)
                 },
                 modifier = Modifier
                     .padding(top = 40.dp)
@@ -124,5 +121,5 @@ fun OnBoarding2(navController: NavController) {
 @Preview(showSystemUi = true)
 @Composable
 private fun OnBoarding2Preview() {
-    OnBoarding2(rememberNavController())
+    OnBoarding2 {}
 }

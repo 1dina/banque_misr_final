@@ -29,7 +29,6 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation.NavController
 import com.example.speedotransfer.data.source.remote.models.account.UserAccountsResponseItem
 import com.example.speedotransfer.data.source.remote.models.user.info.UserInfoResponse
 import com.example.speedotransfer.data.source.remote.retrofit.RetrofitInstance
@@ -48,9 +47,9 @@ import com.example.speedotransfer.ui.viewmodels.myCards.MyCardsViewModelFactory
 
 @Composable
 fun MyCardScreen(
-    navController: NavController,
     innerPadding: PaddingValues,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    onBackClicked:() -> Unit
 ) {
     val context = LocalContext.current
 
@@ -112,7 +111,7 @@ fun MyCardScreen(
                 .fillMaxSize()
                 .padding(horizontal = 16.dp)
         ) {
-            HeaderUI(headerTitle = "My Cards", onClickBackButton = { navController.popBackStack() })
+            HeaderUI(headerTitle = "My Cards", onClickBackButton = {onBackClicked()})
             Column(modifier = modifier.fillMaxSize()) {
                 if (userData != null) {
                     MyCardsListMaker(

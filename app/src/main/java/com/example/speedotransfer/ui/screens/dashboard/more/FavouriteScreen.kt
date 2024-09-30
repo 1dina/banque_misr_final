@@ -46,8 +46,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation.NavController
-import androidx.navigation.compose.rememberNavController
 import com.example.speedotransfer.R
 import com.example.speedotransfer.data.source.remote.models.favourite.FavouriteAdditionResponse
 import com.example.speedotransfer.data.source.remote.retrofit.RetrofitInstance
@@ -62,9 +60,9 @@ import com.example.speedotransfer.ui.viewmodels.fav.FavouriteViewModelFactory
 
 @Composable
 fun FavouriteScreen(
-    navController: NavController,
     innerPadding: PaddingValues,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    onBackClick : () -> Unit
 ) {
     val context = LocalContext.current
     val apiService = RetrofitInstance.callable
@@ -101,7 +99,7 @@ fun FavouriteScreen(
     ) {
         Column(modifier = modifier.padding(horizontal = 16.dp)) {
             HeaderUI(headerTitle = "Favourite", onClickBackButton = {
-                navController.popBackStack()
+                onBackClick()
             })
             Text(
                 text = "Your favourite list",
@@ -293,7 +291,7 @@ fun FavBottomSheetMaker(
                     unfocusedContainerColor = White,
                     focusedIndicatorColor = Maroon,
                     unfocusedIndicatorColor = Grey
-                ),// Input text size
+                ),
                 modifier = modifier
                     .fillMaxWidth()
                     .padding(bottom = 32.dp)
@@ -302,7 +300,6 @@ fun FavBottomSheetMaker(
             Button(
                 onClick = {
                     onDismiss()
-                    //update saved item data
                 },
                 modifier = modifier
                     .fillMaxWidth(),
@@ -327,5 +324,5 @@ fun FavBottomSheetMaker(
 @Preview(showSystemUi = true)
 @Composable
 private fun FavouriteScreenPreview() {
-    FavouriteScreen(rememberNavController(), innerPadding = PaddingValues(16.dp))
+    FavouriteScreen(innerPadding = PaddingValues(16.dp)) {}
 }

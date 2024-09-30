@@ -14,7 +14,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.Divider
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -38,13 +38,14 @@ import com.example.speedotransfer.ui.theme.Marron
 
 @Composable
 fun TransactionsDetails(
-    navController: NavController, innerPaddingValues: PaddingValues,
+    innerPaddingValues: PaddingValues,
     strangeName: String, amount: Int, date: String,
     strangeAccNum : Int,
     currentUserName : String,
     currentUserAccountNum : Int,
     state :String,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    onBackClick : () -> Unit
 ) {
 
     Box(
@@ -66,7 +67,7 @@ fun TransactionsDetails(
                 .padding(horizontal = 16.dp)
         ) {
             HeaderUI(headerTitle = "Successful Transactions", onClickBackButton = {
-                navController.popBackStack()
+                onBackClick()
 
             })
 
@@ -84,7 +85,7 @@ fun TransactionsDetails(
                         .size(150.dp)
                 )
 
-                Row() {
+                Row {
                     Text(
                         text = amount.toString(),
                         fontSize = 21.sp,
@@ -127,10 +128,10 @@ fun TransactionsDetails(
                         .padding(top = 8.dp)
                 ) {
                     Column {
-                        var senderName = ""
-                        var receivedName = ""
-                        var senderAccountNum = 0
-                        var receivedAccountNum = 0
+                        val senderName : String
+                        val receivedName : String
+                        val senderAccountNum: Int
+                        val receivedAccountNum: Int
                         if(state == "Received") {
                             senderName = strangeName
                             senderAccountNum = strangeAccNum
@@ -207,14 +208,14 @@ fun TransactionsDetails(
 
 
                         }
-                        Divider(
+                        HorizontalDivider(
                             modifier = modifier
                                 .padding(vertical = 16.dp)
                                 .fillMaxWidth(0.9f)
                                 .align(Alignment.CenterHorizontally)
                                 .alpha(0.4f),
-                            color = Color.Gray,
-                            thickness = 1.dp
+                            thickness = 1.dp,
+                            color = Color.Gray
                         )
 
                         Row(

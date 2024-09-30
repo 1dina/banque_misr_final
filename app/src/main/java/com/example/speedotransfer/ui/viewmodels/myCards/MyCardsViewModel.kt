@@ -3,7 +3,6 @@ package com.example.speedotransfer.ui.viewmodels.myCards
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.speedotransfer.data.source.remote.models.account.AccountCreationRequest
-import com.example.speedotransfer.data.source.remote.models.account.UserAccountsResponseItem
 import com.example.speedotransfer.domain.usecases.CreateAccountUseCase
 import com.example.speedotransfer.domain.usecases.GetUserAccountsUseCase
 import kotlinx.coroutines.Dispatchers

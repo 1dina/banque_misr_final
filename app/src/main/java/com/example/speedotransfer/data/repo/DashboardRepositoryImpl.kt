@@ -110,8 +110,9 @@ class DashboardRepositoryImpl(
         return try {
             val accessToken = encryptedSharedPreferences.getAccessToken()
             val response = apiService.fetchInfo("Bearer $accessToken")
-            if (response.isSuccessful)
+            if (response.isSuccessful ) {
                 accountId = response.body()!!.accounts[0].id
+            }
             response
         } catch (e: Exception) {
             throw e

@@ -50,9 +50,9 @@ import com.example.speedotransfer.utils.formatDate
 
 @Composable
 fun NotificationScreen(
-    navController: NavController,
     modifier: Modifier = Modifier,
     innerPadding: PaddingValues,
+    onBackClick : () -> Unit
 ) {
     val context = LocalContext.current
     val apiService = RetrofitInstance.callable
@@ -85,7 +85,7 @@ fun NotificationScreen(
                 .padding(horizontal = 16.dp)
         ) {
             HeaderUI(headerTitle = "Notifications", onClickBackButton = {
-                navController.popBackStack()
+                onBackClick()
             })
             if (userData != null) {
                 NotificationListMaker(

@@ -38,8 +38,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation.NavController
-import androidx.navigation.compose.rememberNavController
 import com.example.speedotransfer.R
 import com.example.speedotransfer.data.source.remote.models.transaction.history.Passwords
 import com.example.speedotransfer.data.source.remote.retrofit.RetrofitInstance
@@ -53,7 +51,7 @@ import com.example.speedotransfer.ui.viewmodels.home.HomeViewModelFactory
 
 
 @Composable
-fun ChangePassword(navController: NavController, modifier: Modifier = Modifier) {
+fun ChangePassword(modifier: Modifier = Modifier, onBackClick: () -> Unit) {
 
     val apiService = RetrofitInstance.callable
     val context = LocalContext.current
@@ -96,7 +94,7 @@ fun ChangePassword(navController: NavController, modifier: Modifier = Modifier) 
         ) {
             HeaderUI(
                 headerTitle = "Change Password",
-                onClickBackButton = { navController.popBackStack() })
+                onClickBackButton = { onBackClick() })
             Column(
                 verticalArrangement = Arrangement.spacedBy((-25).dp),
                 modifier = Modifier.fillMaxHeight()
@@ -212,6 +210,6 @@ fun ChangePassword(navController: NavController, modifier: Modifier = Modifier) 
 @Composable
 private fun ChangePasswordPreview() {
 
-    ChangePassword(rememberNavController())
+    ChangePassword {}
 
 }

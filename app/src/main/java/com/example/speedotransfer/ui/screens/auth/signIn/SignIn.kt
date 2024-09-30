@@ -45,7 +45,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.example.speedotransfer.R
 import com.example.speedotransfer.data.source.remote.models.user.UserLoginRequest
@@ -61,7 +60,7 @@ import com.example.speedotransfer.ui.viewmodels.auth.AuthViewModelFactory
 
 
 @Composable
-fun SignIn(navController: NavController, modifier: Modifier = Modifier) {
+fun SignIn(modifier: Modifier = Modifier, onNavigateCallBack: () -> Unit) {
     val apiService = RetrofitInstance.callable
     val context = LocalContext.current
 
@@ -274,9 +273,7 @@ fun SignIn(navController: NavController, modifier: Modifier = Modifier) {
                     modifier = Modifier
                         .padding(start = 4.dp)
                         .clickable {
-                            navController.navigate(AppRoutes.FIRST_PAGE_SIGN_UP) {
-                                popUpTo(AppRoutes.SIGN_IN) { inclusive = true }
-                            }
+                            onNavigateCallBack()
                         },
                     color = Maroon,
                     fontSize = 16.sp,
@@ -306,5 +303,5 @@ fun SignIn(navController: NavController, modifier: Modifier = Modifier) {
 @Preview
 @Composable
 private fun SignInPreview() {
-    SignIn(navController = rememberNavController())
+    SignIn(){}
 }

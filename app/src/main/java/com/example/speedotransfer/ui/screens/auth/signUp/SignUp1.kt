@@ -42,15 +42,16 @@ import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.navigation.NavController
-import androidx.navigation.compose.rememberNavController
 import com.example.speedotransfer.R
-import com.example.speedotransfer.ui.routes.AppRoutes
 import com.example.speedotransfer.ui.theme.LightRed
 import com.example.speedotransfer.ui.theme.Maroon
 
 @Composable
-fun SignUp1(navController: NavController, modifier: Modifier = Modifier) {
+fun SignUp1(
+    modifier: Modifier = Modifier,
+    onNavigateToSignIn: () -> Unit,
+    onNavigateToSignUp2: (String, String, String) -> Unit
+) {
 
     var name by rememberSaveable { mutableStateOf("") }
     var email by rememberSaveable { mutableStateOf("") }
@@ -84,7 +85,8 @@ fun SignUp1(navController: NavController, modifier: Modifier = Modifier) {
                 emailError = null
                 passwordError = null
                 confirmPasswordError = null
-                navController.navigate("${AppRoutes.LAST_PAGE_SIGN_UP}/$name/$email/$password")
+                //navController.navigate("${AppRoutes.LAST_PAGE_SIGN_UP}/$name/$email/$password")
+                onNavigateToSignUp2(name, email, password)
             }
         }
     }
@@ -355,7 +357,7 @@ fun SignUp1(navController: NavController, modifier: Modifier = Modifier) {
                     modifier = Modifier
                         .padding(start = 3.dp)
                         .clickable {
-                            navController.navigate(AppRoutes.SIGN_IN)
+                            onNavigateToSignIn()
                         },
                     color = Maroon,
                     fontSize = 16.sp,
@@ -427,6 +429,6 @@ fun Texts(text: String) {
 @Preview(showSystemUi = true)
 @Composable
 private fun SignUp1Preview() {
-    SignUp1(rememberNavController())
+    SignUp1(onNavigateToSignIn = {}, onNavigateToSignUp2 = { _, _, _ -> })
 
 }

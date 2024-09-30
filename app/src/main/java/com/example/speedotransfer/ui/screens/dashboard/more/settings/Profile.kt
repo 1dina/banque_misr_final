@@ -27,7 +27,6 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.navigation.NavController
 import com.example.speedotransfer.R
 import com.example.speedotransfer.ui.routes.AppRoutes
 import com.example.speedotransfer.ui.screens.dashboard.commonUI.HeaderUI
@@ -41,8 +40,10 @@ import com.example.speedotransfer.ui.viewmodels.home.HomeViewModel
 
 @Composable
 fun Profile(
-    navController: NavController, modifier: Modifier = Modifier,
-    viewModel: HomeViewModel
+    modifier: Modifier = Modifier,
+    viewModel: HomeViewModel,
+    onNavigationCallBack: (String) -> Unit,
+    onBackClick: () -> Unit
 ) {
     val homeUiState by viewModel.uiState.collectAsState()
     val userData = when (homeUiState) {
@@ -68,7 +69,7 @@ fun Profile(
                 .padding(16.dp)
         ) {
             HeaderUI(headerTitle = "Profile", onClickBackButton = {
-                navController.popBackStack()
+                onBackClick()
             })
             Row(
                 modifier = Modifier.fillMaxWidth()
@@ -119,7 +120,7 @@ fun Profile(
                     modifier = Modifier
                         .fillMaxHeight(0.1f)
                         .padding(top = 5.dp)
-                        .clickable { navController.navigate(AppRoutes.PROFILE_INFO) }
+                        .clickable { onNavigationCallBack(AppRoutes.PROFILE_INFO) }
                 ) {
                     ProfileScreen(
                         text1 = "Profile information",
@@ -149,7 +150,7 @@ fun Profile(
                     modifier = Modifier
                         .fillMaxHeight(0.13f)
                         .padding(top = 5.dp)
-                        .clickable { navController.navigate(AppRoutes.SETTINGS) }
+                        .clickable { onNavigationCallBack(AppRoutes.SETTINGS) }
                 ) {
                     ProfileScreen(
                         text1 = "Setting", text2 = "Change your settings", image = painterResource(
