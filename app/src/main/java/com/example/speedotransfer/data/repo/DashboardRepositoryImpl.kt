@@ -26,9 +26,7 @@ class DashboardRepositoryImpl(
         account: AccountCreationRequest
     ): Response<AccountCreationResponse> {
         return try {
-            val accessToken = encryptedSharedPreferences.getAccessToken()
-                ?: throw Exception("Access Token is null")
-            apiService.createAccount("Bearer $accessToken", account)
+            apiService.createAccount( account)
         } catch (e: Exception) {
             throw e
         }
@@ -36,9 +34,7 @@ class DashboardRepositoryImpl(
 
     override suspend fun fetchUserAccounts(): Response<ArrayList<UserAccountsResponseItem>> {
         return try {
-            val accessToken = encryptedSharedPreferences.getAccessToken()
-                ?: throw Exception("Access Token is null")
-            val response = apiService.fetchUserAccounts("Bearer $accessToken")
+            val response = apiService.fetchUserAccounts()
             response
         } catch (e: Exception) {
             throw e
@@ -47,10 +43,7 @@ class DashboardRepositoryImpl(
 
     override suspend fun fetchUserAccountById(accountId: String): Response<AccountByIdResponse> {
         return try {
-
-            val accessToken = encryptedSharedPreferences.getAccessToken()
-                ?: throw Exception("Access Token is null")
-            apiService.fetchUserAccountById("Bearer $accessToken", accountId)
+            apiService.fetchUserAccountById( accountId)
         } catch (e: Exception) {
             throw e
         }
@@ -58,15 +51,13 @@ class DashboardRepositoryImpl(
     }
 
     override suspend fun createTransferProcess(transactionRequest: TransactionRequest): Response<TransactionResponse> {
-        val accessToken = encryptedSharedPreferences.getAccessToken()
-        return apiService.createTransferProcess("Bearer $accessToken", transactionRequest)
+        return apiService.createTransferProcess( transactionRequest)
     }
 
     override suspend fun fetchTransactionHistory(transactionHistoryRequest: TransactionHistoryRequest): Response<TransactionHistoryResponse> {
         return try {
-            val accessToken = encryptedSharedPreferences.getAccessToken()
             transactionHistoryRequest.accountId = accountId
-            apiService.fetchTransactionHistory("Bearer $accessToken", transactionHistoryRequest)
+            apiService.fetchTransactionHistory( transactionHistoryRequest)
         } catch (e: Exception) {
             throw e
         }
@@ -78,7 +69,7 @@ class DashboardRepositoryImpl(
             val decodedJWT = JWT.decode(accessToken)
             val userId = decodedJWT.getClaim("id").asInt()
             favouriteAdditionResponse.userId = userId
-            apiService.addToFav("Bearer $accessToken", favouriteAdditionResponse)
+            apiService.addToFav(favouriteAdditionResponse)
         } catch (e: Exception) {
             throw e
         }
@@ -89,7 +80,7 @@ class DashboardRepositoryImpl(
             val accessToken = encryptedSharedPreferences.getAccessToken()
             val decodedJWT = JWT.decode(accessToken)
             val userId = decodedJWT.getClaim("id").asInt()
-            apiService.fetchAllFav("Bearer $accessToken", userId)
+            apiService.fetchAllFav( userId)
         } catch (e: Exception) {
             throw e
         }
@@ -97,9 +88,7 @@ class DashboardRepositoryImpl(
 
     override suspend fun deleteFromFav(accountId: Int): Response<String> {
         return try {
-            val accessToken = encryptedSharedPreferences.getAccessToken()
-            apiService.deleteFromFav("Bearer $accessToken", accountId)
-
+            apiService.deleteFromFav(accountId)
         } catch (e: Exception) {
             throw e
         }
@@ -108,8 +97,7 @@ class DashboardRepositoryImpl(
     override suspend fun fetchInfo(): Response<UserInfoResponse> {
 
         return try {
-            val accessToken = encryptedSharedPreferences.getAccessToken()
-            val response = apiService.fetchInfo("Bearer $accessToken")
+            val response = apiService.fetchInfo()
             if (response.isSuccessful ) {
                 accountId = response.body()!!.accounts[0].id
             }
@@ -122,9 +110,7 @@ class DashboardRepositoryImpl(
 
     override suspend fun updatePassword(passwords: Passwords): Response<String> {
         return try {
-            val accessToken = encryptedSharedPreferences.getAccessToken()
-                ?: throw Exception("Access Token is null")
-            apiService.updatePassword("Bearer $accessToken", passwords)
+            apiService.updatePassword( passwords)
         } catch (e: Exception) {
             throw e
         }

@@ -30,7 +30,7 @@ fun DashboardNavGraph(
     navController: NavController, innerPadding: PaddingValues, viewModel: HomeViewModel
 ) {
     NavHost(navController = navController as NavHostController, startDestination = HOME) {
-        composable(AppRoutes.HOME) {
+        composable(HOME) {
             HomeScreen(
                 innerPadding = innerPadding
             ) { route ->
@@ -72,7 +72,7 @@ fun DashboardNavGraph(
             MoreScreen(
                 innerPadding = innerPadding
             ) { route ->
-                if (route == AppRoutes.HOME) {
+                if (route == HOME) {
                     navController.navigate(route) {
                         popUpTo(navController.graph.findStartDestination().id) { inclusive = true }
                     }

@@ -37,57 +37,46 @@ interface BankingAPICallable {
 
     @POST(Constants.ACCOUNT_CREATION_ENDPOINT)
     suspend fun createAccount(
-        @Header("Authorization") accessToken: String,
         @Body account: AccountCreationRequest
     ): Response<AccountCreationResponse>
 
     @GET(Constants.USER_ACCOUNTS_ENDPOINT)
-    suspend fun fetchUserAccounts(
-        @Header("Authorization")
-        accessToken: String
-    ): Response<ArrayList<UserAccountsResponseItem>>
+    suspend fun fetchUserAccounts(): Response<ArrayList<UserAccountsResponseItem>>
 
     @GET(Constants.GET_USER_ACCOUNT_ID_ENDPOINT)
     suspend fun fetchUserAccountById(
-        @Header("Authorization") accessToken: String,
         @Path("accountID") accountId: String
     )
             : Response<AccountByIdResponse>
 
     @POST(Constants.TRANSFER_PROCESS_ENDPOINT)
     suspend fun createTransferProcess(
-        @Header("Authorization") accessToken: String,
         @Body transactionRequest: TransactionRequest
     ): Response<TransactionResponse>
 
     @POST(Constants.TRANSACTION_HISTORY_ENDPOINT)
     suspend fun fetchTransactionHistory(
-        @Header("Authorization") accessToken: String,
         @Body transactionHistoryRequest: TransactionHistoryRequest
     ) : Response<TransactionHistoryResponse>
     @GET(Constants.INFO_ENDPOINT)
-    suspend fun fetchInfo(@Header("Authorization") accessToken: String): Response<UserInfoResponse>
+    suspend fun fetchInfo(): Response<UserInfoResponse>
 
     @PUT(Constants.UPDATE_PASSWORD)
     suspend fun updatePassword(
-        @Header("Authorization") accessToken: String,
         @Body passwords: Passwords
     ): Response<String>
     @POST(Constants.FAVOURITE_ADDITION_ENDPOINT)
     suspend fun addToFav(
-        @Header("Authorization") accessToken: String,
         @Body favouriteAdditionResponse: FavouriteAdditionResponse
     ): Response<FavouriteAdditionResponse>
 
     @GET (Constants.ALL_FAVOURITES_ENDPOINT)
     suspend fun  fetchAllFav(
-        @Header("Authorization")accessToken: String,
         @Path("userId") userId: Int
     ) : Response<List<FavouriteAdditionResponse>>
 
     @DELETE (Constants.DELETE_FAVOURITE_ENDPOINT)
     suspend fun deleteFromFav(
-        @Header("Authorization")accessToken: String,
         @Path("accountId") accountId: Int
     ) : Response<String>
 }
