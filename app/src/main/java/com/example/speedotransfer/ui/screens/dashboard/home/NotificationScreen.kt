@@ -20,25 +20,32 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.example.speedotransfer.R
 import com.example.speedotransfer.data.source.remote.models.transaction.history.Content
 import com.example.speedotransfer.data.source.remote.models.user.info.UserInfoResponse
+import com.example.speedotransfer.data.source.remote.retrofit.RetrofitInstance
 import com.example.speedotransfer.ui.screens.dashboard.commonUI.HeaderUI
 import com.example.speedotransfer.ui.theme.Grey
 import com.example.speedotransfer.ui.theme.LightPink
 import com.example.speedotransfer.ui.theme.LightYellow
+import com.example.speedotransfer.ui.viewmodels.fav.FavouriteUiState
+import com.example.speedotransfer.ui.viewmodels.home.HomeUiState
 import com.example.speedotransfer.ui.viewmodels.home.HomeViewModel
+import com.example.speedotransfer.ui.viewmodels.home.HomeViewModelFactory
 import com.example.speedotransfer.utils.formatDate
 
 @Composable
@@ -46,10 +53,20 @@ fun NotificationScreen(
     navController: NavController,
     modifier: Modifier = Modifier,
     innerPadding: PaddingValues,
-    viewModel: HomeViewModel
 ) {
-    val transactionList = viewModel.transactionHistoryList.collectAsState()
-    val userData = viewModel.userInfoData.collectAsState()
+    val context = LocalContext.current
+    val apiService = RetrofitInstance.callable
+    val viewModel: HomeViewModel =
+        viewModel(factory = HomeViewModelFactory(apiService, context = context))
+    val homeUiState by viewModel.uiState.collectAsState()
+    val transactionList = when (homeUiState) {
+        is HomeUiState.Success -> (homeUiState as HomeUiState.Success).transactionHistory
+        else -> emptyList()
+    }
+    val userData = when (homeUiState) {
+        is HomeUiState.Success -> (homeUiState as HomeUiState.Success).userInfo
+        else -> null
+    }
     Box(
         modifier = modifier
             .fillMaxSize()
@@ -70,10 +87,12 @@ fun NotificationScreen(
             HeaderUI(headerTitle = "Notifications", onClickBackButton = {
                 navController.popBackStack()
             })
-            NotificationListMaker(
-                notificationItems = transactionList.value,
-                userData = userData.value
-            )
+            if (userData != null) {
+                NotificationListMaker(
+                    notificationItems = transactionList,
+                    userData = userData
+                )
+            }
 
         }
     }

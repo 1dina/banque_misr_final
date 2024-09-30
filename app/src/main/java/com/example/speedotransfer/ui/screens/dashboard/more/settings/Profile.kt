@@ -12,10 +12,11 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material3.Divider
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
@@ -34,14 +35,20 @@ import com.example.speedotransfer.ui.screens.dashboard.commonUI.ProfileScreen
 import com.example.speedotransfer.ui.theme.LightRed
 import com.example.speedotransfer.ui.theme.LightWhite
 import com.example.speedotransfer.ui.theme.LightYellow
+import com.example.speedotransfer.ui.viewmodels.home.HomeUiState
 import com.example.speedotransfer.ui.viewmodels.home.HomeViewModel
 
 
 @Composable
-fun Profile(navController: NavController, modifier: Modifier = Modifier,
-            viewModel: HomeViewModel
+fun Profile(
+    navController: NavController, modifier: Modifier = Modifier,
+    viewModel: HomeViewModel
 ) {
-    val userData = viewModel.userInfoData.collectAsState()
+    val homeUiState by viewModel.uiState.collectAsState()
+    val userData = when (homeUiState) {
+        is HomeUiState.Success -> (homeUiState as HomeUiState.Success).userInfo
+        else -> null
+    }
 
     Box(
         modifier = Modifier
@@ -72,11 +79,11 @@ fun Profile(navController: NavController, modifier: Modifier = Modifier,
                         .size(60.dp)
                         .background(LightWhite, shape = CircleShape),
                 ) {
-                    val nameParts = userData.value.name.split(" ")
-                    val initials = if (nameParts.size >= 2) {
+                    val nameParts = userData?.name?.split(" ")
+                    val initials = if (nameParts?.size!! >= 2) {
                         (nameParts[0].take(1) + nameParts[1].take(1)).uppercase()
                     } else {
-                        userData.value.name.take(2).uppercase()
+                        userData.name.take(2).uppercase()
                     }
                     Text(
                         text = initials,
@@ -88,21 +95,25 @@ fun Profile(navController: NavController, modifier: Modifier = Modifier,
                         style = TextStyle(color = Color.Gray)
                     )
                 }
-                Text(
-                    text = userData.value.name,
-                    fontWeight = FontWeight.Bold,
-                    fontSize = 23.sp,
-                    modifier = Modifier.padding(top = 42.dp, start = 15.dp)
+                userData?.name?.let {
+                    Text(
+                        text = it,
+                        fontWeight = FontWeight.Bold,
+                        fontSize = 23.sp,
+                        modifier = Modifier.padding(top = 42.dp, start = 15.dp)
 
-                )
+                    )
+                }
 
             }
 
 
 
-            Column(modifier = modifier
-                .padding(top = 24.dp)
-                .fillMaxSize()) {
+            Column(
+                modifier = modifier
+                    .padding(top = 24.dp)
+                    .fillMaxSize()
+            ) {
 
                 Row(
                     modifier = Modifier
@@ -124,7 +135,7 @@ fun Profile(navController: NavController, modifier: Modifier = Modifier,
 
                 }
 
-                Divider(
+                HorizontalDivider(
                     modifier = Modifier
                         .padding(vertical = 12.dp)
                         .padding(start = 15.dp)
@@ -150,7 +161,7 @@ fun Profile(navController: NavController, modifier: Modifier = Modifier,
                 }
 
 
-                Divider(
+                HorizontalDivider(
                     modifier = Modifier
                         .padding(vertical = 12.dp)
                         .padding(start = 15.dp)
@@ -180,7 +191,7 @@ fun Profile(navController: NavController, modifier: Modifier = Modifier,
                 }
 
 
-                Divider(
+                HorizontalDivider(
                     modifier = Modifier
                         .padding(vertical = 12.dp)
                         .padding(start = 15.dp)

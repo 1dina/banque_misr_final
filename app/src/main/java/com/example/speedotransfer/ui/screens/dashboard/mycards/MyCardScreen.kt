@@ -19,6 +19,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
@@ -37,7 +39,10 @@ import com.example.speedotransfer.ui.theme.LightPink
 import com.example.speedotransfer.ui.theme.LightYellow
 import com.example.speedotransfer.ui.theme.Maroon
 import com.example.speedotransfer.ui.theme.MediumGrey
+import com.example.speedotransfer.ui.viewmodels.home.HomeUiState
 import com.example.speedotransfer.ui.viewmodels.home.HomeViewModel
+import com.example.speedotransfer.ui.viewmodels.home.HomeViewModelFactory
+import com.example.speedotransfer.ui.viewmodels.myCards.MyCardsUiState
 import com.example.speedotransfer.ui.viewmodels.myCards.MyCardsViewModel
 import com.example.speedotransfer.ui.viewmodels.myCards.MyCardsViewModelFactory
 
@@ -45,28 +50,49 @@ import com.example.speedotransfer.ui.viewmodels.myCards.MyCardsViewModelFactory
 fun MyCardScreen(
     navController: NavController,
     innerPadding: PaddingValues,
-    homeViewModel : HomeViewModel,
     modifier: Modifier = Modifier
 ) {
     val context = LocalContext.current
+
     val apiService = RetrofitInstance.callable
+    val homeViewModel: HomeViewModel =
+        viewModel(factory = HomeViewModelFactory(apiService, context = context))
     val viewModel: MyCardsViewModel =
         viewModel(factory = MyCardsViewModelFactory(apiService, context))
-    val cardList by viewModel.myCardsList.collectAsState()
-    val isCardCreated by viewModel.responseStatus.collectAsState()
-    val userData = homeViewModel.userInfoData.collectAsState()
-    LaunchedEffect(isCardCreated) {
-        if (isCardCreated == true) {
-            viewModel.resetResponseStatus()
-        } else {
-            if (viewModel.toastMessage.value != null)
+    val myCardsUiState by viewModel.uiState.collectAsState()
+    val cardList = remember { mutableStateOf<List<UserAccountsResponseItem>>(emptyList()) }
+    val homeUiState by homeViewModel.uiState.collectAsState()
+    val userData = when (homeUiState) {
+        is HomeUiState.Success -> (homeUiState as HomeUiState.Success).userInfo
+        else -> null
+    }
+
+    LaunchedEffect(myCardsUiState) {
+        when (myCardsUiState) {
+            is MyCardsUiState.Loading -> {
+            }
+
+            is MyCardsUiState.AccountCreationSuccess -> {
                 Toast.makeText(
                     context,
-                    viewModel.toastMessage.value,
+                    (myCardsUiState as MyCardsUiState.AccountCreationSuccess).message,
                     Toast.LENGTH_SHORT
                 ).show()
-            viewModel.resetToastMessage()
-            viewModel.resetResponseStatus()
+            }
+
+            is MyCardsUiState.Error -> {
+                Toast.makeText(
+                    context,
+                    (homeUiState as HomeUiState.Error).message,
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
+
+            is MyCardsUiState.Success -> {
+                cardList.value = (myCardsUiState as MyCardsUiState.Success).cards
+            }
+
+            else -> {}
         }
     }
     Box(
@@ -88,7 +114,13 @@ fun MyCardScreen(
         ) {
             HeaderUI(headerTitle = "My Cards", onClickBackButton = { navController.popBackStack() })
             Column(modifier = modifier.fillMaxSize()) {
-                MyCardsListMaker(myCardsList = cardList, modifier = modifier.weight(2f), userData = userData.value)
+                if (userData != null) {
+                    MyCardsListMaker(
+                        myCardsList = cardList.value,
+                        modifier = modifier.weight(2f),
+                        userData = userData
+                    )
+                }
 
                 Button(
                     onClick = { viewModel.createAccount() },
@@ -113,14 +145,18 @@ fun MyCardScreen(
 }
 
 @Composable
-fun MyCardsListMaker(myCardsList: List<UserAccountsResponseItem>, userData: UserInfoResponse, modifier: Modifier) {
+fun MyCardsListMaker(
+    myCardsList: List<UserAccountsResponseItem>,
+    userData: UserInfoResponse,
+    modifier: Modifier
+) {
     LazyColumn(
         modifier = modifier
             .fillMaxWidth()
             .padding(vertical = 16.dp)
     ) {
         itemsIndexed(myCardsList) { index, item ->
-            MyCardsListItemUI(myCardsListItem = item, index = index , userData)
+            MyCardsListItemUI(myCardsListItem = item, index = index, userData)
         }
     }
 }

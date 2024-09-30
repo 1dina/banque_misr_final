@@ -8,7 +8,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
-import androidx.compose.material3.Divider
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -26,6 +26,7 @@ import androidx.navigation.NavController
 import com.example.speedotransfer.ui.screens.dashboard.commonUI.HeaderUI
 import com.example.speedotransfer.ui.theme.LightRed
 import com.example.speedotransfer.ui.theme.LightYellow
+import com.example.speedotransfer.ui.viewmodels.home.HomeUiState
 import com.example.speedotransfer.ui.viewmodels.home.HomeViewModel
 
 
@@ -33,8 +34,11 @@ import com.example.speedotransfer.ui.viewmodels.home.HomeViewModel
 fun ProfileInfo(
     navController: NavController, modifier: Modifier = Modifier, viewModel: HomeViewModel
 ) {
-    viewModel.getUserInfo()
-    val userInfo by viewModel.userInfoData.collectAsState()
+    val homeUiState by viewModel.uiState.collectAsState()
+    val userInfo = when (homeUiState) {
+        is HomeUiState.Success -> (homeUiState as HomeUiState.Success).userInfo
+        else -> null
+    }
 
     Box(
         modifier = Modifier
@@ -78,7 +82,7 @@ fun ProfileInfo(
                     )
                 }
 
-                Divider(
+                HorizontalDivider(
                     modifier = Modifier
                         .padding(vertical = 10.dp)
                         .padding(start = 15.dp)
@@ -106,7 +110,7 @@ fun ProfileInfo(
                     )
                 }
 
-                Divider(
+                HorizontalDivider(
                     modifier = Modifier
                         .padding(vertical = 10.dp)
                         .padding(start = 15.dp)
@@ -134,7 +138,7 @@ fun ProfileInfo(
                     )
                 }
 
-                Divider(
+                HorizontalDivider(
                     modifier = Modifier
                         .padding(vertical = 10.dp)
                         .padding(start = 15.dp)
@@ -162,7 +166,7 @@ fun ProfileInfo(
                     )
                 }
 
-                Divider(
+                HorizontalDivider(
                     modifier = Modifier
                         .padding(vertical = 10.dp)
                         .padding(start = 15.dp)
@@ -181,7 +185,7 @@ fun ProfileInfo(
                 )
 
 
-                var accountNumber = userInfo?.accounts?.get(0)?.id.toString()
+                val accountNumber = userInfo?.accounts?.get(0)?.id.toString()
                 val accountNumberMod = "xxxx" + accountNumber.takeLast(4)
 
                 Text(
@@ -192,7 +196,7 @@ fun ProfileInfo(
                         .alpha(0.5f)
                 )
 
-                Divider(
+                HorizontalDivider(
                     modifier = Modifier
                         .padding(vertical = 10.dp)
                         .padding(start = 15.dp)

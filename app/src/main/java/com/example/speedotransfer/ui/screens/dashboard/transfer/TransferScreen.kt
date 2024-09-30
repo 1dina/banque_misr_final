@@ -44,11 +44,14 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationManagerCompat
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import com.example.speedotransfer.R
 import com.example.speedotransfer.data.source.remote.models.favourite.FavouriteAdditionResponse
 import com.example.speedotransfer.data.source.remote.models.transaction.TransactionRequest
+import com.example.speedotransfer.data.source.remote.models.user.info.UserInfoResponse
+import com.example.speedotransfer.data.source.remote.retrofit.RetrofitInstance
 import com.example.speedotransfer.ui.routes.AppRoutes
 import com.example.speedotransfer.ui.screens.auth.signUp.IndeterminateCircularIndicator
 import com.example.speedotransfer.ui.screens.dashboard.commonUI.HeaderUI
@@ -56,17 +59,16 @@ import com.example.speedotransfer.ui.theme.LightPink
 import com.example.speedotransfer.ui.theme.LightRed
 import com.example.speedotransfer.ui.theme.LightYellow
 import com.example.speedotransfer.ui.theme.Marron
+import com.example.speedotransfer.ui.viewmodels.home.HomeUiState
 import com.example.speedotransfer.ui.viewmodels.home.HomeViewModel
+import com.example.speedotransfer.ui.viewmodels.home.HomeViewModelFactory
 
 @Composable
 fun TransferScreen(
     navController: NavController,
     innerPadding: PaddingValues,
-    viewModel: HomeViewModel,
     modifier: Modifier = Modifier
 ) {
-
-    viewModel.resetResponseStatus()
     val totalSteps = 3
     var chosenUser by remember {
         mutableStateOf(FavouriteAdditionResponse(0, ""))
@@ -80,35 +82,46 @@ fun TransferScreen(
         mutableIntStateOf(0)
     }
     val context = LocalContext.current
-    val transferUserFound by viewModel.userFound.collectAsState()
-    val userData by viewModel.userInfoData.collectAsState()
+    val apiService = RetrofitInstance.callable
+    val viewModel: HomeViewModel =
+        viewModel(factory = HomeViewModelFactory(apiService, context = context))
+    val homeUiState by viewModel.uiState.collectAsState()
     val userAccountId by viewModel.accountId.collectAsState()
-    LaunchedEffect(transferUserFound) {
-        isLoading = false
-        if (transferUserFound == true) {
-            isLoading = false
-            if (currentStep == 2) {
-                currentStep += 1
-                sendNotification("Speedo Transfer", "Your transaction is successful", context)
-                viewModel.succtrans = false
+    val userData by viewModel.userData.collectAsState()
+    LaunchedEffect(homeUiState){
 
+        when (homeUiState) {
+            is HomeUiState.Loading -> {
+                isLoading = true
             }
-            viewModel.resetResponseStatus()
-            viewModel.resetUserFound()
 
-        } else {
-            isLoading = false
-            if (viewModel.toastMessage.value != null)
+            is HomeUiState.Success -> {
+                isLoading = false
+                if ((homeUiState as HomeUiState.Success).toastMessage == "Transfer successful") {
+                    if (currentStep == 2) {
+                        currentStep += 1
+                        sendNotification(
+                            "Speedo Transfer",
+                            "Your transaction is successful",
+                            context
+                        )
+                        viewModel.succtrans = false
+                    }
+                }
+            }
+
+            is HomeUiState.Error -> {
+                isLoading = false
                 Toast.makeText(
                     context,
-                    viewModel.toastMessage.value,
+                    (homeUiState as HomeUiState.Error).message,
                     Toast.LENGTH_SHORT
                 ).show()
-            viewModel.resetToastMessage()
-            viewModel.resetResponseStatus()
-            viewModel.resetUserFound()
+            }
 
+            else -> {}
         }
+
     }
     Box(
         modifier = Modifier
@@ -147,24 +160,24 @@ fun TransferScreen(
                 }
 
                 2 -> ConfirmationStepScreen(
-                    senderUser = userData.name,
-                    senderAccId = userAccountId,
-                    amountOfMoney = amountOfMoney,
-                    recipientUser = chosenUser,
-                ) {
-                    if (it) {
-                        isLoading = true
-                        viewModel.transferProcess(
-                            TransactionRequest(
-                                reciverAccountNum = chosenUser.accountId,
-                                amount = amountOfMoney,
-                                senderName = userData.name, receiverName = chosenUser.name
+                        senderUser = userData.name,
+                        senderAccId = userAccountId,
+                        amountOfMoney = amountOfMoney,
+                        recipientUser = chosenUser,
+                    ) {
+                        if (it) {
+                            isLoading = true
+                            viewModel.transferProcess(
+                                TransactionRequest(
+                                    reciverAccountNum = chosenUser.accountId,
+                                    amount = amountOfMoney,
+                                    senderName = userData.name, receiverName = chosenUser.name
+                                )
                             )
-                        )
 
-                    } else
-                        currentStep -= 1
-                }
+                        } else
+                            currentStep -= 1
+                    }
 
                 else -> PaymentStepScreen(
                     senderUser = userData.name,

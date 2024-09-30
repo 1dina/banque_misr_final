@@ -6,6 +6,7 @@ import com.example.speedotransfer.data.source.remote.models.account.AccountCreat
 import com.example.speedotransfer.data.source.remote.models.account.UserAccountsResponseItem
 import com.example.speedotransfer.domain.usecases.CreateAccountUseCase
 import com.example.speedotransfer.domain.usecases.GetUserAccountsUseCase
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
@@ -13,59 +14,50 @@ import kotlinx.coroutines.launch
 class MyCardsViewModel(
     private val createAccountUseCase: CreateAccountUseCase,
     private val getUserAccountsUseCase: GetUserAccountsUseCase) : ViewModel() {
-    private val _myCardsList = MutableStateFlow<List<UserAccountsResponseItem>>(
-        emptyList()
-    )
-    val myCardsList = _myCardsList.asStateFlow()
-    private val _toastMessage = MutableStateFlow<String?>(null)
-    val toastMessage = _toastMessage.asStateFlow()
-    private val _responseStatus = MutableStateFlow<Boolean?>(null)
-    val responseStatus = _responseStatus.asStateFlow()
-
+    private val _uiState = MutableStateFlow<MyCardsUiState>(MyCardsUiState.Idle)
+    val uiState = _uiState.asStateFlow()
 
     init {
         getUserAccounts()
     }
+
     private fun getUserAccounts() {
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
+            _uiState.value = MyCardsUiState.Loading
             try {
                 val result = getUserAccountsUseCase.execute()
                 if (result.isSuccess) {
-                    _myCardsList.value = result.getOrNull()!!
+                    val cards = result.getOrNull() ?: emptyList()
+                    _uiState.value = MyCardsUiState.Success(cards)
                 } else {
                     result.exceptionOrNull()?.let {
-                        _toastMessage.value = it.message
+                        _uiState.value = MyCardsUiState.Error(it.message ?: "An error occurred")
                     }
                 }
             } catch (e: Exception) {
-                _toastMessage.value = e.message
+                _uiState.value = MyCardsUiState.Error(e.message ?: "An unknown error occurred")
             }
-
         }
     }
-    fun createAccount () {
-        viewModelScope.launch {
+
+    fun createAccount() {
+        viewModelScope.launch(Dispatchers.IO) {
+            _uiState.value = MyCardsUiState.Loading
             try {
-                val result = createAccountUseCase.execute(AccountCreationRequest("visa",(1000..10000).random()))
+                val result = createAccountUseCase.execute(
+                    AccountCreationRequest("visa", (1000..10000).random())
+                )
                 if (result.isSuccess) {
-                    _responseStatus.value =true
-                    _toastMessage.value ="You've successfully added your card"
+                    _uiState.value = MyCardsUiState.AccountCreationSuccess("You've successfully added your card")
+                    getUserAccounts()
+                } else {
+                    result.exceptionOrNull()?.let {
+                        _uiState.value = MyCardsUiState.Error(it.message ?: "Failed to create account")
+                    }
                 }
-                else {
-                    result.exceptionOrNull()?.let {   _toastMessage.value = it.message }
-                }
-            }catch (e : Exception) {
-                _toastMessage.value=e.message
+            } catch (e: Exception) {
+                _uiState.value = MyCardsUiState.Error(e.message ?: "An unknown error occurred")
             }
-            getUserAccounts()
         }
     }
-    fun resetResponseStatus() {
-        _responseStatus.value = null
-    }
-
-    fun resetToastMessage() {
-        _toastMessage.value = null
-    }
-
 }

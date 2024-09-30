@@ -32,29 +32,23 @@ fun DashboardNavGraph(
         composable(AppRoutes.HOME) {
             HomeScreen(
                 navController = navController,
-                innerPadding = innerPadding,
-                viewModel = viewModel
-            )
+                innerPadding = innerPadding)
         }
         composable(AppRoutes.TRANSFER) {
             TransferScreen(
                 navController = navController,
-                innerPadding = innerPadding,
-                viewModel = viewModel
+                innerPadding = innerPadding
             )
         }
         composable(AppRoutes.TRANSACTION) {
             TransactionScreen(
                 navController = navController,
-                innerPadding = innerPadding,
-                viewModel = viewModel
-            )
+                innerPadding = innerPadding)
         }
         composable(AppRoutes.MY_CARD) {
             MyCardScreen(
                 navController = navController,
                 innerPadding = innerPadding,
-                viewModel
             )
         }
         composable(AppRoutes.MORE) {
@@ -73,7 +67,6 @@ fun DashboardNavGraph(
             NotificationScreen(
                 navController = navController,
                 innerPadding = innerPadding,
-                viewModel = viewModel
             )
         }
         composable(route = "$TRANS_DETAILS/{clientName}/{amount}/{date}/{accountNum}/{currentUserName}/{state}/{currentUserAccNum}",

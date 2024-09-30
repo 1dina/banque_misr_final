@@ -1,6 +1,5 @@
 package com.example.speedotransfer.ui.screens.dashboard.transaction
 
-import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
@@ -23,23 +22,26 @@ import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.State
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.example.speedotransfer.R
 import com.example.speedotransfer.data.source.remote.models.transaction.history.Content
 import com.example.speedotransfer.data.source.remote.models.user.info.UserInfoResponse
+import com.example.speedotransfer.data.source.remote.retrofit.RetrofitInstance
 import com.example.speedotransfer.ui.routes.AppRoutes
 import com.example.speedotransfer.ui.screens.dashboard.commonUI.HeaderUI
 import com.example.speedotransfer.ui.theme.Green
@@ -47,7 +49,9 @@ import com.example.speedotransfer.ui.theme.LightRed
 import com.example.speedotransfer.ui.theme.LightYellow
 import com.example.speedotransfer.ui.theme.Marron
 import com.example.speedotransfer.ui.theme.TransparentGreen
+import com.example.speedotransfer.ui.viewmodels.home.HomeUiState
 import com.example.speedotransfer.ui.viewmodels.home.HomeViewModel
+import com.example.speedotransfer.ui.viewmodels.home.HomeViewModelFactory
 import com.example.speedotransfer.utils.formatDate
 
 
@@ -55,12 +59,21 @@ import com.example.speedotransfer.utils.formatDate
 fun TransactionScreen(
     navController: NavController,
     innerPadding: PaddingValues,
-    viewModel: HomeViewModel,
     modifier: Modifier = Modifier
 ) {
-    val transactionList = viewModel.transactionHistoryList.collectAsState()
-    val userData = viewModel.userInfoData.collectAsState()
-    Log.e("trace list ", transactionList.value.toString())
+    val context = LocalContext.current
+    val apiService = RetrofitInstance.callable
+    val viewModel: HomeViewModel =
+        viewModel(factory = HomeViewModelFactory(apiService, context = context))
+    val homeUiState by viewModel.uiState.collectAsState()
+    val transactionList = when (homeUiState) {
+        is HomeUiState.Success -> (homeUiState as HomeUiState.Success).transactionHistory
+        else -> emptyList()
+    }
+    val userData = when (homeUiState) {
+        is HomeUiState.Success -> (homeUiState as HomeUiState.Success).userInfo
+        else -> null
+    }
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -89,7 +102,7 @@ fun TransactionScreen(
             )
 
             CardTransactionList(
-                transactionList = transactionList.value,
+                transactionList = transactionList,
                 onClickItem = { content, state ->
                     navController.navigate(
                         "${AppRoutes.TRANS_DETAILS}/${content.receiverName}/${content.amount}/${content.createdTimeStamp}" +
@@ -108,7 +121,7 @@ fun TransactionScreen(
 fun CardTransactionList(
     transactionList: List<Content>,
     onClickItem: (Content, String) -> Unit,
-    userData: State<UserInfoResponse>,
+    userData: UserInfoResponse?,
     modifier: Modifier
 ) {
     LazyColumn(
@@ -130,13 +143,13 @@ fun CardTransactionList(
 @Composable
 fun CardTransactionItemUI(
     transactionCard: Content, onClickItem: (Content, String) -> Unit,
-    userData: State<UserInfoResponse>
+    userData: UserInfoResponse?
 ) {
-    val state = if (transactionCard.senderName == userData.value.name) "Sent"
+    val state = if (transactionCard.senderName == userData?.name) "Sent"
     else "Received"
 
     val cardHolderName =
-        if (transactionCard.senderName == userData.value.name) transactionCard.receiverName
+        if (transactionCard.senderName == userData?.name) transactionCard.receiverName
         else transactionCard.senderName
     Card(
         modifier = Modifier
@@ -182,7 +195,7 @@ fun CardTransactionItemUI(
                 )
                 val formattedDate = formatDate(transactionCard.createdTimeStamp)
                 Text(
-                    text = "${formattedDate} - $state",
+                    text = "$formattedDate - $state",
                     fontSize = 12.sp,
                     modifier = Modifier.alpha(0.6f)
                 )

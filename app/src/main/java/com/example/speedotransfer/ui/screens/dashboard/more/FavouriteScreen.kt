@@ -56,6 +56,7 @@ import com.example.speedotransfer.ui.theme.Grey
 import com.example.speedotransfer.ui.theme.LightPink
 import com.example.speedotransfer.ui.theme.LightYellow
 import com.example.speedotransfer.ui.theme.Maroon
+import com.example.speedotransfer.ui.viewmodels.fav.FavouriteUiState
 import com.example.speedotransfer.ui.viewmodels.fav.FavouriteViewModel
 import com.example.speedotransfer.ui.viewmodels.fav.FavouriteViewModelFactory
 
@@ -69,9 +70,13 @@ fun FavouriteScreen(
     val apiService = RetrofitInstance.callable
     val viewModel: FavouriteViewModel =
         viewModel(factory = FavouriteViewModelFactory(apiService, context))
-    val favList  by viewModel.favListItems.collectAsState()
+    val favUiState by viewModel.favUiState.collectAsState()
     var showBottomDialog by remember {
         mutableStateOf(false)
+    }
+    val favList = when (favUiState) {
+        is FavouriteUiState.Success -> (favUiState as FavouriteUiState.Success).favListItems
+        else -> emptyList()
     }
 
     var chosenItem by remember {

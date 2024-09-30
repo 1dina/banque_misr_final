@@ -30,6 +30,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
@@ -46,17 +49,21 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.example.speedotransfer.R
 import com.example.speedotransfer.data.source.remote.models.transaction.history.Content
 import com.example.speedotransfer.data.source.remote.models.user.info.UserInfoResponse
+import com.example.speedotransfer.data.source.remote.retrofit.RetrofitInstance
 import com.example.speedotransfer.ui.routes.AppRoutes
 import com.example.speedotransfer.ui.theme.Grey
 import com.example.speedotransfer.ui.theme.LightRed
 import com.example.speedotransfer.ui.theme.LightWhite
 import com.example.speedotransfer.ui.theme.LightYellow
 import com.example.speedotransfer.ui.theme.Maroon
+import com.example.speedotransfer.ui.viewmodels.home.HomeUiState
 import com.example.speedotransfer.ui.viewmodels.home.HomeViewModel
+import com.example.speedotransfer.ui.viewmodels.home.HomeViewModelFactory
 import com.example.speedotransfer.utils.formatDate
 
 @Composable
@@ -64,29 +71,51 @@ fun HomeScreen(
     navController: NavController,
     modifier: Modifier = Modifier,
     innerPadding: PaddingValues,
-    viewModel: HomeViewModel
 ) {
 
     val context = LocalContext.current
-    val currentBalance by viewModel.userAccountData.collectAsState()
-    val responseState by viewModel.responseStatus.collectAsState()
-    val historyTransactions by viewModel.transactionHistoryList.collectAsState()
-    val userData by viewModel.userInfoData.collectAsState()
+    val apiService = RetrofitInstance.callable
+    val viewModel: HomeViewModel =
+        viewModel(factory = HomeViewModelFactory(apiService, context = context))
+    val homeUiState by viewModel.uiState.collectAsState()
+    var isLoading by remember {
+        mutableStateOf(false)
+    }
 
-    LaunchedEffect(responseState) {
-        if (responseState == true)
-            viewModel.resetResponseStatus()
-        else {
-            if (viewModel.toastMessage.value != null)
+    var userData by remember {
+        mutableStateOf(UserInfoResponse(emptyList(), "", "", "", -1, ""))
+    }
+    var currentBalance by remember {
+        mutableStateOf("")
+    }
+    var historyTransactions by remember {
+        mutableStateOf(emptyList<Content>())
+    }
+
+    LaunchedEffect(homeUiState) {
+        when (homeUiState) {
+            is HomeUiState.Loading -> {
+                isLoading = true
+            }
+
+            is HomeUiState.Success -> {
+                isLoading = false
+                historyTransactions = (homeUiState as HomeUiState.Success).transactionHistory
+                userData = (homeUiState as HomeUiState.Success).userInfo
+                currentBalance = (homeUiState as HomeUiState.Success).accountBalance
+            }
+
+            is HomeUiState.Error -> {
+                isLoading = false
                 Toast.makeText(
                     context,
-                    viewModel.toastMessage.value,
+                    (homeUiState as HomeUiState.Error).message,
                     Toast.LENGTH_SHORT
                 ).show()
-            viewModel.resetToastMessage()
-            viewModel.resetResponseStatus()
-        }
+            }
 
+            else -> {}
+        }
     }
     Box(
         modifier = Modifier
@@ -112,26 +141,26 @@ fun HomeScreen(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Box(
-                modifier = Modifier
-                    .size(48.dp)
-                    .background(LightWhite, shape = CircleShape),
-            ) {
-                val nameParts = userData.name.split(" ")
-                val initials = if (nameParts.size >= 2) {
-                    (nameParts[0].take(1) + nameParts[1].take(1)).uppercase()
-                } else {
-                    userData.name.take(2).uppercase()
-                }
-                Text(
-                    text = initials,
-                    fontSize = 20.sp,
-                    fontWeight = FontWeight.Bold,
                     modifier = Modifier
-                        .align(Alignment.Center)
-                        .alpha(0.7f),
-                    style = TextStyle(color = Color.Gray)
-                )
-            }
+                        .size(48.dp)
+                        .background(LightWhite, shape = CircleShape),
+                ) {
+                    val nameParts = userData.name.split(" ")
+                    val initials = if (nameParts.size >= 2) {
+                        (nameParts[0].take(1) + nameParts[1].take(1)).uppercase()
+                    } else {
+                        userData.name.take(2).uppercase()
+                    }
+                    Text(
+                        text = initials,
+                        fontSize = 20.sp,
+                        fontWeight = FontWeight.Bold,
+                        modifier = Modifier
+                            .align(Alignment.Center)
+                            .alpha(0.7f),
+                        style = TextStyle(color = Color.Gray)
+                    )
+                }
                 Column(
                     verticalArrangement = Arrangement.SpaceEvenly,
                     modifier = modifier
@@ -180,7 +209,7 @@ fun HomeScreen(
                 }
             }
 
-            TransactionList(transactionList = historyTransactions,userData, onAllViewClick = {
+            TransactionList(transactionList = historyTransactions, userData, onAllViewClick = {
                 navController.navigate(AppRoutes.TRANSACTION)
             })
         }
@@ -202,23 +231,23 @@ fun TransactionList(
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
         Text(text = "Recent transactions", fontSize = 14.sp, fontWeight = FontWeight.Normal)
-            Text(
-                text = "View all",
-                fontSize = 14.sp,
-                color = Grey,
-                fontWeight = FontWeight.Normal,
-                modifier= modifier.clickable {
-                    onAllViewClick()
-                }
-            )
-        }
+        Text(
+            text = "View all",
+            fontSize = 14.sp,
+            color = Grey,
+            fontWeight = FontWeight.Normal,
+            modifier = modifier.clickable {
+                onAllViewClick()
+            }
+        )
+    }
     Surface(
         shape = RoundedCornerShape(4.dp), modifier = modifier.padding(top = 8.dp),
         shadowElevation = 2.dp
     ) {
         LazyColumn {
             items(transactionList) {
-                RecentTransactionUI(transactionItem = it, userData = userData )
+                RecentTransactionUI(transactionItem = it, userData = userData)
                 HorizontalDivider(
                     modifier = Modifier
                         .fillMaxWidth(),
@@ -231,7 +260,11 @@ fun TransactionList(
 }
 
 @Composable
-fun RecentTransactionUI(transactionItem: Content, userData : UserInfoResponse, modifier: Modifier = Modifier) {
+fun RecentTransactionUI(
+    transactionItem: Content,
+    userData: UserInfoResponse,
+    modifier: Modifier = Modifier
+) {
 
     val state = if (transactionItem.senderName == userData.name) "Sent"
     else "Received"

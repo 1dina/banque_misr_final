@@ -47,6 +47,7 @@ import com.example.speedotransfer.data.source.remote.retrofit.RetrofitInstance
 import com.example.speedotransfer.ui.theme.Grey
 import com.example.speedotransfer.ui.theme.LightPink
 import com.example.speedotransfer.ui.theme.Marron
+import com.example.speedotransfer.ui.viewmodels.fav.FavouriteUiState
 import com.example.speedotransfer.ui.viewmodels.fav.FavouriteViewModel
 import com.example.speedotransfer.ui.viewmodels.fav.FavouriteViewModelFactory
 
@@ -224,7 +225,12 @@ fun BottomSheetFav(
     onDismiss: (Boolean) -> Unit,
     onItemClicked: (FavouriteAdditionResponse) -> Unit
 ) {
-    val favoriteList by viewModel.favListItems.collectAsState()
+    val favUiState by viewModel.favUiState.collectAsState()
+    val favList = when (favUiState) {
+        is FavouriteUiState.Success -> (favUiState as FavouriteUiState.Success).favListItems
+        else -> emptyList()
+    }
+
     ModalBottomSheet(onDismissRequest = { onDismiss(false) }) {
         Column(
             modifier = modifier
@@ -249,7 +255,7 @@ fun BottomSheetFav(
                     fontWeight = FontWeight.Normal
                 )
             }
-            FavoriteListMaker(favItems = favoriteList, modifier = modifier) {
+            FavoriteListMaker(favItems = favList, modifier = modifier) {
                 onItemClicked(it)
             }
         }
