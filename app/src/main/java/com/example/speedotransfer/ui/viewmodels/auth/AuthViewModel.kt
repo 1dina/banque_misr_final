@@ -9,6 +9,7 @@ import com.example.speedotransfer.data.source.remote.models.user.UserLoginReques
 import com.example.speedotransfer.domain.usecases.LoginUserUseCase
 import com.example.speedotransfer.domain.usecases.RegisterUserUseCase
 import com.example.speedotransfer.domain.usecases.SignOutUseCase
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
@@ -31,13 +32,14 @@ class AuthViewModel(
     }
 
     private fun createUser(user: UserAuthRegisterRequest) {
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             _authUiState.value = AuthUiState.Loading
             try {
                 Log.e("trace", "Submitting user data $user")
                 val result = registerUserUseCase.execute(user)
                 if (result.isSuccess) {
-                    _authUiState.value = AuthUiState.RegistrationSuccess("User created successfully")
+                    _authUiState.value =
+                        AuthUiState.RegistrationSuccess("User created successfully")
                 } else {
                     _authUiState.value = AuthUiState.Error("")
                     handleError(Exception(result.exceptionOrNull()?.message))
@@ -49,7 +51,7 @@ class AuthViewModel(
     }
 
     private fun loginUser(user: UserLoginRequest) {
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             _authUiState.value = AuthUiState.Loading
             try {
                 val authDataResult: Result<AuthData> = loginUserUseCase.execute(user)
@@ -66,7 +68,7 @@ class AuthViewModel(
     }
 
     fun signOut() {
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             _authUiState.value = AuthUiState.Loading
             try {
                 val signOutResult = signOutUseCase.execute()

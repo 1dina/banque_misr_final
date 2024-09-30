@@ -1,6 +1,5 @@
 package com.example.speedotransfer.ui.screens.auth.signUp
 
-import android.content.Intent
 import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -60,7 +59,6 @@ import com.example.speedotransfer.R
 import com.example.speedotransfer.data.source.remote.models.user.UserAuthRegisterRequest
 import com.example.speedotransfer.data.source.remote.retrofit.RetrofitInstance
 import com.example.speedotransfer.ui.routes.AppRoutes
-import com.example.speedotransfer.ui.screens.dashboard.DashboardActivity
 import com.example.speedotransfer.ui.theme.LightGrey
 import com.example.speedotransfer.ui.theme.LightRed
 import com.example.speedotransfer.ui.theme.Maroon
@@ -121,7 +119,7 @@ fun SignUp2(
 
     val authUiState by viewModel.authUiState.collectAsState()
 
-        LaunchedEffect(authUiState) {
+    LaunchedEffect(authUiState) {
             when (authUiState) {
                 is AuthUiState.Loading -> {
                     isLoading = true
